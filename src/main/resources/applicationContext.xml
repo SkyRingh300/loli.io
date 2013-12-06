@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    default-autowire="byName" xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+    <context:annotation-config />
+    <context:component-scan base-package="io.loli"
+        scope-resolver="io.loli.jsr330.CustomScopeMetadataResolver" />
+    <!--注册Bean验证后处理器 -->
+    <bean
+        class="org.springframework.validation.beanvalidation.BeanValidationPostProcessor" />
+    <!--注册方法验证的后处理器 -->
+    <bean
+        class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor" />
+    <bean id="placeholderConfig"
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:db.properties" />
+    </bean>
+    <!-- hibernate的entityManagerFactory -->
+    <bean id="entityManagerFactory"
+        class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="jpaVendorAdapter">
+            <bean
+                class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="showSql" value="true" />
+                <property name="generateDdl" value="true" />
+                <property name="databasePlatform" value="${db.dialect}" />
+            </bean>
+        </property>
+    </bean>
+    <!-- dbcp DataSource -->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+        destroy-method="close">
+        <property name="driverClassName" value="${db.driver}" />
+        <property name="url" value="${db.url}" />
+        <property name="username" value="${db.username}" />
+        <property name="password" value="${db.password}" />
+    </bean>
+    <!-- spring自带的数据源 -->
+
+    <!-- <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource"> 
+        <property name="driverClassName" value="${db.driver}" /> <property name="url" 
+        value="${db.url}" /> <property name="username" value="${db.username}" /> 
+        <property name="password" value="${db.password}" /> </bean> <bean id="entityManagerFactory" 
+        class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"> 
+        配置dataSource可以覆盖下面的persistenceUnitName中的属性 <property name="dataSource" ref="dataSource" 
+        /> <property name="persistenceUnitName" value="askloli" /> <property name="jpaVendorAdapter"> 
+        <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"> 
+        <property name="generateDdl" value="true" /> </bean> </property> <property 
+        name="loadTimeWeaver"> <bean class="org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver" 
+        /> </property> </bean> -->
+
+    <!-- 事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    <!-- <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"> 
+        </bean> -->
+    <context:annotation-config />
+    <tx:annotation-driven transaction-manager="transactionManager" />
+
+    <!-- <tx:annotation-driven /> -->
+
+    <bean
+        class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+
+
+
+    <!-- 定义使用事务的方法 <tx:advice id="txAdvice" transaction-manager="transactionManager"> 
+        <tx:attributes> <tx:method name="save*" propagation="REQUIRED" /> <tx:method 
+        name="delete*" propagation="REQUIRED" /> <tx:method name="update*" propagation="REQUIRED" 
+        /> <tx:method name="*" read-only="true" /> </tx:attributes> </tx:advice> 
+        定义一个切入点，使事务在它的切入点内有效 <aop:config> <aop:pointcut expression="execution(* com.ejb.bean.*Impl.*(..))" 
+        id="pointcut" /> <aop:advisor pointcut-ref="pointcut" advice-ref="txAdvice" 
+        /> </aop:config> -->
+
+    <tx:annotation-driven />
+
+    <bean
+        class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+
+    <bean
+        class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"></property>
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+
+</beans>
