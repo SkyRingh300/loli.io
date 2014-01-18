@@ -1,10 +1,12 @@
-function md5password(input){
-	var form = input.form;
-	var password1 = form['user.password'].value;
-	alert(password1);
-	var password2 = form['password_re'].value;
-	alert(password2);
-	if(password1 == password2){
-		form.submit();
+function md5password() {
+	var password1 = document.getElementById("user.password").value;
+	var password2 = document.getElementById("password_re").value;
+	if (password1 == password2) {
+		var md5pw = hex_md5(password1);
+		$("#password_md5").attr("value", md5pw);
+		$("#password_re_md5").attr("value", md5pw);
+		return true;
+	} else {
+		return false;
 	}
 }

@@ -11,17 +11,18 @@
 	<form action="login" method="POST">
 		<table border="0">
 			<tr>
-				<td><label for="user.email">E-mail</label></td>
-				<td><input type="email" id="user.email" name="user.email"></td>
+				<td><label for="user.email">E-mail</label ></td>
+				<td><input type="email" id="user.email" name="email"></td>
 			<tr>
 				<td><label for="user.password">Password</label></td>
-				<td><input type="password" id="user.password" name="user.password"></td>
+				<td><input type="password" id="user.password" name="password_ori"></td>
 			</tr>
 			<tr>
 				<td></td>
 				<td><input type="submit" name="submit" value="登录"></td>
 			</tr>
 		</table>
+		<input type="hidden" id="password_md5" name="password_md5">
 	</form>
 </body>
 </html>
