@@ -6,6 +6,7 @@
 
     <persistence-unit name="askloli" transaction-type="RESOURCE_LOCAL">
         <class>io.loli.sc.server.entity.User</class>
+        <class>io.loli.sc.server.entity.ClientToken</class>
     </persistence-unit>
 
 </persistence>
