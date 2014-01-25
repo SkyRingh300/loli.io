@@ -95,14 +95,16 @@ public class UserLogin {
                 || user.getPassword().length() != 32) {
             flag = false;
         }
-        if (flag) {
+        // 当验证失败时，跳转回登陆界面
+        if (!flag) {
             return "redirect:/user/login";
         }
 
         // 根据此email查询出用户
         User trueUser = userService.findByEmail(user.getEmail());
         // 当查询出来的user不为空时
-        if (trueUser != null && user.getPassword().equals(trueUser.getPassword())) {
+        if (trueUser != null
+                && user.getPassword().equals(trueUser.getPassword())) {
             session.setAttribute("user", trueUser);
             return "redirect:/user/welcome";
         } else {
