@@ -28,12 +28,12 @@ public class ImageClientUpload {
     @Inject
     private UserService us;
 
-    @RequestMapping(value = { "/token" }, method = RequestMethod.POST)
+    @RequestMapping(value = { "/token" }, method = RequestMethod.POST, produces = { "text/plain" })
     public String requestToken(@RequestParam(required = true) String email,
             @RequestParam(required = true) String password) {
         User trueUser = us.findByEmail(email);
         String token = null;
-        //登陆成功后
+        // 验证密码是否正确
         if (trueUser.getPassword().equals(password)) {
             ClientToken ct = cts.findByEmail(email);
 
