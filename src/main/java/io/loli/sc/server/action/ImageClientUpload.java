@@ -9,9 +9,12 @@ import io.loli.util.MD5Util;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * 负责客户端登陆验证和图片上传的类
@@ -20,21 +23,24 @@ import org.springframework.web.bind.annotation.RequestParam;
  * 
  */
 @Named
-@RequestMapping("/api")
+@RequestMapping(value = { "/api" })
 public class ImageClientUpload {
     @Inject
     private ClientTokenService cts;
 
     @Inject
+    @Named("userService")
     private UserService us;
 
-    @RequestMapping(value = { "/token" }, method = RequestMethod.POST, produces = { "text/plain" })
-    public String requestToken(@RequestParam(required = true) String email,
+    @RequestMapping(value = { "/token" }, method = { RequestMethod.GET,
+            RequestMethod.POST }, consumes = { "text/plain" })
+    @ResponseStatus(HttpStatus.OK)  
+    public @ResponseBody String requestToken(@RequestParam(required = true) String email,
             @RequestParam(required = true) String password) {
         User trueUser = us.findByEmail(email);
         String token = null;
         // 验证密码是否正确
-        if (trueUser.getPassword().equals(password)) {
+        if (trueUser.getPassword().equalsIgnoreCase(password)) {
             ClientToken ct = cts.findByEmail(email);
 
             if (ct != null) {
@@ -52,7 +58,6 @@ public class ImageClientUpload {
                 cts.save(ct);
             }
         }
-
         return token;
     }
 }

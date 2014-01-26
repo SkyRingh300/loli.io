@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Named
-@RequestMapping("/user")
+@RequestMapping(value = { "/user" })
 public class UserLogin {
     @Inject
     private UserService userService;

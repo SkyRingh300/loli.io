@@ -9,7 +9,7 @@ import javax.inject.Named;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-@Named
+@Named("userService")
 public class UserService {
     @Inject
     private UserDao userDao;
