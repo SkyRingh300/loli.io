@@ -2,18 +2,17 @@ package io.loli.sc.server.action;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import io.loli.util.MD5Util;
 
 import javax.inject.Inject;
 
+import org.hamcrest.CustomMatcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -21,9 +20,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 /**
  * 
@@ -49,13 +45,26 @@ public class ImageClientUploadTest extends
 
     }
 
+    @Test
     public void testGetToken() throws Exception {
         mockMvc.perform(
-                post("/api/token").param("email", "admin@admin.com")
+                post("/api/token")
+                        .param("email", "admin@admin.com")
                         .param("password", MD5Util.hash("admin"))
-                        .accept(MediaType.TEXT_PLAIN))
+                        .accept(MediaType
+                                .parseMediaType("application/json;charset=UTF-8")))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.TEXT_PLAIN));
+                .andExpect(content().contentType(MediaType
+                        .parseMediaType("application/json;charset=UTF-8")))
+                .andExpect(jsonPath("$.token").value(
+                // 匿名内部类，自定义Matcher，判断返回的json文的token属性是否是32个字符长的md5密文
+                        new CustomMatcher<String>("长度为32的字符串") {
+                            public boolean matches(Object object) {
+                                return ((object instanceof String)
+                                        && !((String) object).isEmpty() && ((String) object)
+                                        .length() == 32);
+                            }
+                        }));
     }
 
     // @Inject

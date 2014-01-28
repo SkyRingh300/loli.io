@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,15 +34,17 @@ public class ImageClientUpload {
     private UserService us;
 
     @RequestMapping(value = { "/token" }, method = { RequestMethod.GET,
-            RequestMethod.POST }, consumes = { "text/plain" })
-    @ResponseStatus(HttpStatus.OK)  
-    public @ResponseBody String requestToken(@RequestParam(required = true) String email,
+            RequestMethod.POST })
+    @ResponseStatus(HttpStatus.OK)
+    public @ResponseBody
+    ClientToken requestToken(@RequestParam(required = true) String email,
             @RequestParam(required = true) String password) {
         User trueUser = us.findByEmail(email);
         String token = null;
+        ClientToken ct = null;
         // 验证密码是否正确
         if (trueUser.getPassword().equalsIgnoreCase(password)) {
-            ClientToken ct = cts.findByEmail(email);
+            ct = cts.findByEmail(email);
 
             if (ct != null) {
                 // 当已有该email的token时，把token返回
@@ -58,6 +61,12 @@ public class ImageClientUpload {
                 cts.save(ct);
             }
         }
-        return token;
+        return ct;
     }
+    
+//    @RequestMapping(value = { "/upload" }, method = {RequestMethod.POST }, consumes = { MediaType.APPLICATION_JSON_VALUE })
+//    @ResponseStatus(HttpStatus.OK)
+//    public @ResponseBody UploadedImage upload(@RequestParam(required=true) String token){
+//        //TODO 图片上传
+//    }
 }

@@ -57,5 +57,23 @@ public class ClientTokenServiceTest extends
         ClientToken result = cts.findByEmail(user.getEmail());
         assertEquals(ct, result);
     }
+    
+    @Test
+    public void testFindByToken(){
+        User user = new User();
+        user.setEmail("test@test.com");
+        user.setPassword("test");
+        user.setRegDate(new Date());
+        us.save(user);
+        assertThat(user.getId(), not(0));
+        ClientToken ct = new ClientToken();
+        ct.setToken("testtoken");
+        ct.setUser(user);
+        cts.save(ct);
+        assertThat(ct.getId(), not(0));
+
+        ClientToken result = cts.findByToken("testtoken");
+        assertEquals(ct, result);
+    }
 
 }

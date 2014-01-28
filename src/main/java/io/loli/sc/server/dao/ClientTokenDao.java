@@ -28,4 +28,15 @@ public class ClientTokenDao {
         em.persist(ct);
     }
 
+    public ClientToken findByToken(String token) {
+        List<ClientToken> list = em
+                .createNamedQuery("ClientToken.findByToken", ClientToken.class)
+                .setParameter("token", token).getResultList();
+        ClientToken result = null;
+        if (list.size() >= 1) {
+            result = list.get(0);
+        }
+        return result;
+    }
+
 }
