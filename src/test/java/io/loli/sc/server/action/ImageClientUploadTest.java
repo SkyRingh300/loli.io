@@ -30,7 +30,7 @@ import org.springframework.web.context.WebApplicationContext;
  * @author choco
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:applicationContext.xml")
+@ContextConfiguration(locations = {"classpath:applicationContext.xml"})
 @WebAppConfiguration
 public class ImageClientUploadTest extends
         AbstractTransactionalJUnit4SpringContextTests {
