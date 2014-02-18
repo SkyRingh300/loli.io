@@ -1,5 +1,6 @@
 package io.loli.sc.server.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -12,7 +13,9 @@ import javax.persistence.NamedQuery;
 
 @Entity
 @NamedQueries(value = { @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email=:email") })
-public class User {
+public class User implements Serializable {
+
+    private static final long serialVersionUID = -6060393006470256261L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;

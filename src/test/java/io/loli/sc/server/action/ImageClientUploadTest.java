@@ -1,18 +1,36 @@
 package io.loli.sc.server.action;
 
+import static org.junit.Assert.assertThat;
+
+import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import io.loli.util.MD5Util;
+import io.loli.sc.server.entity.Cat;
+import io.loli.sc.server.entity.ClientToken;
+import io.loli.sc.server.entity.UploadedImage;
+import io.loli.sc.server.entity.User;
+import io.loli.sc.server.service.CatService;
+import io.loli.sc.server.service.CatServiceTest;
+import io.loli.sc.server.service.UserService;
+import io.loli.sc.server.service.UserServiceTest;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import javax.inject.Inject;
+import static org.hamcrest.CoreMatchers.not;
 
 import org.hamcrest.CustomMatcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -30,7 +48,7 @@ import org.springframework.web.context.WebApplicationContext;
  * @author choco
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:applicationContext.xml"})
+@ContextConfiguration(locations = { "classpath:applicationContext.xml" })
 @WebAppConfiguration
 public class ImageClientUploadTest extends
         AbstractTransactionalJUnit4SpringContextTests {
@@ -42,20 +60,27 @@ public class ImageClientUploadTest extends
     @Before
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
-
     }
+
+    @Inject
+    private UserService us;
 
     @Test
     public void testGetToken() throws Exception {
+        User user = UserServiceTest.newInstence();
+        us.save(user);
         mockMvc.perform(
                 post("/api/token")
-                        .param("email", "admin@admin.com")
-                        .param("password", MD5Util.hash("admin"))
+                        .param("email", user.getEmail())
+                        .param("password", user.getPassword())
                         .accept(MediaType
                                 .parseMediaType("application/json;charset=UTF-8")))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType
-                        .parseMediaType("application/json;charset=UTF-8")))
+                .andExpect(
+                        content()
+                                .contentType(
+                                        MediaType
+                                                .parseMediaType("application/json;charset=UTF-8")))
                 .andExpect(jsonPath("$.token").value(
                 // 匿名内部类，自定义Matcher，判断返回的json文的token属性是否是32个字符长的md5密文
                         new CustomMatcher<String>("长度为32的字符串") {
@@ -67,11 +92,31 @@ public class ImageClientUploadTest extends
                         }));
     }
 
-    // @Inject
-    // private ImageClientUpload action;
-    // @Test
-    // public void testWithInjectOnly(){
-    // String s = action.requestToken("admin@admin.com", MD5Util.hash("admin"));
-    // assertEquals(32,s.length());
-    // }
+    @Inject
+    private ImageClientUpload imageClientUpload;
+
+    @Inject
+    private CatService cs;
+
+    @Test
+    public void testUpload() throws FileNotFoundException, IOException {
+        Cat cat = CatServiceTest.newInstence();
+        User user = cat.getUser();
+        us.save(user);
+        cs.save(cat);
+
+        ClientToken ct = imageClientUpload.requestToken(user.getEmail(),
+                user.getPassword());
+
+        File fileToUpload = new File("src/test/resources/" + "imgToUpload.jpg");
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("image",
+                fileToUpload.getName(), "image/jpg", new BufferedInputStream(
+                        new FileInputStream(fileToUpload)));
+
+        // 无法模拟上传文件，所以直接调用upload方法
+        UploadedImage img = imageClientUpload.upload(ct.getToken(),
+                cat.getId(), "This is a test file", mockMultipartFile);
+        assertNotNull(img.getPath());
+        assertThat(img.getId(), not(0));
+    }
 }

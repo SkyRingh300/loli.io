@@ -1,20 +1,30 @@
 package io.loli.sc.server.action;
 
 import io.loli.sc.server.entity.ClientToken;
+import io.loli.sc.server.entity.UploadedImage;
 import io.loli.sc.server.entity.User;
+import io.loli.sc.server.service.CatService;
 import io.loli.sc.server.service.ClientTokenService;
+import io.loli.sc.server.service.UploadedImageService;
 import io.loli.sc.server.service.UserService;
 import io.loli.util.MD5Util;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
+
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 负责客户端登陆验证和图片上传的类
@@ -31,6 +41,12 @@ public class ImageClientUpload {
     @Inject
     @Named("userService")
     private UserService us;
+
+    @Inject
+    private CatService cs;
+
+    @Inject
+    private UploadedImageService uic;
 
     @RequestMapping(value = { "/token" }, method = { RequestMethod.GET,
             RequestMethod.POST })
@@ -62,10 +78,76 @@ public class ImageClientUpload {
         }
         return ct;
     }
-    
-//    @RequestMapping(value = { "/upload" }, method = {RequestMethod.POST }, consumes = { MediaType.APPLICATION_JSON_VALUE })
-//    @ResponseStatus(HttpStatus.OK)
-//    public @ResponseBody UploadedImage upload(@RequestParam(required=true) String token){
-//        //TODO 图片上传
-//    }
+
+    @RequestMapping(value = { "/upload" }, method = { RequestMethod.POST })
+    @ResponseStatus(HttpStatus.OK)
+    public @ResponseBody
+    UploadedImage upload(
+            @RequestParam(value = "token", required = true) String token,
+            @RequestParam(value = "c_id", required = true) int c_id,
+            @RequestParam(value = "desc", required = false) String desc,
+            @RequestParam(value = "image", required = true) MultipartFile imageFile) {
+        UploadedImage imageObj = new UploadedImage();
+        imageObj.setDate(new Date());
+        imageObj.setCat(cs.findById(c_id));
+        imageObj.setDesc((null == desc || desc.isEmpty()) ? "" : desc);
+
+        // 当上传的是图片文件时，保存图片
+        if (validateImage(imageFile)) {
+            File file = saveImage(imageFile);
+            imageObj.setPath(file.getPath());
+            imageObj.setOriginName(imageFile.getOriginalFilename());
+            uic.save(imageObj);
+        } else {
+            // TODO
+        }
+
+        return imageObj;
+    }
+
+    /**
+     * 判断上传的一个文件是否是图片文件
+     * 
+     * @param image
+     * @return 如果是图片返回true，不是图片返回false
+     */
+    private boolean validateImage(MultipartFile image) {
+        String contentType = image.getContentType();
+        return contentType.equals("image/jpeg")
+                || contentType.equals("image/jpg")
+                || contentType.equals("image/png");
+    }
+
+    @Inject
+    private HttpServletRequest request;
+
+    /**
+     * 将一个图片保存起来
+     * 
+     * @param image
+     * @return 保存后的图片File对象
+     */
+    private File saveImage(MultipartFile image) {
+        File file = new File(request.getSession().getServletContext()
+                .getRealPath("")
+                + File.separator
+                + "img"
+                + File.separator
+                + MD5Util.hash(
+                        new Date().getTime() + image.getOriginalFilename())
+                        .substring(26) + "."
+                // 获取图片扩展名，如image/jpg
+                + image.getContentType().substring(6));
+        if (!file.getParentFile().exists()) {
+            file.getParentFile().mkdir();
+        }
+        try {
+            FileUtils.writeByteArrayToFile(file, image.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+            // TODO
+        }
+        return file;
+    }
+
 }

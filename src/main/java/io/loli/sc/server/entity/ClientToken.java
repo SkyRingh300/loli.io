@@ -1,5 +1,7 @@
 package io.loli.sc.server.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,7 +17,9 @@ import javax.persistence.OneToOne;
 @NamedQueries(value = {
         @NamedQuery(name = "ClientToken.findByUId", query = "SELECT c FROM ClientToken c WHERE c.user.id=:uid"),
         @NamedQuery(name = "ClientToken.findByToken", query = "SELECT c FROM ClientToken c WHERE c.token=:token") })
-public class ClientToken {
+public class ClientToken  implements Serializable {
+
+    private static final long serialVersionUID = 1525705395637042673L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;

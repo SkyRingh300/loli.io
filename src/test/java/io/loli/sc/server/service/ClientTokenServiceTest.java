@@ -6,20 +6,11 @@ import static org.junit.Assert.assertThat;
 import io.loli.sc.server.entity.ClientToken;
 import io.loli.sc.server.entity.User;
 
-import java.util.Date;
-
 import javax.inject.Inject;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:applicationContext.xml")
-public class ClientTokenServiceTest extends
-        AbstractTransactionalJUnit4SpringContextTests {
+public class ClientTokenServiceTest extends SpringBaseTest {
     @Inject
     private ClientTokenService cts;
     @Inject
@@ -27,53 +18,44 @@ public class ClientTokenServiceTest extends
 
     @Test
     public void testSave() {
-        User user = new User();
-        user.setEmail("test@test.com");
-        user.setPassword("test");
-        user.setRegDate(new Date());
-        us.save(user);
-        assertThat(user.getId(), not(0));
-        ClientToken ct = new ClientToken();
-        ct.setToken("testtoken");
-        ct.setUser(user);
+        ClientToken ct = newInstence();
+        us.save(ct.getUser());
+        assertThat(ct.getUser().getId(), not(0));
         cts.save(ct);
         assertThat(ct.getId(), not(0));
     }
 
     @Test
     public void testFindByEmail() {
-        User user = new User();
-        user.setEmail("test@test.com");
-        user.setPassword("test");
-        user.setRegDate(new Date());
+        ClientToken ct = newInstence();
+        User user = ct.getUser();
         us.save(user);
         assertThat(user.getId(), not(0));
-        ClientToken ct = new ClientToken();
-        ct.setToken("testtoken");
-        ct.setUser(user);
         cts.save(ct);
         assertThat(ct.getId(), not(0));
 
         ClientToken result = cts.findByEmail(user.getEmail());
         assertEquals(ct, result);
     }
-    
+
     @Test
-    public void testFindByToken(){
-        User user = new User();
-        user.setEmail("test@test.com");
-        user.setPassword("test");
-        user.setRegDate(new Date());
+    public void testFindByToken() {
+        ClientToken ct = newInstence();
+        User user = ct.getUser();
         us.save(user);
         assertThat(user.getId(), not(0));
-        ClientToken ct = new ClientToken();
-        ct.setToken("testtoken");
-        ct.setUser(user);
         cts.save(ct);
         assertThat(ct.getId(), not(0));
 
         ClientToken result = cts.findByToken("testtoken");
         assertEquals(ct, result);
     }
-
+    public static ClientToken newInstence(){
+        ClientToken ct = new ClientToken();
+        ct.setToken("testtoken");
+        User user = UserServiceTest.newInstence();
+        ct.setUser(user);
+        
+        return ct;
+    }
 }
