@@ -1,18 +1,15 @@
 package io.loli.sc.server.action;
 
-import static org.junit.Assert.assertThat;
-
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import io.loli.sc.server.entity.Cat;
 import io.loli.sc.server.entity.ClientToken;
 import io.loli.sc.server.entity.UploadedImage;
 import io.loli.sc.server.entity.User;
-import io.loli.sc.server.service.CatService;
-import io.loli.sc.server.service.CatServiceTest;
 import io.loli.sc.server.service.UserService;
 import io.loli.sc.server.service.UserServiceTest;
 
@@ -23,7 +20,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.inject.Inject;
-import static org.hamcrest.CoreMatchers.not;
 
 import org.hamcrest.CustomMatcher;
 import org.junit.Before;
@@ -95,15 +91,10 @@ public class ImageClientUploadTest extends
     @Inject
     private ImageClientUpload imageClientUpload;
 
-    @Inject
-    private CatService cs;
-
     @Test
     public void testUpload() throws FileNotFoundException, IOException {
-        Cat cat = CatServiceTest.newInstence();
-        User user = cat.getUser();
+        User user = UserServiceTest.newInstence();
         us.save(user);
-        cs.save(cat);
 
         ClientToken ct = imageClientUpload.requestToken(user.getEmail(),
                 user.getPassword());
@@ -115,7 +106,7 @@ public class ImageClientUploadTest extends
 
         // 无法模拟上传文件，所以直接调用upload方法
         UploadedImage img = imageClientUpload.upload(ct.getToken(),
-                cat.getId(), "This is a test file", mockMultipartFile);
+                user.getId(), "This is a test file", mockMultipartFile);
         assertNotNull(img.getPath());
         assertThat(img.getId(), not(0));
     }

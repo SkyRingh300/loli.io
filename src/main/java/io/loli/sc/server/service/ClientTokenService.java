@@ -29,6 +29,7 @@ public class ClientTokenService {
 
     /**
      * 将ClientToken对象持久化
+     * 
      * @param ct
      */
     @Transactional(propagation = Propagation.REQUIRED)
@@ -38,11 +39,23 @@ public class ClientTokenService {
 
     /**
      * 通过token的md5值查找出此token
+     * 
      * @param token
      * @return 当查找不到时，返回null
      */
     public ClientToken findByToken(String token) {
         return ctd.findByToken(token);
+    }
+
+    /**
+     * 判断某个token是否属于指定的用户id
+     * @param token
+     * @param u_id 用户id
+     * @return 如果此token不存在或者不属于指定用户返回false，否则返回true
+     */
+    public boolean checkTokenBelongToUser(String token, int u_id) {
+        ClientToken clientToken = this.findByToken(token);
+        return token!=null||clientToken.getUser().getId() == u_id;
     }
 
 }

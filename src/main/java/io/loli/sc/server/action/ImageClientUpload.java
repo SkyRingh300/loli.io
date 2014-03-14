@@ -3,7 +3,6 @@ package io.loli.sc.server.action;
 import io.loli.sc.server.entity.ClientToken;
 import io.loli.sc.server.entity.UploadedImage;
 import io.loli.sc.server.entity.User;
-import io.loli.sc.server.service.CatService;
 import io.loli.sc.server.service.ClientTokenService;
 import io.loli.sc.server.service.UploadedImageService;
 import io.loli.sc.server.service.UserService;
@@ -41,9 +40,6 @@ public class ImageClientUpload {
     @Inject
     @Named("userService")
     private UserService us;
-
-    @Inject
-    private CatService cs;
 
     @Inject
     private UploadedImageService uic;
@@ -84,12 +80,17 @@ public class ImageClientUpload {
     public @ResponseBody
     UploadedImage upload(
             @RequestParam(value = "token", required = true) String token,
-            @RequestParam(value = "c_id", required = true) int c_id,
+            @RequestParam(value = "u_id", required = true) int u_id,
             @RequestParam(value = "desc", required = false) String desc,
             @RequestParam(value = "image", required = true) MultipartFile imageFile) {
+        
+        if(cts.checkTokenBelongToUser(token, u_id)){
+            
+        }
+        
+        
         UploadedImage imageObj = new UploadedImage();
         imageObj.setDate(new Date());
-        imageObj.setCat(cs.findById(c_id));
         imageObj.setDesc((null == desc || desc.isEmpty()) ? "" : desc);
 
         // 当上传的是图片文件时，保存图片
@@ -106,8 +107,8 @@ public class ImageClientUpload {
     }
 
     /**
-     * 判断上传的一个文件是否是图片文件
-     * 
+     * 判断上传的一个文件是否是图片文件<br/>
+     * 只允许png和jpg/jpeg类型的图片
      * @param image
      * @return 如果是图片返回true，不是图片返回false
      */
