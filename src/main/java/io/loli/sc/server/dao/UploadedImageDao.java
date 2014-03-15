@@ -8,7 +8,7 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-@Named
+@Named("imageDao")
 public class UploadedImageDao {
     @PersistenceContext
     private EntityManager em;
@@ -25,6 +25,7 @@ public class UploadedImageDao {
      * 根据图片id将查询出此图片的信息
      * 
      * @param id
+     *            图片的id
      * @return 查询出的图片，如果没有此id的图片，则返回null
      */
     public UploadedImage findById(int id) {
@@ -32,15 +33,24 @@ public class UploadedImageDao {
     }
 
     /**
-     * 根据Cat的id查询出该cat下的所有图片
+     * 分页查询出指定用户的截图列表
      * 
-     * @param cid
-     * @return 该cat下的所有图片的列表
+     * @param u_id
+     *            用户id
+     * @param firstPosition
+     *            初始位置
+     * @param maxResults
+     *            每页的最大数量
+     * @return 截图列表
      */
-    public List<UploadedImage> listByCId(int cid) {
+    public List<UploadedImage> listByUId(int u_id, int firstPosition,
+            int maxResults) {
+
         return em
-                .createNamedQuery("UploadedImage.listByCId",
-                        UploadedImage.class).setParameter("cid", cid)
+                .createNamedQuery("UploadedImage.listByUId",
+                        UploadedImage.class).setParameter("u_id", u_id)
+                .setFirstResult(firstPosition).setMaxResults(maxResults)
                 .getResultList();
     }
+
 }

@@ -3,21 +3,29 @@ package io.loli.sc.server.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 @Entity
-@NamedQueries(value = {})
+@NamedQueries(value = { @NamedQuery(name = "UploadedImage.listByUId", query = "SELECT u FROM UploadedImage u WHERE u.user.id=:u_id") })
 public class UploadedImage implements Serializable {
 
     private static final long serialVersionUID = 1398371509051853854L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+
+    @JoinColumn
+    @ManyToOne(cascade = CascadeType.REFRESH)
+    private User user;
 
     @Column
     private Date date;
@@ -72,5 +80,21 @@ public class UploadedImage implements Serializable {
 
     public void setOriginName(String originName) {
         this.originName = originName;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

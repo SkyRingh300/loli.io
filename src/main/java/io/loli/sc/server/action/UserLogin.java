@@ -7,6 +7,7 @@ import java.util.Date;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.ui.Model;
@@ -110,5 +111,17 @@ public class UserLogin {
         } else {
             return "redirect:/user/login";
         }
+    }
+
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logOut(HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        if (user != null) {
+            request.getSession().removeAttribute("user");
+        } else {
+            // TODO 用户未登录时的操作
+        }
+        return "redirect:/user/login";
+
     }
 }

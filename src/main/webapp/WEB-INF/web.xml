@@ -65,10 +65,18 @@
         <servlet-name>sc-server</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
-    <!-- <jsp-config> <taglib> <taglib-uri>http://java.sun.com/jsp/jstl/fmt</taglib-uri> 
-        <taglib-location>/META-INF/fmt.tld</taglib-location> </taglib> <taglib> <taglib-uri>http://java.sun.com/jsp/jstl/c</taglib-uri> 
-        <taglib-location>/META-INF/c.tld</taglib-location> </taglib> <taglib> <taglib-uri>http://java.sun.com/jsp/jstl/functions</taglib-uri> 
-        <taglib-location>/META-INF/fn.tld</taglib-location> </taglib> <jsp-property-group> 
-        <url-pattern>*.jsp</url-pattern> <trim-directive-whitespaces>true</trim-directive-whitespaces> 
-        </jsp-property-group> </jsp-config> -->
+    <jsp-config>
+        <taglib>
+            <taglib-uri>http://java.sun.com/jsp/jstl/fmt</taglib-uri>
+            <taglib-location>/META-INF/fmt.tld</taglib-location>
+        </taglib>
+        <taglib>
+            <taglib-uri>http://java.sun.com/jsp/jstl/c</taglib-uri>
+            <taglib-location>/META-INF/c.tld</taglib-location>
+        </taglib>
+        <jsp-property-group>
+            <url-pattern>*.jsp</url-pattern>
+            <trim-directive-whitespaces>true</trim-directive-whitespaces>
+        </jsp-property-group>
+    </jsp-config>
 </web-app>

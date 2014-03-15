@@ -4,7 +4,6 @@
     String rootPath = request.getServletContext().getContextPath();
     request.setAttribute("rootPath", rootPath);
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -12,29 +11,73 @@
 <script src="${rootPath}/static/js/jquery.js"></script>
 <script src="${rootPath}/static/js/md5.js"></script>
 <script src="${rootPath}/static/js/regist.js"></script>
+<script src="${rootPath}/static/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="${rootPath}/static/css/bootstrap.min.css">
+
+<style type="text/css">
+.register-form {
+	width: 70%;
+	margin: auto;
+	margin-top: 60px;
+	padding: 3px 60px 60px 20px;
+	border-width: 1px;
+	border-color: rgb(221, 221, 221);
+	border-radius: 4 4 4 4;
+	box-shadow: none;
+	border-style: solid;
+}
+</style>
 </head>
 <body>
-	<form action="regist" method="POST" onsubmit="return md5password();">
-		<table border="0">
-			<tr>
-				<td><label for="user.email">E-mail</label></td>
-				<td><input type="email" id="user.email" name="email"></td>
-			<tr>
-				<td><label for="user.password">Password</label></td>
-				<td><input type="password" id="user.password" name="password_ori"></td>
-			</tr>
-			<tr>
-				<td><label for="password">Repeat Password</label></td>
-				<td><input type="password" id="password_re" name="password_re_ori"></td>
-			</tr>
-			<tr>
-				<td></td>
-				<td><input type="submit" name="button" value="注册"></td>
-			</tr>
-		</table>
+	<jsp:include page="../top.jsp"></jsp:include>
 
-		<input type="hidden" id="password_md5" name="password">
-		<input type="hidden" id="password_re_md5" name="password_re">
-	</form>
+	<div id="main">
+		<div class="container">
+			<div class="register-form">
+				<h2>Register</h2>
+				<form class="form-horizontal" action="regist" role="form"
+					method="POST" onsubmit="return md5password();">
+					<div class="form-group">
+						<label for="user-email" class="col-sm-4 control-label">E-mail</label>
+						<div class="col-sm-6">
+							<input type="email" name="email" class="form-control"
+								id="user-email" placeholder="E-mail">
+						</div>
+						<span class="label label-danger" id="email_error"></span>
+
+					</div>
+					<div class="form-group">
+						<label for="user-password" class="col-sm-4 control-label">Password</label>
+						<div class="col-sm-6">
+							<input type="password" class="form-control" name="password_ori"
+								id="user-password" placeholder="Password">
+						</div>
+						<span class="label label-danger" id="password_error"></span>
+
+					</div>
+					<div class="form-group">
+						<label for="password_re" class="col-sm-4 control-label">Repeat
+							Password</label>
+						<div class="col-sm-6">
+							<input type="password" class="form-control"
+								name="password_re_ori" id="password_re"
+								placeholder="Repeat Password">
+						</div>
+						<span class="label label-danger" id="password_re_error"></span>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-offset-4 col-sm-6">
+							<button type="submit" class="btn btn-primary">Register</button>
+						</div>
+					</div>
+					<input type="hidden" id="password_md5" name="password"> <input
+						type="hidden" id="password_re_md5" name="password_re">
+				</form>
+			</div>
+		</div>
+	</div>
+
+
 </body>
 </html>

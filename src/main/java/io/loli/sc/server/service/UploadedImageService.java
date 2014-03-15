@@ -1,17 +1,18 @@
 package io.loli.sc.server.service;
 
+import java.util.List;
+
 import io.loli.sc.server.dao.UploadedImageDao;
 import io.loli.sc.server.entity.UploadedImage;
-
-import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-@Named
+@Named("imageService")
 public class UploadedImageService {
 
     @Inject
+    @Named("imageDao")
     private UploadedImageDao ud;
 
     public void save(UploadedImage image) {
@@ -32,13 +33,35 @@ public class UploadedImageService {
         return ud.findById(id);
     }
 
+    private int maxResults = 20;
+
     /**
-     * 根据Cat的id查询出该cat下的所有图片
+     * 分页查询出指定用户的截图列表
      * 
-     * @param cid
-     * @return 该cat下的所有图片的列表
+     * @param u_id
+     *            用户id
+     * @param firstPosition
+     *            初始位置
+     * @param maxResults
+     *            每页的最大数量
+     * @return 截图列表
      */
-    public List<UploadedImage> listByCId(int cid) {
-        return ud.listByCId(cid);
+    public List<UploadedImage> listByUId(int u_id, int firstPosition,
+            int maxResults) {
+        return ud.listByUId(u_id, firstPosition, maxResults);
     }
+
+    /**
+     * 不包含分页参数的查询，默认查询出20行
+     * 
+     * @param u_id
+     *            用户id
+     * @param firstPosition
+     *            开始位置
+     * @return 截图列表
+     */
+    public List<UploadedImage> listByUId(int u_id, int firstPosition) {
+        return this.listByUId(u_id, firstPosition, maxResults);
+    }
+
 }

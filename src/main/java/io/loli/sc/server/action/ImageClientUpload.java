@@ -83,12 +83,11 @@ public class ImageClientUpload {
             @RequestParam(value = "u_id", required = true) int u_id,
             @RequestParam(value = "desc", required = false) String desc,
             @RequestParam(value = "image", required = true) MultipartFile imageFile) {
-        
-        if(cts.checkTokenBelongToUser(token, u_id)){
-            
+
+        if (!cts.checkTokenBelongToUser(token, u_id)) {
+            //TODO 当token不属于此用户时
         }
-        
-        
+
         UploadedImage imageObj = new UploadedImage();
         imageObj.setDate(new Date());
         imageObj.setDesc((null == desc || desc.isEmpty()) ? "" : desc);
@@ -100,7 +99,7 @@ public class ImageClientUpload {
             imageObj.setOriginName(imageFile.getOriginalFilename());
             uic.save(imageObj);
         } else {
-            // TODO
+            // TODO 当上传的不是图片文件时
         }
 
         return imageObj;
@@ -109,6 +108,7 @@ public class ImageClientUpload {
     /**
      * 判断上传的一个文件是否是图片文件<br/>
      * 只允许png和jpg/jpeg类型的图片
+     * 
      * @param image
      * @return 如果是图片返回true，不是图片返回false
      */
