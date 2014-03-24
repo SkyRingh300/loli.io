@@ -1,7 +1,7 @@
 
 function validateEmail() {
 	var email = $("#user-email").val();
-	var reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/;
+	var reg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
 	if (reg.test(email)) {
 		$("#email-error").html("");
 		return true;
@@ -37,7 +37,7 @@ function md5password() {
 		var md5pw = hex_md5(password1);
 		$("#password_md5").attr("value", md5pw);
 		$("#password_re_md5").attr("value", md5pw);
-		return false;
+		return true;
 	} else {
 		return false;
 	}

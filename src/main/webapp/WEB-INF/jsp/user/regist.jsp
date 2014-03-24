@@ -9,6 +9,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Regist</title>
 <script src="${rootPath}/static/js/jquery.js"></script>
+<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> -->
 <script src="${rootPath}/static/js/md5.js"></script>
 <script src="${rootPath}/static/js/regist.js"></script>
 <script src="${rootPath}/static/js/bootstrap.min.js"></script>
@@ -44,7 +45,7 @@
 							<input type="email" name="email" class="form-control"
 								id="user-email" placeholder="E-mail">
 						</div>
-						<span class="label label-danger" id="email_error"></span>
+						<span class="label label-danger" id="email-error"></span>
 
 					</div>
 					<div class="form-group">
