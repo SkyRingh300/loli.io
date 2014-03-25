@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%
     String rootPath = request.getServletContext().getContextPath();
     request.setAttribute("rootPath", rootPath);
@@ -9,7 +11,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Regist</title>
 <!-- <script src="${rootPath}/static/js/jquery.js"></script> -->
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="${rootPath}/static/js/md5.js"></script>
 <script src="${rootPath}/static/js/regist.js"></script>
 <script src="${rootPath}/static/js/bootstrap.min.js"></script>
@@ -45,7 +48,8 @@
 							<input type="email" name="email" class="form-control"
 								id="user-email" placeholder="E-mail">
 						</div>
-						<span class="label label-danger" id="email-error"></span>
+						<span class="label label-danger" id="email-error">${message["email"]}
+						</span>
 
 					</div>
 					<div class="form-group">

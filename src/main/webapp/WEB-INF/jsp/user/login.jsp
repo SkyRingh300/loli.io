@@ -48,7 +48,7 @@
                             <input type="email" name="email" class="form-control"
                                 id="user-email" placeholder="E-mail">
                         </div>
-                        <span class="label label-danger" id="email-error"></span>
+                        <span class="label label-danger" id="email-error">${message["email"]}</span>
                     </div>
                     <div class="form-group">
                         <label for="user-password" class="col-sm-4 control-label">Password</label>

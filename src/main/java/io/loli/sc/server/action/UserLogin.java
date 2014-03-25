@@ -1,9 +1,12 @@
 package io.loli.sc.server.action;
 
 import io.loli.sc.server.entity.User;
+import io.loli.sc.server.exception.DBException;
 import io.loli.sc.server.service.UserService;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -52,19 +55,26 @@ public class UserLogin {
      */
     @RequestMapping(value = { "/regist" }, method = RequestMethod.POST)
     public String submitReg(@ModelAttribute User user, Model model,
-            @RequestParam(required = true) String password_re) {
+            @RequestParam(required = true) String password_re,
+            HttpServletRequest request) {
+        Map<String, String> msgMap = new HashMap<String, String>();
+        request.setAttribute("message", msgMap);
         // 没有md5加密
-        if (user.getPassword().length() != 32) {
-            return REGINPUT;
-        }
-        // 两次密码不相等
-        if (!user.getPassword().equals(password_re)) {
+        if (user.getPassword().length() != 32
+                || !user.getPassword().equals(password_re)) {
+            msgMap.put("email", "非法请求");
             return REGINPUT;
         }
 
         // 用户注册日期
         user.setRegDate(new Date());
-        userService.save(user);
+        try {
+            userService.save(user);
+        } catch (DBException e) {
+            // 已经存在此邮箱，抛出异常
+            msgMap.put("email", e.getMessage());
+            return REGINPUT;
+        }
         return "redirect:/user/login";
     }
 
@@ -85,7 +95,11 @@ public class UserLogin {
      */
     @RequestMapping(value = { "/login" }, method = RequestMethod.POST)
     public String submitLogin(@ModelAttribute("user") User user, Model model,
-            HttpSession session) {
+            HttpSession session, HttpServletRequest request) {
+        // 保存页面显示信息的map
+        Map<String, String> msgMap = new HashMap<String, String>();
+        request.setAttribute("message", msgMap);
+
         // 是否验证通过
         boolean flag = true;
         if (user.getEmail() == null || user.getEmail().trim().length() == 0) {
@@ -98,7 +112,9 @@ public class UserLogin {
         }
         // 当验证失败时，跳转回登陆界面
         if (!flag) {
-            return "redirect:/user/login";
+            // 非法请求
+            msgMap.put("email", "非法请求");
+            return "/user/login";
         }
 
         // 根据此email查询出用户
@@ -109,7 +125,9 @@ public class UserLogin {
             session.setAttribute("user", trueUser);
             return "redirect:/user/welcome";
         } else {
-            return "redirect:/user/login";
+            // 邮箱或者密码错误
+            msgMap.put("email", "用户名或者密码错误");
+            return "/user/login";
         }
     }
 
@@ -123,10 +141,10 @@ public class UserLogin {
         }
         return "redirect:/user/login";
     }
-    
-    @RequestMapping(value="/welcome",method = RequestMethod.GET)
-    public String welcome(){
-        
+
+    @RequestMapping(value = "/welcome", method = RequestMethod.GET)
+    public String welcome() {
+
         return "user/welcome";
     }
 }
