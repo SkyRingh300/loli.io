@@ -41,7 +41,7 @@
 					method="POST" onsubmit="return md5password();">
 					<div class="form-group">
 						<label for="user-email" class="col-sm-4 control-label">E-mail</label>
-						<div class="col-sm-6">
+						<div class="col-sm-4">
 							<input type="email" name="email" class="form-control"
 								id="user-email" placeholder="E-mail">
 						</div>
@@ -50,7 +50,7 @@
 					</div>
 					<div class="form-group">
 						<label for="user-password" class="col-sm-4 control-label">Password</label>
-						<div class="col-sm-6">
+						<div class="col-sm-4">
 							<input type="password" class="form-control" name="password_ori"
 								id="user-password" placeholder="Password">
 						</div>
@@ -60,7 +60,7 @@
 					<div class="form-group">
 						<label for="password_re" class="col-sm-4 control-label">Repeat
 							Password</label>
-						<div class="col-sm-6">
+						<div class="col-sm-4">
 							<input type="password" class="form-control"
 								name="password_re_ori" id="password_re"
 								placeholder="Repeat Password">
