@@ -11,26 +11,62 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Login</title>
-<script src="${rootPath}/static/js/jquery.js"></script>
+<!-- <script src="${rootPath}/static/js/jquery.js"></script> -->
 <script src="${rootPath}/static/js/md5.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="${rootPath}/static/js/login.js"></script>
+<script src="${rootPath}/static/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css"
+    href="${rootPath}/static/css/bootstrap.min.css">
+    
+<style type="text/css">
+.login-form {
+    width: 70%;
+    margin: auto;
+    margin-top: 60px;
+    padding: 3px 60px 60px 20px;
+    border-width: 1px;
+    border-color: rgb(221, 221, 221);
+    border-radius: 4 4 4 4;
+    box-shadow: none;
+    border-style: solid;
+}
+</style>
 </head>
 <body>
-	<form action="login" method="POST" onsubmit="return md5password();">
-		<table border="0">
-			<tr>
-				<td><label for="user.email">E-mail</label ></td>
-				<td><input type="email" id="user.email" name="email"></td>
-			<tr>
-				<td><label for="user.password">Password</label></td>
-				<td><input type="password" id="user.password" name="password_ori"></td>
-			</tr>
-			<tr>
-				<td></td>
-				<td><input type="submit" name="submit" value="登录"></td>
-			</tr>
-		</table>
-		<input type="hidden" id="password_md5" name="password">
-	</form>
+    <jsp:include page="../top.jsp"></jsp:include>
+
+    <div id="main">
+        <div class="container">
+            <div class="login-form">
+                <h2>Login</h2>
+                <form class="form-horizontal" action="login" role="form"
+                    method="POST" onsubmit="return md5password();">
+                    <div class="form-group">
+                        <label for="user-email" class="col-sm-4 control-label">E-mail</label>
+                        <div class="col-sm-4">
+                            <input type="email" name="email" class="form-control"
+                                id="user-email" placeholder="E-mail">
+                        </div>
+                        <span class="label label-danger" id="email-error"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-password" class="col-sm-4 control-label">Password</label>
+                        <div class="col-sm-4">
+                            <input type="password" class="form-control" id="user-password" name="password_ori" placeholder="Password">
+                        </div>
+                        <span class="label label-danger" id="password_error"></span>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-4 col-sm-6">
+                            <button type="submit" class="btn btn-primary">Login</button>
+                        </div>
+                    </div>
+                            <input type="hidden" id="password_md5" name="password">
+
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

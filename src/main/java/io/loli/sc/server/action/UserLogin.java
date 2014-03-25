@@ -122,6 +122,11 @@ public class UserLogin {
             // TODO 用户未登录时的操作
         }
         return "redirect:/user/login";
-
+    }
+    
+    @RequestMapping(value="/welcome",method = RequestMethod.GET)
+    public String welcome(){
+        
+        return "user/welcome";
     }
 }
