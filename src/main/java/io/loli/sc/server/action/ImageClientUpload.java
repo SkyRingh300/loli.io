@@ -54,7 +54,8 @@ public class ImageClientUpload {
         String token = null;
         ClientToken ct = null;
         // 验证密码是否正确
-        if (trueUser.getPassword().equalsIgnoreCase(password)) {
+        if (trueUser != null
+                && trueUser.getPassword().equalsIgnoreCase(password)) {
             ct = cts.findByEmail(email);
 
             if (ct != null) {
@@ -71,8 +72,9 @@ public class ImageClientUpload {
                 ct.setUser(trueUser);
                 cts.save(ct);
             }
+            return ct;
         }
-        return ct;
+        return new ClientToken();
     }
 
     @RequestMapping(value = { "/upload" }, method = { RequestMethod.POST })
@@ -80,43 +82,26 @@ public class ImageClientUpload {
     public @ResponseBody
     UploadedImage upload(
             @RequestParam(value = "token", required = true) String token,
-            @RequestParam(value = "u_id", required = true) int u_id,
+            @RequestParam(value = "email", required = true) String email,
             @RequestParam(value = "desc", required = false) String desc,
-            @RequestParam(value = "image", required = true) MultipartFile imageFile) {
+            @RequestParam(value = "image", required = true) MultipartFile imageFile,
+            HttpServletRequest request) {
 
-        if (!cts.checkTokenBelongToUser(token, u_id)) {
-            //TODO 当token不属于此用户时
+        if (!cts.checkTokenBelongToUser(token, email)) {
+            return new UploadedImage();
         }
 
         UploadedImage imageObj = new UploadedImage();
         imageObj.setDate(new Date());
         imageObj.setDesc((null == desc || desc.isEmpty()) ? "" : desc);
 
-        // 当上传的是图片文件时，保存图片
-        if (validateImage(imageFile)) {
-            File file = saveImage(imageFile);
-            imageObj.setPath(file.getPath());
-            imageObj.setOriginName(imageFile.getOriginalFilename());
-            uic.save(imageObj);
-        } else {
-            // TODO 当上传的不是图片文件时
-        }
+        File file = saveImage(imageFile);
+        imageObj.setPath(file.getPath());
+        imageObj.setOriginName(imageFile.getOriginalFilename());
+        uic.save(imageObj);
 
+        imageObj.setPath("img/" + file.getName());
         return imageObj;
-    }
-
-    /**
-     * 判断上传的一个文件是否是图片文件<br/>
-     * 只允许png和jpg/jpeg类型的图片
-     * 
-     * @param image
-     * @return 如果是图片返回true，不是图片返回false
-     */
-    private boolean validateImage(MultipartFile image) {
-        String contentType = image.getContentType();
-        return contentType.equals("image/jpeg")
-                || contentType.equals("image/jpg")
-                || contentType.equals("image/png");
     }
 
     @Inject
@@ -136,9 +121,11 @@ public class ImageClientUpload {
                 + File.separator
                 + MD5Util.hash(
                         new Date().getTime() + image.getOriginalFilename())
-                        .substring(26) + "."
-                // 获取图片扩展名，如image/jpg
-                + image.getContentType().substring(6));
+                        .substring(26)
+                + "."
+                // 获取图片扩展名，jpg,png
+                + image.getOriginalFilename().substring(
+                        image.getOriginalFilename().lastIndexOf(".") + 1));
         if (!file.getParentFile().exists()) {
             file.getParentFile().mkdir();
         }

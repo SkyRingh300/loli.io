@@ -1,23 +1,12 @@
 package io.loli.sc.server.action;
 
-import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import io.loli.sc.server.entity.ClientToken;
-import io.loli.sc.server.entity.UploadedImage;
 import io.loli.sc.server.entity.User;
 import io.loli.sc.server.service.UserService;
 import io.loli.sc.server.service.UserServiceTest;
-
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 import javax.inject.Inject;
 
@@ -26,7 +15,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -88,26 +76,4 @@ public class ImageClientUploadTest extends
                         }));
     }
 
-    @Inject
-    private ImageClientUpload imageClientUpload;
-
-    @Test
-    public void testUpload() throws FileNotFoundException, IOException {
-        User user = UserServiceTest.newInstence();
-        us.save(user);
-
-        ClientToken ct = imageClientUpload.requestToken(user.getEmail(),
-                user.getPassword());
-
-        File fileToUpload = new File("src/test/resources/" + "imgToUpload.jpg");
-        MockMultipartFile mockMultipartFile = new MockMultipartFile("image",
-                fileToUpload.getName(), "image/jpg", new BufferedInputStream(
-                        new FileInputStream(fileToUpload)));
-
-        // 无法模拟上传文件，所以直接调用upload方法
-        UploadedImage img = imageClientUpload.upload(ct.getToken(),
-                user.getId(), "This is a test file", mockMultipartFile);
-        assertNotNull(img.getPath());
-        assertThat(img.getId(), not(0));
-    }
 }
