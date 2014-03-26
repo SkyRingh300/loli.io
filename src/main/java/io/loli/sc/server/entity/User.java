@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 @Entity
 @NamedQueries(value = { @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email=:email") })
 public class User implements Serializable {
@@ -24,6 +26,7 @@ public class User implements Serializable {
     @Column
     private Date regDate;
     @Column
+    @JsonIgnore
     private String password;
 
     public int getId() {
