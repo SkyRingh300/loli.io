@@ -127,6 +127,7 @@ public class UserLogin {
         } else {
             // 邮箱或者密码错误
             msgMap.put("email", "用户名或者密码错误");
+            request.setAttribute("email", user.getEmail());
             return "/user/login";
         }
     }

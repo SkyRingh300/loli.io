@@ -46,7 +46,7 @@
                         <label for="user-email" class="col-sm-4 control-label">E-mail</label>
                         <div class="col-sm-4">
                             <input type="email" name="email" class="form-control"
-                                id="user-email" placeholder="E-mail">
+                                id="user-email" value="${email}" placeholder="E-mail">
                         </div>
                         <span class="label label-danger" id="email-error">${message["email"]}</span>
                     </div>
