@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
@@ -23,7 +25,8 @@ public class User implements Serializable {
     private int id;
     @Column(unique = true)
     private String email;
-    @Column
+    @Column(name = "reg_date")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date regDate;
     @Column
     @JsonIgnore

@@ -13,6 +13,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @NamedQueries(value = { @NamedQuery(name = "UploadedImage.listByUId", query = "SELECT u FROM UploadedImage u WHERE u.user.id=:u_id") })
@@ -28,18 +31,23 @@ public class UploadedImage implements Serializable {
     private User user;
 
     @Column
+    @Temporal(TemporalType.TIMESTAMP)
     private Date date;
     /**
      * 图片描述显示在alt标签中
      */
     @Column
     private String description;
-    @Column
-    private String path;
+    /**
+     * 图片存储在哪里
+     */
+    @OneToOne
+    @JoinColumn(name = "storage_id")
+    private ImageStorage imageStorage;
     /**
      * 原始名字显示在title标签中
      */
-    @Column
+    @Column(name="origin_name")
     private String originName;
 
     public int getId() {
@@ -66,14 +74,6 @@ public class UploadedImage implements Serializable {
         this.description = desc;
     }
 
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
     public String getOriginName() {
         return originName;
     }
@@ -96,5 +96,13 @@ public class UploadedImage implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public ImageStorage getImageStorage() {
+        return imageStorage;
+    }
+
+    public void setImageStorage(ImageStorage imageStorage) {
+        this.imageStorage = imageStorage;
     }
 }
