@@ -7,6 +7,7 @@ import io.loli.sc.server.service.ClientTokenService;
 import io.loli.sc.server.service.UploadedImageService;
 import io.loli.sc.server.service.UserService;
 import io.loli.util.MD5Util;
+import io.loli.util.ShortUrl;
 
 import java.io.File;
 import java.io.IOException;
@@ -119,8 +120,8 @@ public class ImageClientUpload {
                 + File.separator
                 + "img"
                 + File.separator
-                + MD5Util.hash(
-                        new Date().getTime() + image.getOriginalFilename())
+                + ShortUrl.shortText(
+                        new Date().getTime() + image.getOriginalFilename())[0]
                         .substring(26)
                 + "."
                 // 获取图片扩展名，jpg,png

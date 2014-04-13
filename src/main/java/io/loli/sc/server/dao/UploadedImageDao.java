@@ -24,8 +24,7 @@ public class UploadedImageDao {
     /**
      * 根据图片id将查询出此图片的信息
      * 
-     * @param id
-     *            图片的id
+     * @param id 图片的id
      * @return 查询出的图片，如果没有此id的图片，则返回null
      */
     public UploadedImage findById(int id) {
@@ -35,12 +34,9 @@ public class UploadedImageDao {
     /**
      * 分页查询出指定用户的截图列表
      * 
-     * @param u_id
-     *            用户id
-     * @param firstPosition
-     *            初始位置
-     * @param maxResults
-     *            每页的最大数量
+     * @param u_id 用户id
+     * @param firstPosition 初始位置
+     * @param maxResults 每页的最大数量
      * @return 截图列表
      */
     public List<UploadedImage> listByUId(int u_id, int firstPosition,
@@ -52,5 +48,4 @@ public class UploadedImageDao {
                 .setFirstResult(firstPosition).setMaxResults(maxResults)
                 .getResultList();
     }
-
 }
