@@ -1,7 +1,7 @@
 
 function validateEmail() {
 	var email = $("#user-email").val();
-	var reg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+	var reg = /^.+@.+$/;
 	if (reg.test(email)) {
 		$("#email-error").html("");
 		return true;
