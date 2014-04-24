@@ -32,8 +32,7 @@ public class UserService {
     /**
      * 更新User实体
      * 
-     * @param user
-     *            需要更新的实体
+     * @param user 需要更新的实体
      * @return 更新后的实体
      * @see UserDao#update(User)
      */

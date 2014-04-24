@@ -33,6 +33,7 @@ public class UploadedImage implements Serializable {
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
+
     /**
      * 图片描述显示在alt标签中
      */
@@ -47,8 +48,11 @@ public class UploadedImage implements Serializable {
     /**
      * 原始名字显示在title标签中
      */
-    @Column(name="origin_name")
+    @Column(name = "origin_name")
     private String originName;
+
+    @Column
+    private String path;
 
     public int getId() {
         return id;
@@ -104,5 +108,13 @@ public class UploadedImage implements Serializable {
 
     public void setImageStorage(ImageStorage imageStorage) {
         this.imageStorage = imageStorage;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }

@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%
     String rootPath = request.getServletContext().getContextPath();
-    request.setAttribute("rootPath", rootPath);
+			request.setAttribute("rootPath", rootPath);
 %>
 <html>
 <head>
@@ -30,6 +30,19 @@
 	border-style: solid;
 }
 </style>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#sendEmail").click(function(e){
+            if(validateEmail()){
+                $.post("${rootPath}/mail/send",{email:$("#user-email").val()},function(e){
+                    alert(e);
+                    },"text");
+            }});
+        
+            
+        
+    });
+</script>
 </head>
 <body>
 	<jsp:include page="../top.jsp"></jsp:include>
@@ -37,35 +50,43 @@
 	<div id="main">
 		<div class="container">
 			<div class="register-form">
-				<h2>Register</h2>
-				<form class="form-horizontal" action="regist" role="form"
-					method="POST" onsubmit="return md5password();">
+				<h2>用户注册</h2>
+				<form class="form-horizontal" action="regist" method="POST"
+					onsubmit="return md5password();">
 					<div class="form-group">
-						<label for="user-email" class="col-sm-4 control-label">E-mail</label>
+						<label for="user-email" class="col-sm-4 control-label">邮箱</label>
 						<div class="col-sm-4">
 							<input type="email" name="email" class="form-control"
-								id="user-email" placeholder="E-mail">
+								id="user-email" placeholder="邮箱">
 						</div>
 						<span class="label label-danger" id="email-error">${message["email"]}
 						</span>
-
 					</div>
 					<div class="form-group">
-						<label for="user-password" class="col-sm-4 control-label">Password</label>
+						<label for="验证码" class="col-sm-4 control-label">验证码</label>
+
+						<div class="col-sm-4">
+							<input type="text" name="token" class="form-control"
+								id="user-token" placeholder="验证码">
+						</div>
+						<input type="button" id="sendEmail" class="btn" value="发送验证码">
+						<span class="label label-danger" id="token-error">${message["email"]}
+						</span>
+					</div>
+					<div class="form-group">
+						<label for="user-password" class="col-sm-4 control-label">密码</label>
 						<div class="col-sm-4">
 							<input type="password" class="form-control" name="password_ori"
-								id="user-password" placeholder="Password">
+								id="user-password" placeholder="密码">
 						</div>
 						<span class="label label-danger" id="password_error"></span>
 
 					</div>
 					<div class="form-group">
-						<label for="password_re" class="col-sm-4 control-label">Repeat
-							Password</label>
+						<label for="password_re" class="col-sm-4 control-label">重复输入密码</label>
 						<div class="col-sm-4">
 							<input type="password" class="form-control"
-								name="password_re_ori" id="password_re"
-								placeholder="Repeat Password">
+								name="password_re_ori" id="password_re" placeholder="重复输入密码">
 						</div>
 						<span class="label label-danger" id="password_re_error"></span>
 					</div>

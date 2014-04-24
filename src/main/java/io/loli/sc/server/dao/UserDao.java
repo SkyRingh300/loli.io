@@ -25,7 +25,7 @@ public class UserDao {
     /**
      * 根据指定的email查询出User, 如果无此User则返回null, 如果有多个, 则返回第一个
      * 
-     * @param email 
+     * @param email
      * @return 查询出的User实体
      */
     public User findByEmail(String email) {
@@ -41,16 +41,17 @@ public class UserDao {
 
     /**
      * 更新User实体
+     * 
      * @param user 需要更新的实体
      * @return 更新后的实体
      */
     public User update(User user) {
         return em.merge(user);
     }
-    
-    
+
     /**
      * 根据指定的id(User的主键)查询出User
+     * 
      * @param id
      * @return 如果查询不出, 返回null
      */

@@ -5,6 +5,7 @@ package io.loli.sc.server.exception;
  * User: choco(loli@linux.com) <br/>
  * Date: 2014年3月25日 <br/>
  * Time: 下午8:59:47 <br/>
+ * 
  * @author choco
  */
 public class DBException extends RuntimeException {

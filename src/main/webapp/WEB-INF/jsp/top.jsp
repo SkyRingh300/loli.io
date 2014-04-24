@@ -12,7 +12,7 @@
 					class="icon-bar"></span> <span class="icon-bar"></span> <span
 					class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="#">ImageCloud</a>
+			<a class="navbar-brand" href="#">SCREENSHOT.PICS</a>
 		</div>
 
 		<div class="collapse navbar-collapse"

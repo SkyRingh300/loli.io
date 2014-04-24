@@ -49,24 +49,26 @@ public class ClientTokenService {
 
     /**
      * 判断某个token是否属于指定的用户id
+     * 
      * @param token
      * @param u_id 用户id
      * @return 如果此token不存在或者不属于指定用户返回false，否则返回true
      */
     public boolean checkTokenBelongToUser(String token, int u_id) {
         ClientToken clientToken = this.findByToken(token);
-        return token!=null||clientToken.getUser().getId() == u_id;
+        return token != null || clientToken.getUser().getId() == u_id;
     }
-    
+
     /**
      * 判断某个token是否属于指定的用户email
+     * 
      * @param token
      * @param u_id 用户id
      * @return 如果此token不存在或者不属于指定用户返回false，否则返回true
      */
     public boolean checkTokenBelongToUser(String token, String email) {
         ClientToken clientToken = this.findByToken(token);
-        return token!=null||clientToken.getUser().getEmail().equals(email);
+        return token != null || clientToken.getUser().getEmail().equals(email);
     }
 
 }

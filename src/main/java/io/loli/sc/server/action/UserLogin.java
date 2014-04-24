@@ -45,13 +45,10 @@ public class UserLogin {
     /**
      * 用户注册POST提交
      * 
-     * @param user
-     *            User对象
+     * @param user User对象
      * @param model
-     * @param re_password
-     *            用户重复输入的密码, 应为md5值
-     * @param password_md5
-     *            客户端js自动生成的密码md5值, 用以验证非法提交
+     * @param re_password 用户重复输入的密码, 应为md5值
+     * @param password_md5 客户端js自动生成的密码md5值, 用以验证非法提交
      */
     @RequestMapping(value = { "/regist" }, method = RequestMethod.POST)
     public String submitReg(@ModelAttribute User user, Model model,
@@ -90,8 +87,7 @@ public class UserLogin {
      * 
      * @param user
      * @param model
-     * @param session
-     *            自动注入的Session对象
+     * @param session 自动注入的Session对象
      */
     @RequestMapping(value = { "/login" }, method = RequestMethod.POST)
     public String submitLogin(@ModelAttribute("user") User user, Model model,

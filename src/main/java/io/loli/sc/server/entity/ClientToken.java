@@ -17,7 +17,7 @@ import javax.persistence.OneToOne;
 @NamedQueries(value = {
         @NamedQuery(name = "ClientToken.findByUId", query = "SELECT c FROM ClientToken c WHERE c.user.id=:uid"),
         @NamedQuery(name = "ClientToken.findByToken", query = "SELECT c FROM ClientToken c WHERE c.token=:token") })
-public class ClientToken  implements Serializable {
+public class ClientToken implements Serializable {
 
     private static final long serialVersionUID = 1525705395637042673L;
     @Id

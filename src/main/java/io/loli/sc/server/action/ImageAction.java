@@ -48,8 +48,7 @@ public class ImageAction {
     @RequestMapping(value = "/{filename:[a-zA-Z0-9]{1,}\\.png}")
     public void showImg(@PathVariable("filename") String filename,
             HttpServletRequest request, HttpServletResponse response) {
-        String imagePath = request.getServletContext().getRealPath(
-                "img");
+        String imagePath = request.getServletContext().getRealPath("img");
 
         File file = new File(imagePath + File.separator + filename);
         if (file.exists()) {

@@ -8,6 +8,7 @@
         <class>io.loli.sc.server.entity.User</class>
         <class>io.loli.sc.server.entity.ClientToken</class>
         <class>io.loli.sc.server.entity.UploadedImage</class>
+        <class>io.loli.sc.server.entity.EmailSendLog</class>
     </persistence-unit>
 
 </persistence>

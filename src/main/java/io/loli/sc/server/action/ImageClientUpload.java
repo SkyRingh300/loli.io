@@ -48,8 +48,8 @@ public class ImageClientUpload {
     @RequestMapping(value = { "/token" }, method = { RequestMethod.GET,
             RequestMethod.POST })
     @ResponseStatus(HttpStatus.OK)
-    public @ResponseBody
-    ClientToken requestToken(@RequestParam(required = true) String email,
+    public @ResponseBody ClientToken requestToken(
+            @RequestParam(required = true) String email,
             @RequestParam(required = true) String password) {
         User trueUser = us.findByEmail(email);
         String token = null;
@@ -80,8 +80,7 @@ public class ImageClientUpload {
 
     @RequestMapping(value = { "/upload" }, method = { RequestMethod.POST })
     @ResponseStatus(HttpStatus.OK)
-    public @ResponseBody
-    UploadedImage upload(
+    public @ResponseBody UploadedImage upload(
             @RequestParam(value = "token", required = true) String token,
             @RequestParam(value = "email", required = true) String email,
             @RequestParam(value = "desc", required = false) String desc,
@@ -120,9 +119,8 @@ public class ImageClientUpload {
                 + File.separator
                 + "img"
                 + File.separator
-                + ShortUrl.shortText(
-                        new Date().getTime() + image.getOriginalFilename())[0]
-                        .substring(26)
+                + ShortUrl.shortText(new Date().getTime()
+                        + image.getOriginalFilename())[0].substring(26)
                 + "."
                 // 获取图片扩展名，jpg,png
                 + image.getOriginalFilename().substring(
