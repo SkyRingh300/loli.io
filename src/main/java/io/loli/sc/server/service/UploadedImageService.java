@@ -1,12 +1,14 @@
 package io.loli.sc.server.service;
 
-import java.util.List;
-
 import io.loli.sc.server.dao.UploadedImageDao;
 import io.loli.sc.server.entity.UploadedImage;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.springframework.transaction.annotation.Transactional;
 
 @Named("imageService")
 public class UploadedImageService {
@@ -15,6 +17,7 @@ public class UploadedImageService {
     @Named("imageDao")
     private UploadedImageDao ud;
 
+    @Transactional
     public void save(UploadedImage image) {
         ud.save(image);
     }

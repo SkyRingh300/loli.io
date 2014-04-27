@@ -14,10 +14,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 @Entity
+@Table(name = "uploaded_image")
 @NamedQueries(value = { @NamedQuery(name = "UploadedImage.listByUId", query = "SELECT u FROM UploadedImage u WHERE u.user.id=:u_id") })
 public class UploadedImage implements Serializable {
 
@@ -43,8 +47,9 @@ public class UploadedImage implements Serializable {
      * 图片存储在哪里
      */
     @OneToOne
-    @JoinColumn(name = "storage_id")
-    private ImageStorage imageStorage;
+    @JoinColumn(name = "bucket_id")
+    @JsonIgnore
+    private StorageBucket storageBucket;
     /**
      * 原始名字显示在title标签中
      */
@@ -102,19 +107,19 @@ public class UploadedImage implements Serializable {
         this.description = description;
     }
 
-    public ImageStorage getImageStorage() {
-        return imageStorage;
-    }
-
-    public void setImageStorage(ImageStorage imageStorage) {
-        this.imageStorage = imageStorage;
-    }
-
     public String getPath() {
         return path;
     }
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public StorageBucket getStorageBucket() {
+        return storageBucket;
+    }
+
+    public void setStorageBucket(StorageBucket storageBucket) {
+        this.storageBucket = storageBucket;
     }
 }

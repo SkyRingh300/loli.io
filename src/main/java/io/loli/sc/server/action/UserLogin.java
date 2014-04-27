@@ -51,11 +51,21 @@ public class UserLogin {
      * @param password_md5 客户端js自动生成的密码md5值, 用以验证非法提交
      */
     @RequestMapping(value = { "/regist" }, method = RequestMethod.POST)
-    public String submitReg(@ModelAttribute User user, Model model,
+    public String submitReg(@ModelAttribute User user,
+            @RequestParam("token") String token, Model model,
             @RequestParam(required = true) String password_re,
             HttpServletRequest request) {
         Map<String, String> msgMap = new HashMap<String, String>();
         request.setAttribute("message", msgMap);
+        Object tokenInSession = request.getSession().getAttribute("token");
+        if (null != tokenInSession && null != token
+                && !token.equals(tokenInSession)) {
+            msgMap.put("token", "验证码不正确");
+            return REGINPUT;
+        } else {
+            request.getSession().removeAttribute("token");
+        }
+
         // 没有md5加密
         if (user.getPassword().length() != 32
                 || !user.getPassword().equals(password_re)) {

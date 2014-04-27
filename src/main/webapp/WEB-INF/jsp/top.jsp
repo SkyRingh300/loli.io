@@ -17,13 +17,14 @@
 
 		<div class="collapse navbar-collapse"
 			id="bs-example-navbar-collapse-1">
-			<ul class="nav navbar-nav">
+			<!-- <ul class="nav navbar-nav">
 				<li class="active"><a href="#">菜单1</a></li>
 				<li><a href="#">菜单2</a></li>
 			</ul>
+			 -->
 
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="#">Link</a></li>
+				<li><a href="regist">注册</a></li>
 			</ul>
 		</div>
 	</div>

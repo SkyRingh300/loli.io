@@ -4,6 +4,7 @@ import io.loli.sc.server.service.MailService;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,15 +20,20 @@ public class MailAction {
 
     @RequestMapping(value = "send", method = RequestMethod.POST)
     @ResponseBody
-    public String sendEmail(@RequestParam("email") String email) {
-        mailService.save(email);
-        return "success";
+    public String sendEmail(@RequestParam("email") String email,
+            HttpServletRequest request) {
+        request.getSession().setAttribute("token", mailService.save(email));
+        return String.valueOf(true);
     }
 
-    @RequestMapping(value = "verify", method = RequestMethod.POST)
+    @RequestMapping(value = "validate", method = RequestMethod.POST)
     @ResponseBody
-    public String verify(@RequestParam("token") String token) {
-        return String.valueOf(mailService.verify(token));
+    public String verify(@RequestParam("token") String token,
+            HttpServletRequest request) {
+        Object tokenInSession = request.getSession().getAttribute("token");
+        boolean result = tokenInSession != null
+                && ((String) tokenInSession).equals(token);
+        return String.valueOf(result);
     }
 
 }

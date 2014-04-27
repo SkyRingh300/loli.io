@@ -4,7 +4,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import io.loli.sc.server.entity.User;
-import io.loli.util.MD5Util;
+import io.loli.util.string.MD5Util;
 
 import java.util.Date;
 

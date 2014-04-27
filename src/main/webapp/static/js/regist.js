@@ -12,8 +12,11 @@ function validateEmail() {
 
 function validateToken() {
     var token = $("#user-token").val();
-    if (token == null || token == "") {
+    if (token == null || token == "" || token.length != 32) {
         $("#token-error").html("请输入邮箱验证码");
+        return false;
+    } else {
+        return true;
     }
 }
 

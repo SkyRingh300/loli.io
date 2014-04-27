@@ -12,8 +12,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "client_token")
 @NamedQueries(value = {
         @NamedQuery(name = "ClientToken.findByUId", query = "SELECT c FROM ClientToken c WHERE c.user.id=:uid"),
         @NamedQuery(name = "ClientToken.findByToken", query = "SELECT c FROM ClientToken c WHERE c.token=:token") })

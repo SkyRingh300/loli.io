@@ -10,7 +10,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Login</title>
+<title>登陆</title>
 <!-- <script src="${rootPath}/static/js/jquery.js"></script> -->
 <script src="${rootPath}/static/js/md5.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -39,11 +39,11 @@
     <div id="main">
         <div class="container">
             <div class="login-form">
-                <h2>Login</h2>
+                <h2>登陆</h2>
                 <form class="form-horizontal" action="login" role="form"
                     method="POST" onsubmit="return md5password();">
                     <div class="form-group">
-                        <label for="user-email" class="col-sm-4 control-label">E-mail</label>
+                        <label for="user-email" class="col-sm-4 control-label">邮箱</label>
                         <div class="col-sm-4">
                             <input type="email" name="email" class="form-control"
                                 id="user-email" value="${email}" placeholder="E-mail">
@@ -51,7 +51,7 @@
                         <span class="label label-danger" id="email-error">${message["email"]}</span>
                     </div>
                     <div class="form-group">
-                        <label for="user-password" class="col-sm-4 control-label">Password</label>
+                        <label for="user-password" class="col-sm-4 control-label">密码</label>
                         <div class="col-sm-4">
                             <input type="password" class="form-control" id="user-password" name="password_ori" placeholder="Password">
                         </div>
@@ -59,7 +59,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-offset-4 col-sm-6">
-                            <button type="submit" class="btn btn-primary">Login</button>
+                            <button type="submit" class="btn btn-primary">登陆</button>
                         </div>
                     </div>
                             <input type="hidden" id="password_md5" name="password">

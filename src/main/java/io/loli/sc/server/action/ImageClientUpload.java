@@ -3,14 +3,17 @@ package io.loli.sc.server.action;
 import io.loli.sc.server.entity.ClientToken;
 import io.loli.sc.server.entity.UploadedImage;
 import io.loli.sc.server.entity.User;
+import io.loli.sc.server.service.BucketService;
 import io.loli.sc.server.service.ClientTokenService;
 import io.loli.sc.server.service.UploadedImageService;
 import io.loli.sc.server.service.UserService;
-import io.loli.util.MD5Util;
-import io.loli.util.ShortUrl;
+import io.loli.sc.server.storage.StorageUploader;
+import io.loli.util.string.MD5Util;
+import io.loli.util.string.ShortUrl;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
 import javax.inject.Inject;
@@ -78,6 +81,12 @@ public class ImageClientUpload {
         return new ClientToken();
     }
 
+    @Inject
+    private BucketService bucketService;
+    @Inject
+    private UserService userService;
+    
+
     @RequestMapping(value = { "/upload" }, method = { RequestMethod.POST })
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody UploadedImage upload(
@@ -87,25 +96,31 @@ public class ImageClientUpload {
             @RequestParam(value = "image", required = true) MultipartFile imageFile,
             HttpServletRequest request) {
 
+        UploadedImage imageObj = new UploadedImage();
+        
         if (!cts.checkTokenBelongToUser(token, email)) {
             return new UploadedImage();
+        } else{
+            imageObj.setUser(userService.findByEmail(email));
         }
-
-        UploadedImage imageObj = new UploadedImage();
         imageObj.setDate(new Date());
         imageObj.setDesc((null == desc || desc.isEmpty()) ? "" : desc);
 
         File file = saveImage(imageFile);
-        imageObj.setPath(file.getPath());
+        imageObj.setStorageBucket(bucketService.randomBucket());
+        StorageUploader uploader = StorageUploader.newInstance(imageObj
+                .getStorageBucket());
+        imageObj.setPath(uploader.upload(file));
+        try {
+            System.out.println(new String(imageFile.getOriginalFilename().getBytes("ISO8859-1"),"UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         imageObj.setOriginName(imageFile.getOriginalFilename());
         uic.save(imageObj);
-
-        imageObj.setPath("img/" + file.getName());
         return imageObj;
     }
-
-    @Inject
-    private HttpServletRequest request;
 
     /**
      * 将一个图片保存起来
@@ -114,17 +129,15 @@ public class ImageClientUpload {
      * @return 保存后的图片File对象
      */
     private File saveImage(MultipartFile image) {
-        File file = new File(request.getSession().getServletContext()
-                .getRealPath("")
-                + File.separator
-                + "img"
-                + File.separator
-                + ShortUrl.shortText(new Date().getTime()
-                        + image.getOriginalFilename())[0].substring(26)
-                + "."
-                // 获取图片扩展名，jpg,png
-                + image.getOriginalFilename().substring(
-                        image.getOriginalFilename().lastIndexOf(".") + 1));
+        File file = new File(System.getProperty("java.io.tmpdir"),
+                ShortUrl.shortText(new Date().getTime()
+                        + image.getOriginalFilename())[0]
+                        + "."
+                        // 获取图片扩展名，jpg,png
+                        + image.getOriginalFilename()
+                                .substring(
+                                        image.getOriginalFilename()
+                                                .lastIndexOf(".") + 1));
         if (!file.getParentFile().exists()) {
             file.getParentFile().mkdir();
         }
