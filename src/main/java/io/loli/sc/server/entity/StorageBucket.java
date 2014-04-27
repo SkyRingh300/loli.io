@@ -1,26 +1,37 @@
 package io.loli.sc.server.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 @Entity
-public class StorageBucket {
+@Table(name = "storage_bucket")
+@NamedQueries(value = { @NamedQuery(name = "StorageBucket.list", query = "SELECT s FROM StorageBucket s") })
+public class StorageBucket implements Serializable {
+
+    private static final long serialVersionUID = -2588112869005265911L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     @Column
     private String name;
-    @Column(name = "admin_url")
-    private String adminUrl;
-    @Column(name = "fetch_url")
-    private String fetchUrl;
+    @Column(name = "endpoint")
+    private String endPoint;
     @Column(name = "access_key_id")
     private String accessKeyId;
     @Column(name = "access_key_secret")
     private String accessKeySecret;
+    @Column
+    private String type;
+
+    public static final String ALI_TYPE = "ali";
 
     public int getId() {
         return id;
@@ -38,22 +49,6 @@ public class StorageBucket {
         this.name = name;
     }
 
-    public String getAdminUrl() {
-        return adminUrl;
-    }
-
-    public void setAdminUrl(String adminUrl) {
-        this.adminUrl = adminUrl;
-    }
-
-    public String getFetchUrl() {
-        return fetchUrl;
-    }
-
-    public void setFetchUrl(String fetchUrl) {
-        this.fetchUrl = fetchUrl;
-    }
-
     public String getAccessKeyId() {
         return accessKeyId;
     }
@@ -68,5 +63,21 @@ public class StorageBucket {
 
     public void setAccessKeySecret(String accessKeySecret) {
         this.accessKeySecret = accessKeySecret;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getEndPoint() {
+        return endPoint;
+    }
+
+    public void setEndPoint(String endPoint) {
+        this.endPoint = endPoint;
     }
 }
