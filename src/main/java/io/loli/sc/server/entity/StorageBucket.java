@@ -32,6 +32,7 @@ public class StorageBucket implements Serializable {
     private String type;
 
     public static final String ALI_TYPE = "ali";
+    public static final String QN_TYPE = "qn";
 
     public int getId() {
         return id;

@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThat;
 import io.loli.sc.server.entity.User;
 import io.loli.util.string.MD5Util;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
 import javax.inject.Inject;
@@ -53,7 +54,11 @@ public class UserServiceTest extends SpringBaseTest {
     
     public static User newInstence(){
         User user = new User();
-        user.setEmail(MD5Util.hash(String.valueOf(new Date().getTime())).substring(27)+"@test.com");
+        try {
+            user.setEmail(MD5Util.hash(String.valueOf(new Date().getTime())).substring(27)+"@test.com");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
         user.setPassword("password");
         user.setRegDate(new Date());
         

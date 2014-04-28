@@ -15,6 +15,12 @@ public abstract class StorageUploader {
                     bucket.getAccessKeySecret(), bucket.getEndPoint(),
                     bucket.getName());
             break;
+
+        case StorageBucket.QN_TYPE:
+            uploader = new QnStorageUploader(bucket.getAccessKeyId(),
+                    bucket.getAccessKeySecret(), bucket.getEndPoint(),
+                    bucket.getName());
+            break;
         }
         return uploader;
     }

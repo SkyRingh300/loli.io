@@ -7,11 +7,13 @@ import io.loli.util.string.MD5Util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.Properties;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.mail.MessagingException;
 
 @Named
 public class MailService {
@@ -53,7 +55,12 @@ public class MailService {
 
     public String save(String mail) {
         SimpleMailSender sender = new SimpleMailSender();
-        String token = MD5Util.hash(mail + new Date().getTime());
+        String token = null;
+        try {
+            token = MD5Util.hash(mail + new Date().getTime());
+        } catch (NoSuchAlgorithmException e1) {
+            e1.printStackTrace();
+        }
         MailSenderInfo info = this.buildInfo();
         info.setToAddress(mail);
         info.setContent(token);
@@ -61,6 +68,8 @@ public class MailService {
             sender.sendTextMail(info);
         } catch (UnsupportedEncodingException e) {
             return "";
+        } catch (MessagingException e) {
+            e.printStackTrace();
         }
         return token;
     }

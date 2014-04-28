@@ -14,6 +14,7 @@ import io.loli.util.string.ShortUrl;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
 import javax.inject.Inject;
@@ -71,7 +72,11 @@ public class ImageClientUpload {
                 // 用于md5加密的密文
                 String word = trueUser.getEmail()
                         + new java.util.Date().getTime();
-                token = MD5Util.hash(word);
+                try {
+                    token = MD5Util.hash(word);
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                }
                 ct.setToken(token);
                 ct.setUser(trueUser);
                 cts.save(ct);
