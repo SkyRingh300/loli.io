@@ -10,6 +10,6 @@ public class HomeAction {
     
     @RequestMapping(value={"/"})
     public String index(){
-        return "redirect:user/regist";
+        return "index";
     }
 }

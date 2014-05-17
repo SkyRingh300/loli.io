@@ -11,7 +11,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.Properties;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.mail.MessagingException;
 
@@ -47,7 +46,7 @@ public class MailService {
         info.setUserName(p.getProperty("username"));
         info.setPassword(p.getProperty("password"));
         info.setFromAddress(p.getProperty("from"));
-        info.setSenderNickName("nickname");
+        info.setSenderNickName(p.getProperty("nickname"));
         info.setValidate(true);
         info.setSubject("感谢注册, 这是您的验证码");
         return info;

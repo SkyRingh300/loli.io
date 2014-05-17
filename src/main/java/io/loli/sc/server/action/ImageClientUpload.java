@@ -22,6 +22,7 @@ import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -49,6 +50,8 @@ public class ImageClientUpload {
     @Inject
     private UploadedImageService uic;
 
+    private Logger logger = Logger.getLogger(ImageClientUpload.class);
+
     @RequestMapping(value = { "/token" }, method = { RequestMethod.GET,
             RequestMethod.POST })
     @ResponseStatus(HttpStatus.OK)
@@ -66,6 +69,7 @@ public class ImageClientUpload {
             if (ct != null) {
                 // 当已有该email的token时，把token返回
                 token = ct.getToken();
+                logger.info(email + "已有token，将已经存在的token返回");
             } else {
                 // 当没有该email的token时，新建一个token保存至数据库，然后返回
                 ct = new ClientToken();
@@ -80,6 +84,7 @@ public class ImageClientUpload {
                 ct.setToken(token);
                 ct.setUser(trueUser);
                 cts.save(ct);
+                logger.info(email + "生成新token");
             }
             return ct;
         }
@@ -90,40 +95,55 @@ public class ImageClientUpload {
     private BucketService bucketService;
     @Inject
     private UserService userService;
-    
 
     @RequestMapping(value = { "/upload" }, method = { RequestMethod.POST })
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody UploadedImage upload(
-            @RequestParam(value = "token", required = true) String token,
-            @RequestParam(value = "email", required = true) String email,
+            @RequestParam(value = "token", required = false) String token,
+            @RequestParam(value = "email", required = false) String email,
             @RequestParam(value = "desc", required = false) String desc,
             @RequestParam(value = "image", required = true) MultipartFile imageFile,
             HttpServletRequest request) {
 
         UploadedImage imageObj = new UploadedImage();
-        
-        if (!cts.checkTokenBelongToUser(token, email)) {
-            return new UploadedImage();
-        } else{
-            imageObj.setUser(userService.findByEmail(email));
-        }
         imageObj.setDate(new Date());
-        imageObj.setDesc((null == desc || desc.isEmpty()) ? "" : desc);
 
+        if (email == null && desc == null && token == null) {
+        } else {
+            if (!cts.checkTokenBelongToUser(token, email)) {
+                logger.info(email + "使用错误的token上传");
+                return new UploadedImage();
+            } else {
+                System.out.println("xx");
+                imageObj.setUser(userService.findByEmail(email));
+            }
+            imageObj.setDesc((null == desc || desc.isEmpty()) ? "" : desc);
+        }
+        User user = null;
+        if ((user = (User) request.getSession().getAttribute("user")) != null) {
+            imageObj.setUser(user);
+        }
         File file = saveImage(imageFile);
         imageObj.setStorageBucket(bucketService.randomBucket());
         StorageUploader uploader = StorageUploader.newInstance(imageObj
                 .getStorageBucket());
         imageObj.setPath(uploader.upload(file));
         try {
-            System.out.println(new String(imageFile.getOriginalFilename().getBytes("ISO8859-1"),"UTF-8"));
+            System.out.println(new String(imageFile.getOriginalFilename()
+                    .getBytes("ISO8859-1"), "UTF-8"));
         } catch (UnsupportedEncodingException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         imageObj.setOriginName(imageFile.getOriginalFilename());
         uic.save(imageObj);
+        if (imageObj.getUser() == null) {
+            logger.info("匿名上传文件:" + imageObj.getOriginName() + ", 链接为"
+                    + imageObj.getPath());
+        } else {
+            logger.info(imageObj.getUser().getEmail() + "上传文件:"
+                    + imageObj.getOriginName() + ", 链接为" + imageObj.getPath());
+        }
         return imageObj;
     }
 

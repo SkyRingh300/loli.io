@@ -16,6 +16,8 @@
 <script src="${rootPath}/static/js/bootstrap.min.js"></script>
 <link rel="stylesheet" type="text/css"
 	href="${rootPath}/static/css/bootstrap.min.css">
+<link href="${pageContext.request.contextPath}/static/css/styles.css"
+	type="text/css" rel='stylesheet' />
 
 <style type="text/css">
 .register-form {
@@ -57,7 +59,7 @@
                 e.preventDefault();
             }
         });
-        
+
         $("#user-token").on("input", function(e) {
             if (e.target.value.length == 32) {
                 validateTokenTrue();

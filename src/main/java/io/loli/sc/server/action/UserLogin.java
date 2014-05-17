@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Named
 @RequestMapping(value = { "/user" })
@@ -54,7 +55,7 @@ public class UserLogin {
     public String submitReg(@ModelAttribute User user,
             @RequestParam("token") String token, Model model,
             @RequestParam(required = true) String password_re,
-            HttpServletRequest request) {
+            HttpServletRequest request, RedirectAttributes redirectAttributes) {
         Map<String, String> msgMap = new HashMap<String, String>();
         request.setAttribute("message", msgMap);
         Object tokenInSession = request.getSession().getAttribute("token");
@@ -82,6 +83,7 @@ public class UserLogin {
             msgMap.put("email", e.getMessage());
             return REGINPUT;
         }
+        redirectAttributes.addFlashAttribute("info", "您已成功注册");
         return "redirect:/user/login";
     }
 
@@ -101,7 +103,8 @@ public class UserLogin {
      */
     @RequestMapping(value = { "/login" }, method = RequestMethod.POST)
     public String submitLogin(@ModelAttribute("user") User user, Model model,
-            HttpSession session, HttpServletRequest request) {
+            HttpSession session, HttpServletRequest request,
+            RedirectAttributes redirectAttributes) {
         // 保存页面显示信息的map
         Map<String, String> msgMap = new HashMap<String, String>();
         request.setAttribute("message", msgMap);
@@ -129,7 +132,8 @@ public class UserLogin {
         if (trueUser != null
                 && user.getPassword().equals(trueUser.getPassword())) {
             session.setAttribute("user", trueUser);
-            return "redirect:/user/welcome";
+            redirectAttributes.addFlashAttribute("info", "登陆成功");
+            return "redirect:/";
         } else {
             // 邮箱或者密码错误
             msgMap.put("email", "用户名或者密码错误");
@@ -139,10 +143,12 @@ public class UserLogin {
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
-    public String logOut(HttpServletRequest request) {
+    public String logOut(HttpServletRequest request,
+            RedirectAttributes redirectAttributes) {
         User user = (User) request.getSession().getAttribute("user");
         if (user != null) {
             request.getSession().removeAttribute("user");
+            redirectAttributes.addFlashAttribute("info", "您已成功退出");
         } else {
             // TODO 用户未登录时的操作
         }
