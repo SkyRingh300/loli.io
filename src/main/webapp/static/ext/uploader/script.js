@@ -101,6 +101,8 @@ $(function() {
                         fail : function(e, data) {
                             // Something has gone wrong!
                             data.context.addClass('error');
+                            data.context.find('label').eq(0).html("图片上传失败");
+
                         },
                         done : function(e, data) {
                             var filename = data.result.path;
