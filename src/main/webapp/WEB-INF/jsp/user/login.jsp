@@ -39,6 +39,10 @@
 	width: 70%;
 	margin: auto;
 }
+
+.footer{
+margin-top: 160px;
+}
 </style>
 </head>
 <body>
@@ -84,5 +88,6 @@
 			</div>
 		</div>
 	</div>
+	<jsp:include page="../bottom.jsp"></jsp:include>
 </body>
 </html>

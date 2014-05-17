@@ -34,29 +34,30 @@
 </head>
 <body>
 	<jsp:include page="../top.jsp"></jsp:include>
-	<c:if test="${info!=null}">
-		<div class="alert alert-success info">
-			<button type="button" class="close" data-dismiss="alert"
-				aria-hidden="true">&times;</button>
-			${info}
-		</div>
-	</c:if>
-	<form id="upload" method="post"
-		action="${pageContext.request.contextPath}/api/upload"
-		enctype="multipart/form-data">
-		<div id="drop">
-			<h3>拖动图片到这里或者</h3>
-			<a class="btn">选择图片</a>&nbsp; <input type="file" name="image"
-				multiple />
-		</div>
-		<button id="clear" type="button" class="btn btn-sm btn-primary">清空上传列表</button>
-		&nbsp;
+	<div class="container">
+		<c:if test="${info!=null}">
+			<div class="alert alert-success info">
+				<button type="button" class="close" data-dismiss="alert"
+					aria-hidden="true">&times;</button>
+				${info}
+			</div>
+		</c:if>
+		<form id="upload" method="post"
+			action="${pageContext.request.contextPath}/api/upload"
+			enctype="multipart/form-data">
+			<div id="drop">
+				<h3>拖动图片到这里或者</h3>
+				<a class="btn">选择图片</a>&nbsp; <input type="file" name="image"
+					multiple />
+			</div>
+			<button id="clear" type="button" class="btn btn-sm btn-primary">清空上传列表</button>
+			&nbsp;
 
-		<ul id="fileList">
-		</ul>
+			<ul id="fileList">
+			</ul>
 
-	</form>
-	<img id="img">
+		</form>
+	</div>
 
 
 	<script src="static/ext/uploader/jquery.knob.js"></script>

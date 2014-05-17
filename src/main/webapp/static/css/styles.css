@@ -2,3 +2,12 @@
     width: 70%;
     margin: auto;
 }
+
+.footer {
+color: rgb(153, 153, 153);
+text-align: center;
+padding: 30px 0;
+margin-top: 100px;
+border-top: 1px solid rgb(229, 229, 229);
+background-color: rgb(245, 245, 245);
+}

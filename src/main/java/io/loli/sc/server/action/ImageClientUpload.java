@@ -13,7 +13,6 @@ import io.loli.util.string.ShortUrl;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
@@ -114,7 +113,6 @@ public class ImageClientUpload {
                 logger.info(email + "使用错误的token上传");
                 return new UploadedImage();
             } else {
-                System.out.println("xx");
                 imageObj.setUser(userService.findByEmail(email));
             }
             imageObj.setDesc((null == desc || desc.isEmpty()) ? "" : desc);
@@ -128,13 +126,6 @@ public class ImageClientUpload {
         StorageUploader uploader = StorageUploader.newInstance(imageObj
                 .getStorageBucket());
         imageObj.setPath(uploader.upload(file));
-        try {
-            System.out.println(new String(imageFile.getOriginalFilename()
-                    .getBytes("ISO8859-1"), "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
         imageObj.setOriginName(imageFile.getOriginalFilename());
         uic.save(imageObj);
         if (imageObj.getUser() == null) {
