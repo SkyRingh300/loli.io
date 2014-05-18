@@ -44,8 +44,8 @@ $(function() {
                                 return;
                             }
 
-                            var tpl = $('<li class="working"><input type="text" value="0" data-width="48" data-height="48"'
-                                    + ' data-fgColor="#0788a5" data-readOnly="1" data-bgColor="#3e4043" /><img class="thumb"><p class="name"></p><span></span><label class="path">链接生成中...</label>');
+                            var tpl = $('<li class="working"><!--<input type="text" value="0" data-width="48" data-height="48"'
+                                    + ' data-fgColor="#0788a5" data-readOnly="1" data-bgColor="#3e4043" />--><img class="thumb"><p class="name"></p><!--<span></span>--><label class="path">图片上传中...</label>');
 
                             // Append the file name and file size
                             tpl.find('p').text(data.files[0].name).append(
@@ -90,11 +90,12 @@ $(function() {
                             // change
                             // so that the jQuery knob plugin knows to update
                             // the dial
-                            data.context.find('input').eq(0).val(progress)
-                                    .change();
-
+                            // data.context.find('input').eq(0).val(progress)
+                            // .change();
+                            data.context.find('label').eq(0).html("链接生成中");
                             if (progress == 100) {
                                 data.context.removeClass('working');
+
                             }
                         },
 
