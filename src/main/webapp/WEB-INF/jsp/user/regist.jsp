@@ -10,7 +10,7 @@
 <title>用户注册</title>
 <!-- <script src="${rootPath}/static/js/jquery.js"></script> -->
 <script
-	src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    src="${pageContext.request.contextPath}/static/js/jquery.js"></script>
 <script src="${rootPath}/static/js/md5.js"></script>
 <script src="${rootPath}/static/js/regist.js"></script>
 <script src="${rootPath}/static/js/bootstrap.min.js"></script>
