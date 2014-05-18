@@ -90,12 +90,12 @@ $(function() {
                             // change
                             // so that the jQuery knob plugin knows to update
                             // the dial
-                            // data.context.find('input').eq(0).val(progress)
-                            // .change();
-                            data.context.find('label').eq(0).html("链接生成中");
+
+                            data.context.find('label').eq(0).html(
+                                    "图片上传中:" + progress + "%");
                             if (progress == 100) {
                                 data.context.removeClass('working');
-
+                                data.context.find('label').eq(0).html("上传成功, 正在生成链接...");
                             }
                         },
 
@@ -107,7 +107,9 @@ $(function() {
                         },
                         done : function(e, data) {
                             var filename = data.result.path;
-                            String
+                            if (filename) {
+                                data.context.find('label').eq(0).html("图片上传失败");
+                            }
                             content = "<a target='_blank' href='";
                             content += filename;
                             content += "'>";
