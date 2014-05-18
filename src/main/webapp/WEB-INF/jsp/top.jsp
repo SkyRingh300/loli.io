@@ -27,7 +27,7 @@
 					class="icon-bar"></span>
 			</button>
 			<a class="navbar-brand title"
-				href="${pageContext.request.contextPath}">SCREENSHOT.PICS(BETA)</a>
+				href="/">SCREENSHOT.PICS(BETA)</a>
 		</div>
 
 		<div class="collapse navbar-collapse"
