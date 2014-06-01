@@ -19,7 +19,7 @@
 .download {
 	width: 50%;
 	margin-left: 25%%;
-	padding-top: 50px;
+	padding-top: 30px;
 	border-width: 1px;
 	border-color: rgb(221, 221, 221);
 }
@@ -30,10 +30,12 @@
 	<div class="container">
 		<div class="download">
 			<h2>客户端下载</h2>
+			<br/>
 			<p>
-				zip和tar.gz版本兼容除XP外所有系统<br /> 需要安装<a target="_blank"
-					href="http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html">Java
-					8</a>或以上版本才能运行(Java 8不支持Windows XP)<br /> <br />
+				这是一个<strong>截图客户端</strong>，可以运行在XP之后的(不包括XP)Windows、Mac、Linux上。<br />
+				需要安装<a target="_blank"
+					href="http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html"><strong>Java
+						8</strong></a>或以上版本才能运行<br /> <br />
 			</p>
 			<p>
 				<span> 最新版本为0.0.1-ALPHA，问题反馈请发送邮件至<a
