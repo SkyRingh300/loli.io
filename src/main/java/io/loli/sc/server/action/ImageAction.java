@@ -44,6 +44,14 @@ public class ImageAction {
         model.addAttribute("imgList", list);
         return "image/list";
     }
+    
+    @RequestMapping(value = "/list/test", method = RequestMethod.GET)
+    public String listTest(Model model, HttpServletRequest request) {
+
+        List<UploadedImage> list = imageService.listTest(0);
+        model.addAttribute("imgList", list);
+        return "image/list";
+    }
 
     @RequestMapping(value = "/{filename:[a-zA-Z0-9]{1,}\\.png}")
     public void showImg(@PathVariable("filename") String filename,

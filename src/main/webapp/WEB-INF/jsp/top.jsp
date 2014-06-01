@@ -22,9 +22,8 @@
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle" data-toggle="collapse"
 				data-target="#bs-example-navbar-collapse-1">
-				<span class="sr-only">Toggle navigation</span> <span
-					class="icon-bar"></span> <span class="icon-bar"></span> <span
-					class="icon-bar"></span>
+				<span class="sr-only">点击下拉</span> <span class="icon-bar"></span> <span
+					class="icon-bar"></span> <span class="icon-bar"></span>
 			</button>
 			<a class="navbar-brand title"
 				href="${pageContext.request.contextPath}/">SCREENSHOT.PICS(BETA)</a>
@@ -32,11 +31,9 @@
 
 		<div class="collapse navbar-collapse"
 			id="bs-example-navbar-collapse-1">
-			<!-- <ul class="nav navbar-nav">
-				<li class="active"><a href="#">菜单1</a></li>
-				<li><a href="#">菜单2</a></li>
+			<ul class="nav navbar-nav">
+				<li><a href="${pageContext.request.contextPath}/download" class="title">下载客户端</a></li>
 			</ul>
-			 -->
 
 			<ul class="nav navbar-nav navbar-right">
 				<c:if test="${sessionScope.user eq null}">
@@ -50,7 +47,6 @@
 					<li><a href="${pageContext.request.contextPath}/user/logout"
 						class="title">登出</a></li>
 				</c:if>
-
 			</ul>
 		</div>
 	</div>

@@ -62,4 +62,8 @@ public class UploadedImageService {
         return this.listByUId(u_id, firstPosition, maxResults);
     }
 
+    public List<UploadedImage> listTest(int firstPosition) {
+        return ud.listTest(firstPosition);
+    }
+
 }

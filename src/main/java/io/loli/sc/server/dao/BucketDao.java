@@ -16,7 +16,6 @@ public class BucketDao {
     private EntityManager em;
 
     public List<StorageBucket> list() {
-        System.out.println(em);
         return em.createNamedQuery("StorageBucket.list", StorageBucket.class)
                 .getResultList();
     }

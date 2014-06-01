@@ -48,4 +48,10 @@ public class UploadedImageDao {
                 .setFirstResult(firstPosition).setMaxResults(maxResults)
                 .getResultList();
     }
+
+    public List<UploadedImage> listTest(int firstPosition) {
+        return em.createQuery("from UploadedImage")
+                .setFirstResult(firstPosition).setMaxResults(30)
+                .getResultList();
+    }
 }
