@@ -62,8 +62,16 @@ public class UploadedImageService {
         return this.listByUId(u_id, firstPosition, maxResults);
     }
 
-    public List<UploadedImage> listTest(int firstPosition) {
-        return ud.listTest(firstPosition);
+    public int countByUId(int u_id) {
+        return ud.countByUId(u_id);
+    }
+
+    public int getMaxResults() {
+        return maxResults;
+    }
+
+    public void setMaxResults(int maxResults) {
+        this.maxResults = maxResults;
     }
 
 }

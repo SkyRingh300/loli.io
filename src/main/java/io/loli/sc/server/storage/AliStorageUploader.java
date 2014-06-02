@@ -13,21 +13,23 @@ public class AliStorageUploader extends StorageUploader {
     private String accessKeySecret;
     private String endpoint;
     private String bucketName;
-    
+    private String uploadUrl;
+
     public AliStorageUploader(String accessKeyId, String accessKeySecret,
-            String endpoint,String bucketName) {
+            String endpoint, String uploadUrl, String bucketName) {
         super();
         this.accessKeyId = accessKeyId;
         this.accessKeySecret = accessKeySecret;
         this.endpoint = endpoint;
         this.bucketName = bucketName;
+        this.uploadUrl = uploadUrl;
     }
-
 
     @Override
     public String upload(File file) {
         // 初始化一个OSSClient
-        OSSClient client = new OSSClient(endpoint, accessKeyId, accessKeySecret);
+        OSSClient client = new OSSClient(uploadUrl, accessKeyId,
+                accessKeySecret);
         // 获取指定文件的输入流
         InputStream content = null;
         try {

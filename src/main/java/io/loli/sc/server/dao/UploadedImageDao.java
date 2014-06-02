@@ -49,9 +49,11 @@ public class UploadedImageDao {
                 .getResultList();
     }
 
-    public List<UploadedImage> listTest(int firstPosition) {
-        return em.createQuery("from UploadedImage")
-                .setFirstResult(firstPosition).setMaxResults(30)
-                .getResultList();
+    public int countByUId(int u_id) {
+        return em
+                .createNamedQuery("UploadedImage.listByUId",
+                        UploadedImage.class).setParameter("u_id", u_id)
+                .getResultList().size();
+
     }
 }

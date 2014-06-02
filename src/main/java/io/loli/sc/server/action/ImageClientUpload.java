@@ -115,7 +115,8 @@ public class ImageClientUpload {
             } else {
                 imageObj.setUser(userService.findByEmail(email));
             }
-            imageObj.setDesc((null == desc || desc.isEmpty()) ? "" : desc);
+            imageObj.setDesc((null == desc || desc.isEmpty()) ? imageFile
+                    .getOriginalFilename() : desc);
         }
         User user = null;
         if ((user = (User) request.getSession().getAttribute("user")) != null) {

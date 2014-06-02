@@ -13,7 +13,7 @@ public abstract class StorageUploader {
         case StorageBucket.ALI_TYPE:
             uploader = new AliStorageUploader(bucket.getAccessKeyId(),
                     bucket.getAccessKeySecret(), bucket.getEndPoint(),
-                    bucket.getName());
+                    bucket.getUploadUrl(), bucket.getName());
             break;
 
         case StorageBucket.QN_TYPE:

@@ -29,7 +29,10 @@ public class ImageAction {
     @Named("imageService")
     private UploadedImageService imageService;
 
-    private int maxResults = 20;
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public String listByUId(Model model, HttpServletRequest request) {
+        return "redirect:/img/list/1";
+    }
 
     @RequestMapping(value = "/list/{page}", method = RequestMethod.GET)
     public String listByUId(@PathVariable(value = "page") int page,
@@ -37,18 +40,22 @@ public class ImageAction {
         if (page == 0) {
             page = 1;
         }
-        int firstPosition = (page - 1) * maxResults;
+        int firstPosition = (page - 1) * imageService.getMaxResults();
         int u_id = ((User) request.getSession().getAttribute("user")).getId();
 
         List<UploadedImage> list = imageService.listByUId(u_id, firstPosition);
-        model.addAttribute("imgList", list);
-        return "image/list";
-    }
-    
-    @RequestMapping(value = "/list/test", method = RequestMethod.GET)
-    public String listTest(Model model, HttpServletRequest request) {
+        int totalCount = imageService.countByUId(u_id);
+        int pageCount = (int) Math.ceil((float) totalCount
+                / (float) imageService.getMaxResults());
+        boolean hasLast = page != 1;
+        boolean hasNext = page != pageCount;
+        int current = page;
+        request.setAttribute("totalCount", totalCount);
+        request.setAttribute("pageCount", pageCount);
+        request.setAttribute("hasLast", hasLast);
+        request.setAttribute("hasNext", hasNext);
+        request.setAttribute("currentPage", current);
 
-        List<UploadedImage> list = imageService.listTest(0);
         model.addAttribute("imgList", list);
         return "image/list";
     }

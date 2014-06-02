@@ -2,6 +2,7 @@ package io.loli.sc.server.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -33,6 +35,9 @@ public class User implements Serializable {
     @Column
     @JsonIgnore
     private String password;
+
+    @OneToMany(mappedBy = "user")
+    private List<UploadedImage> imageList;
 
     public int getId() {
         return id;
@@ -64,5 +69,13 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<UploadedImage> getImageList() {
+        return imageList;
+    }
+
+    public void setImageList(List<UploadedImage> imageList) {
+        this.imageList = imageList;
     }
 }

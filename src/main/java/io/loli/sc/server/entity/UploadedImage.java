@@ -22,7 +22,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 @Entity
 @Table(name = "uploaded_image")
-@NamedQueries(value = { @NamedQuery(name = "UploadedImage.listByUId", query = "SELECT u FROM UploadedImage u WHERE u.user.id=:u_id") })
+@NamedQueries(value = { @NamedQuery(name = "UploadedImage.listByUId", query = "SELECT u FROM UploadedImage u WHERE u.user.id=:u_id order by u.date desc") })
 public class UploadedImage implements Serializable {
 
     private static final long serialVersionUID = 1398371509051853854L;
@@ -58,6 +58,9 @@ public class UploadedImage implements Serializable {
 
     @Column
     private String path;
+
+    @Column(name = "del_flag")
+    private Boolean delFlag = false;
 
     public int getId() {
         return id;
@@ -121,5 +124,13 @@ public class UploadedImage implements Serializable {
 
     public void setStorageBucket(StorageBucket storageBucket) {
         this.storageBucket = storageBucket;
+    }
+
+    public Boolean getDelFlag() {
+        return delFlag;
+    }
+
+    public void setDelFlag(Boolean delFlag) {
+        this.delFlag = delFlag;
     }
 }

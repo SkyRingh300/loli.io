@@ -14,6 +14,10 @@
 .title {
 	color: rgb(230, 230, 230) !important;
 }
+
+.open>a {
+	background-color: rgb(77, 77, 77) !important;
+}
 </style>
 
 <nav id="top" class="navbar navbar-default navbar-static-top"
@@ -32,7 +36,8 @@
 		<div class="collapse navbar-collapse"
 			id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
-				<li><a href="${pageContext.request.contextPath}/download" class="title">下载客户端</a></li>
+				<li><a href="${pageContext.request.contextPath}/download"
+					class="title">下载客户端</a></li>
 			</ul>
 
 			<ul class="nav navbar-nav navbar-right">
@@ -43,7 +48,13 @@
 						class="title">登陆</a></li>
 				</c:if>
 				<c:if test="${sessionScope.user!=null}">
-					<li><a href="#" class="title">${sessionScope.user.email}</a></li>
+					<li><a href="#" class="title dropdown-toggle"
+						data-toggle="dropdown">${sessionScope.user.email} <b
+							class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="${pageContext.request.contextPath}/img/list">查看已上传图片</a></li>
+						</ul></li>
+
 					<li><a href="${pageContext.request.contextPath}/user/logout"
 						class="title">登出</a></li>
 				</c:if>

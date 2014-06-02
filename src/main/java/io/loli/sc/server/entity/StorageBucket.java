@@ -31,6 +31,9 @@ public class StorageBucket implements Serializable {
     @Column
     private String type;
 
+    @Column(name = "upload_url")
+    private String uploadUrl;
+
     public static final String ALI_TYPE = "ali";
     public static final String QN_TYPE = "qn";
 
@@ -81,4 +84,13 @@ public class StorageBucket implements Serializable {
     public void setEndPoint(String endPoint) {
         this.endPoint = endPoint;
     }
+
+    public String getUploadUrl() {
+        return uploadUrl;
+    }
+
+    public void setUploadUrl(String uploadUrl) {
+        this.uploadUrl = uploadUrl;
+    }
+
 }
