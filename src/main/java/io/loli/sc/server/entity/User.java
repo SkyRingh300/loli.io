@@ -37,6 +37,7 @@ public class User implements Serializable {
     private String password;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<UploadedImage> imageList;
 
     public int getId() {

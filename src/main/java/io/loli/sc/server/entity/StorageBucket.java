@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "storage_bucket")
-@NamedQueries(value = { @NamedQuery(name = "StorageBucket.list", query = "SELECT s FROM StorageBucket s") })
+@NamedQueries(value = { @NamedQuery(name = "StorageBucket.list", query = "SELECT s FROM StorageBucket s where s.enabled=true") })
 public class StorageBucket implements Serializable {
 
     private static final long serialVersionUID = -2588112869005265911L;
@@ -33,6 +33,9 @@ public class StorageBucket implements Serializable {
 
     @Column(name = "upload_url")
     private String uploadUrl;
+
+    @Column(name = "enabled")
+    private Boolean enabled = true;
 
     public static final String ALI_TYPE = "ali";
     public static final String QN_TYPE = "qn";
@@ -91,6 +94,14 @@ public class StorageBucket implements Serializable {
 
     public void setUploadUrl(String uploadUrl) {
         this.uploadUrl = uploadUrl;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 
 }
