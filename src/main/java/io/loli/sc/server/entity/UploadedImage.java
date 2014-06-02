@@ -38,6 +38,9 @@ public class UploadedImage implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
+    private String ip;
+    private String ua;
+
     /**
      * 图片描述显示在alt标签中
      */
@@ -126,11 +129,30 @@ public class UploadedImage implements Serializable {
         this.storageBucket = storageBucket;
     }
 
+    @JsonIgnore
     public Boolean getDelFlag() {
         return delFlag;
     }
 
     public void setDelFlag(Boolean delFlag) {
         this.delFlag = delFlag;
+    }
+
+    @JsonIgnore
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    @JsonIgnore
+    public String getUa() {
+        return ua;
+    }
+
+    public void setUa(String ua) {
+        this.ua = ua;
     }
 }

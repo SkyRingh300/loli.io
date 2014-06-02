@@ -122,6 +122,8 @@ public class ImageClientUpload {
         if ((user = (User) request.getSession().getAttribute("user")) != null) {
             imageObj.setUser(user);
         }
+        imageObj.setIp(request.getRemoteAddr());
+        imageObj.setUa(request.getHeader("user-agent"));
         File file = saveImage(imageFile);
         imageObj.setStorageBucket(bucketService.randomBucket());
         StorageUploader uploader = StorageUploader.newInstance(imageObj
