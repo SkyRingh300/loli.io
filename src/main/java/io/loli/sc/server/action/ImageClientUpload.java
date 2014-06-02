@@ -122,7 +122,11 @@ public class ImageClientUpload {
         if ((user = (User) request.getSession().getAttribute("user")) != null) {
             imageObj.setUser(user);
         }
-        imageObj.setIp(request.getRemoteAddr());
+        String ip = request.getRemoteAddr();
+        if (ip != null && ip.equals("127.0.0.1")) {
+            ip = request.getHeader("X-Real-IP");
+        }
+        imageObj.setIp(ip);
         imageObj.setUa(request.getHeader("user-agent"));
         File file = saveImage(imageFile);
         imageObj.setStorageBucket(bucketService.randomBucket());
