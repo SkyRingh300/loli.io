@@ -1,7 +1,9 @@
 package io.loli.sc.server.service;
 
 import io.loli.sc.server.dao.UploadedImageDao;
+import io.loli.sc.server.entity.StorageBucket;
 import io.loli.sc.server.entity.UploadedImage;
+import io.loli.sc.server.storage.StorageUploader;
 
 import java.util.List;
 
@@ -24,6 +26,16 @@ public class UploadedImageService {
 
     public void update(UploadedImage image) {
         ud.update(image);
+    }
+
+    @Transactional
+    public void delete(int id) {
+        UploadedImage image = this.findById(id);
+        StorageBucket sb = image.getStorageBucket();
+        StorageUploader.newInstance(sb).delete(
+                image.getPath().substring(image.getPath().lastIndexOf("/") + 1));
+        System.out.println(image.getPath().substring(image.getPath().indexOf("/") + 1));
+        image.setDelFlag(true);
     }
 
     /**

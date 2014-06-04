@@ -56,4 +56,5 @@ public class UploadedImageDao {
                 .getResultList().size();
 
     }
+    
 }

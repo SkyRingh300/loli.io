@@ -17,10 +17,20 @@
 <!-- Google web fonts -->
 <link href="${pageContext.request.contextPath}/static/css/font.css"
 	rel='stylesheet' />
+<script type="text/javascript">
+    
+</script>
 </head>
 <jsp:include page="../top.jsp"></jsp:include>
 
 <div id="imgList" class="container">
+	<c:if test="${message!=null}">
+		<div class="alert alert-success info">
+			<button type="button" class="close" data-dismiss="alert"
+				aria-hidden="true">&times;</button>
+			${info}
+		</div>
+	</c:if>
 	<div class="tip">
 		<h4>
 			<strong>${user.email}</strong>一共上传了<strong>${totalCount}</strong>张图片
@@ -32,6 +42,7 @@
 				<th>图片名</th>
 				<th>上传时间</th>
 				<th>图片链接</th>
+				<th>操作</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -41,8 +52,12 @@
 					<td><fmt:formatDate value="${img.date}"
 							pattern="yyyy-MM-dd HH:mm:ss" /></td>
 					<td><a href="${img.path}" target="_blank">${img.path}</a></td>
+					<td><a
+						href="${pageContext.request.contextPath}/img/delete?id=${img.id}"
+						class="delete">删除</a></td>
 				</tr>
 			</c:forEach>
+
 		</tbody>
 	</table>
 	<div class="pages">
@@ -63,5 +78,4 @@
 	</div>
 
 </div>
-
 <jsp:include page="../bottom.jsp"></jsp:include>

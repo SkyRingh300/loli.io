@@ -44,10 +44,20 @@ public class AliStorageUploader extends StorageUploader {
         // 必须设置ContentLength
         meta.setContentLength(file.length());
         meta.setContentType("image/png");
+        String suffix = file.getName().substring(
+                file.getName().lastIndexOf("."));
+
         // 上传Object.
         String name = file.getName().substring(0, file.getName().indexOf("."))
-                + ".png";
+                + suffix;
         client.putObject(bucketName, name, content, meta);
         return endpoint + "/" + name;
+    }
+
+    @Override
+    public void delete(String file) {
+        OSSClient client = new OSSClient(uploadUrl, accessKeyId,
+                accessKeySecret);
+        client.deleteObject(bucketName, file);
     }
 }

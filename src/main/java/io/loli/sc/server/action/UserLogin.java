@@ -10,7 +10,9 @@ import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.ui.Model;
@@ -104,7 +106,7 @@ public class UserLogin {
     @RequestMapping(value = { "/login" }, method = RequestMethod.POST)
     public String submitLogin(@ModelAttribute("user") User user, Model model,
             HttpSession session, HttpServletRequest request,
-            RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes, HttpServletResponse response) {
         // 保存页面显示信息的map
         Map<String, String> msgMap = new HashMap<String, String>();
         request.setAttribute("message", msgMap);
@@ -132,6 +134,12 @@ public class UserLogin {
         if (trueUser != null
                 && user.getPassword().equals(trueUser.getPassword())) {
             session.setAttribute("user", trueUser);
+
+            HttpSession sess = request.getSession();
+            Cookie cookie = new Cookie("JSESSIONID", sess.getId());
+            cookie.setMaxAge(24 * 60 * 60 * 60);
+            response.addCookie(cookie);
+
             redirectAttributes.addFlashAttribute("info", "登陆成功");
             return "redirect:/";
         } else {

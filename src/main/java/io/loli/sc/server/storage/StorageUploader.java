@@ -7,6 +7,8 @@ import java.io.File;
 public abstract class StorageUploader {
     public abstract String upload(File file);
 
+    public abstract void delete(String file);
+
     public static StorageUploader newInstance(StorageBucket bucket) {
         StorageUploader uploader = null;
         switch (bucket.getType()) {

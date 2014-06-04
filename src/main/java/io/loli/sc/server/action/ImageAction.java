@@ -20,6 +20,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Named
 @RequestMapping(value = "/img")
@@ -41,6 +43,10 @@ public class ImageAction {
             page = 1;
         }
         int firstPosition = (page - 1) * imageService.getMaxResults();
+        User user = (User) request.getSession().getAttribute("user");
+        if (user == null) {
+            return "redirect:/user/login";
+        }
         int u_id = ((User) request.getSession().getAttribute("user")).getId();
 
         List<UploadedImage> list = imageService.listByUId(u_id, firstPosition);
@@ -58,6 +64,28 @@ public class ImageAction {
 
         model.addAttribute("imgList", list);
         return "image/list";
+    }
+
+    @RequestMapping(value = "/delete")
+    public String delete(@RequestParam(value = "id") int id,
+            RedirectAttributes redirectAttributes, HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        UploadedImage image = imageService.findById(id);
+        if (user == null || image == null
+                || image.getUser().getId() != user.getId()) {
+            redirectAttributes.addFlashAttribute("message", "非法登陆");
+        } else {
+            try {
+                imageService.delete(id);
+                redirectAttributes.addFlashAttribute("message", "删除成功");
+            } catch (Exception e) {
+                e.printStackTrace();
+                redirectAttributes.addFlashAttribute("message",
+                        "删除失败，原因是" + e.getMessage());
+            }
+        }
+
+        return "redirect:/img/list";
     }
 
     @RequestMapping(value = "/{filename:[a-zA-Z0-9]{1,}\\.png}")

@@ -10,6 +10,7 @@ import com.qiniu.api.io.IoApi;
 import com.qiniu.api.io.PutExtra;
 import com.qiniu.api.io.PutRet;
 import com.qiniu.api.rs.PutPolicy;
+import com.qiniu.api.rs.RSClient;
 
 public class QnStorageUploader extends StorageUploader {
     private String accessKeyId;
@@ -45,5 +46,12 @@ public class QnStorageUploader extends StorageUploader {
                 + ".png";
         PutRet ret = IoApi.putFile(uptoken, key, file.getPath(), extra);
         return endpoint + "/" + ret.getKey();
+    }
+
+    @Override
+    public void delete(String file) {
+        Mac mac = new Mac(accessKeyId, accessKeySecret);
+        RSClient client = new RSClient(mac);
+        client.delete(bucketName, file);
     }
 }
