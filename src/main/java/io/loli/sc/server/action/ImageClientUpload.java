@@ -160,7 +160,8 @@ public class ImageClientUpload {
                         + image.getOriginalFilename()
                                 .substring(
                                         image.getOriginalFilename()
-                                                .lastIndexOf(".") + 1));
+                                                .lastIndexOf(".") + 1)
+                                .toLowerCase());
         if (!file.getParentFile().exists()) {
             file.getParentFile().mkdir();
         }
