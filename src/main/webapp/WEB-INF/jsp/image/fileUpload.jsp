@@ -21,7 +21,9 @@
     
 </script>
 <style>
-
+#upload ul li p{
+left: 0px !important;
+}
 </style>
 </head>
 <jsp:include page="../top.jsp"></jsp:include>
