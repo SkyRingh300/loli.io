@@ -10,5 +10,6 @@
 		<a href="http://screenshot.pics">SCREENSHOT.PICS</a>由<a
 			href="https://blog.loli.io" target="_blank">loli.io</a>提供&nbsp;<a
 			href="mailto:loli@linux.com" target="_blank">联系我</a>
+	    <a href="${pageContext.request.contextPath}/file">网盘(BETA)</a>
 	</p>
 </div>

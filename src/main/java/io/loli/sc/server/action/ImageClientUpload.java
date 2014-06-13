@@ -152,16 +152,23 @@ public class ImageClientUpload {
      * @return 保存后的图片File对象
      */
     private File saveImage(MultipartFile image) {
-        File file = new File(System.getProperty("java.io.tmpdir"),
-                ShortUrl.shortText(new Date().getTime()
-                        + image.getOriginalFilename())[0]
-                        + "."
-                        // 获取图片扩展名，jpg,png
-                        + image.getOriginalFilename()
-                                .substring(
-                                        image.getOriginalFilename()
-                                                .lastIndexOf(".") + 1)
-                                .toLowerCase());
+        File file = null;
+        if (image.getOriginalFilename().contains(".")) {
+            file = new File(System.getProperty("java.io.tmpdir"),
+                    ShortUrl.shortText(new Date().getTime()
+                            + image.getOriginalFilename())[0]
+                            + "."
+                            // 获取图片扩展名，jpg,png
+                            + image.getOriginalFilename()
+                                    .substring(
+                                            image.getOriginalFilename()
+                                                    .lastIndexOf(".") + 1)
+                                    .toLowerCase());
+        } else {
+            file = new File(System.getProperty("java.io.tmpdir"),
+                    ShortUrl.shortText(new Date().getTime()
+                            + image.getOriginalFilename())[0].toLowerCase());
+        }
         if (!file.getParentFile().exists()) {
             file.getParentFile().mkdir();
         }

@@ -42,8 +42,7 @@ public class QnStorageUploader extends StorageUploader {
             e.printStackTrace();
         }
         PutExtra extra = new PutExtra();
-        String key = file.getName().substring(0, file.getName().indexOf("."))
-                + ".png";
+        String key = file.getName();
         PutRet ret = IoApi.putFile(uptoken, key, file.getPath(), extra);
         return endpoint + "/" + ret.getKey();
     }

@@ -1,9 +1,13 @@
 package io.loli.sc.server.storage;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+
+import javax.imageio.ImageIO;
 
 import com.aliyun.openservices.oss.OSSClient;
 import com.aliyun.openservices.oss.model.ObjectMetadata;
@@ -43,13 +47,17 @@ public class AliStorageUploader extends StorageUploader {
 
         // 必须设置ContentLength
         meta.setContentLength(file.length());
-        meta.setContentType("image/png");
-        String suffix = file.getName().substring(
-                file.getName().lastIndexOf("."));
-
+        BufferedImage bi = null;
+        try {
+            bi = ImageIO.read(file);
+            
+        } catch (IOException e) {
+        }
+        if (bi !=null) {
+            meta.setContentType("image/png");
+        }
         // 上传Object.
-        String name = file.getName().substring(0, file.getName().indexOf("."))
-                + suffix;
+        String name = file.getName();
         client.putObject(bucketName, name, content, meta);
         return endpoint + "/" + name;
     }
