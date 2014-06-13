@@ -21,11 +21,7 @@
     
 </script>
 <style>
-#message {
-	width: 55%;
-	padding: 0 30 0 10;
-	margin: 0px auto 20px;
-}
+
 </style>
 </head>
 <jsp:include page="../top.jsp"></jsp:include>
@@ -55,6 +51,7 @@
 		<ul>
 			<li>网盘还不稳定，上传成功后会生成URL，如果文件很大，请耐心等待数秒</li>
 			<li>文件大小最大为200M，超过不会上传成功，请注意</li>
+			<li>使用迅雷下载这里的文件可能会对服务器造成巨大压力</li>
 		</ul>
 	</div>
 </div>

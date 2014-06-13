@@ -8,8 +8,9 @@
 	<p>请勿上传违反中国法律法规的图片</p>
     <p>
 		<a href="http://screenshot.pics">SCREENSHOT.PICS</a>由<a
-			href="https://blog.loli.io" target="_blank">loli.io</a>提供&nbsp;<a
-			href="mailto:loli@linux.com" target="_blank">联系我</a>
-	    <a href="${pageContext.request.contextPath}/file">网盘(BETA)</a>
+			href="https://blog.loli.io" target="_blank">loli.io</a>提供&nbsp;
+			     <a href="${pageContext.request.contextPath}/file">网盘(BETA)&nbsp;</a>
+			
+			<a href="mailto:loli@linux.com" target="_blank">联系我</a>
 	</p>
 </div>
