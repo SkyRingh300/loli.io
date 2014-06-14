@@ -34,11 +34,16 @@ public class StorageBucket implements Serializable {
     @Column(name = "upload_url")
     private String uploadUrl;
 
+    @Column(name = "file_type")
+    private String fileType;
+
     @Column(name = "enabled")
     private Boolean enabled = true;
 
     public static final String ALI_TYPE = "ali";
     public static final String QN_TYPE = "qn";
+    public static final String IMG_TYPE = "image";
+    public static final String FILE_TYPE = "file";
 
     public int getId() {
         return id;
@@ -102,6 +107,14 @@ public class StorageBucket implements Serializable {
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
     }
 
 }

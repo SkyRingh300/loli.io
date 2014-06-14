@@ -129,7 +129,15 @@ public class ImageClientUpload {
         imageObj.setIp(ip);
         imageObj.setUa(request.getHeader("user-agent"));
         File file = saveImage(imageFile);
-        imageObj.setStorageBucket(bucketService.randomBucket());
+        String ref = null;
+        if ((ref = request.getHeader("REFERER")) != null) {
+            if (ref.contains("file")) {
+                imageObj.setStorageBucket(bucketService.randomFileBucket());
+            } else {
+                imageObj.setStorageBucket(bucketService.randomImageBucket());
+            }
+        }
+
         StorageUploader uploader = StorageUploader.newInstance(imageObj
                 .getStorageBucket());
         imageObj.setPath(uploader.upload(file));
