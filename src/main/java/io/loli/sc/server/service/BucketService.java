@@ -34,7 +34,7 @@ public class BucketService {
                     .filter(item -> item.getFileType().equals(
                             StorageBucket.IMG_TYPE))
                     .collect(Collectors.toList());
-            fileArray = list.toArray(new StorageBucket[list.size()]);
+            imageArray = list.toArray(new StorageBucket[list.size()]);
         }
         if (fileArray == null) {
             List<StorageBucket> list = bucketList
