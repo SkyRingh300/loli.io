@@ -5,7 +5,6 @@ import io.loli.sc.server.entity.StorageBucket;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -30,16 +29,20 @@ public class BucketService {
                     .size()]);
         }
         if (imageArray == null) {
-            Stream<StorageBucket> str = bucketList.stream().filter(
-                    item -> item.getFileType().equals(StorageBucket.IMG_TYPE));
-            fileArray = str.collect(Collectors.toList()).toArray(
-                    new StorageBucket[(int) str.count()]);
+            List<StorageBucket> list = bucketList
+                    .stream()
+                    .filter(item -> item.getFileType().equals(
+                            StorageBucket.IMG_TYPE))
+                    .collect(Collectors.toList());
+            fileArray = list.toArray(new StorageBucket[list.size()]);
         }
         if (fileArray == null) {
-            Stream<StorageBucket> str = bucketList.stream().filter(
-                    item -> item.getFileType().equals(StorageBucket.FILE_TYPE));
-            fileArray = str.collect(Collectors.toList()).toArray(
-                    new StorageBucket[(int) str.count()]);
+            List<StorageBucket> list = bucketList
+                    .stream()
+                    .filter(item -> item.getFileType().equals(
+                            StorageBucket.FILE_TYPE))
+                    .collect(Collectors.toList());
+            fileArray = list.toArray(new StorageBucket[list.size()]);
         }
 
     }
