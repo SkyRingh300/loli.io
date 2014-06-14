@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <head>
-<title>SCREENSHOT.PCIS-好用的图床</title>
+<title>SCREENSHOT.PICS-好用的图床</title>
 <link href="static/ext/uploader/style.css" rel="stylesheet" />
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
