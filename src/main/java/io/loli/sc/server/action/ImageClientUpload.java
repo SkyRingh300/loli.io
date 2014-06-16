@@ -136,6 +136,8 @@ public class ImageClientUpload {
             } else {
                 imageObj.setStorageBucket(bucketService.randomImageBucket());
             }
+        } else {
+            imageObj.setStorageBucket(bucketService.randomImageBucket());
         }
 
         StorageUploader uploader = StorageUploader.newInstance(imageObj
