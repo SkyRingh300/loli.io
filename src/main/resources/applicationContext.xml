@@ -18,7 +18,7 @@
     </bean>
 
     <context:annotation-config />
-    <context:component-scan base-package="io.loli"
+    <context:component-scan base-package="io.loli.sc.server"
         scope-resolver="io.loli.jsr330.CustomScopeMetadataResolver" />
     <!--注册Bean验证后处理器 -->
     <bean

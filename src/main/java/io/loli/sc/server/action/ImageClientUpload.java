@@ -5,6 +5,7 @@ import io.loli.sc.server.entity.UploadedImage;
 import io.loli.sc.server.entity.User;
 import io.loli.sc.server.service.BucketService;
 import io.loli.sc.server.service.ClientTokenService;
+import io.loli.sc.server.service.FileFetchService;
 import io.loli.sc.server.service.UploadedImageService;
 import io.loli.sc.server.service.UserService;
 import io.loli.sc.server.storage.StorageUploader;
@@ -48,6 +49,10 @@ public class ImageClientUpload {
 
     @Inject
     private UploadedImageService uic;
+
+    @Inject
+    @Named("fileFetchService")
+    private FileFetchService ffs;
 
     private Logger logger = Logger.getLogger(ImageClientUpload.class);
 
@@ -108,6 +113,7 @@ public class ImageClientUpload {
         imageObj.setDate(new Date());
 
         if (email == null && desc == null && token == null) {
+            imageObj.setDesc(imageFile.getOriginalFilename());
         } else {
             if (!cts.checkTokenBelongToUser(token, email)) {
                 logger.info(email + "使用错误的token上传");
@@ -115,8 +121,7 @@ public class ImageClientUpload {
             } else {
                 imageObj.setUser(userService.findByEmail(email));
             }
-            imageObj.setDesc((null == desc || desc.isEmpty()) ? imageFile
-                    .getOriginalFilename() : desc);
+            imageObj.setOriginName(desc);
         }
         User user = null;
         if ((user = (User) request.getSession().getAttribute("user")) != null) {
@@ -144,6 +149,50 @@ public class ImageClientUpload {
                 .getStorageBucket());
         imageObj.setPath(uploader.upload(file));
         imageObj.setOriginName(imageFile.getOriginalFilename());
+        uic.save(imageObj);
+        if (imageObj.getUser() == null) {
+            logger.info("匿名上传文件:" + imageObj.getOriginName() + ", 链接为"
+                    + imageObj.getPath());
+        } else {
+            logger.info(imageObj.getUser().getEmail() + "上传文件:"
+                    + imageObj.getOriginName() + ", 链接为" + imageObj.getPath());
+        }
+        return imageObj;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = { "/fetch" }, method = { RequestMethod.POST })
+    public UploadedImage fetch(String path, HttpServletRequest request) {
+        File imageFile = ffs.fetch(path);
+        if (imageFile == null) {
+            return new UploadedImage();
+        }
+        User user = null;
+        UploadedImage imageObj = new UploadedImage();
+        if ((user = (User) request.getSession().getAttribute("user")) != null) {
+            imageObj.setUser(user);
+        }
+        String ip = request.getRemoteAddr();
+        if (ip != null && ip.equals("127.0.0.1")) {
+            ip = request.getHeader("X-Real-IP");
+        }
+        imageObj.setIp(ip);
+        imageObj.setUa(request.getHeader("user-agent"));
+        String ref = null;
+        if ((ref = request.getHeader("REFERER")) != null) {
+            if (ref.contains("file")) {
+                imageObj.setStorageBucket(bucketService.randomFileBucket());
+            } else {
+                imageObj.setStorageBucket(bucketService.randomImageBucket());
+            }
+        } else {
+            imageObj.setStorageBucket(bucketService.randomImageBucket());
+        }
+
+        StorageUploader uploader = StorageUploader.newInstance(imageObj
+                .getStorageBucket());
+        imageObj.setPath(uploader.upload(imageFile));
+        imageObj.setOriginName(imageFile.getName());
         uic.save(imageObj);
         if (imageObj.getUser() == null) {
             logger.info("匿名上传文件:" + imageObj.getOriginName() + ", 链接为"
