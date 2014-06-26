@@ -35,7 +35,8 @@
 				这是一个<strong>截图客户端</strong>，可以运行在XP之后的(不包括XP)Windows、Mac、Linux上。<br />
 				需要安装<a target="_blank"
 					href="http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html"><strong>Java
-						8</strong></a>或以上版本才能运行<br /> <br />
+						8</strong></a>或以上版本才能运行<br />
+			    首次运行请打开设置-连接配置一下 <br />
 			</p>
 			<p>
 				<span> 最新版本为0.0.1-ALPHA，问题反馈请发送邮件至<a

@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <head>
-<title>SCREENSHOT.PICS-查看已上传图片</title>
+<title>SCREENSHOT.PICS-查看已上传文件</title>
 <link href="static/ext/uploader/style.css" rel="stylesheet" />
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -33,15 +33,15 @@
 	</c:if>
 	<div class="tip">
 		<h4>
-			<strong>${user.email}</strong>一共上传了<strong>${totalCount}</strong>张图片
+			<strong>${user.email}</strong>一共上传了<strong>${totalCount}</strong>个文件
 		</h4>
 	</div>
 	<table class="table table-hover">
 		<thead>
 			<tr>
-				<th>图片名</th>
+				<th>文件名</th>
 				<th>上传时间</th>
-				<th>图片链接</th>
+				<th>链接</th>
 				<th>操作</th>
 			</tr>
 		</thead>

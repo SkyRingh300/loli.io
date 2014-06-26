@@ -82,7 +82,7 @@ $(function() {
                             // the dial
 
                             data.context.find('label').eq(0).html(
-                                    "图片上传中:" + progress + "%");
+                                    "文件上传中:" + progress + "%");
                             if (progress == 100) {
                                 data.context.removeClass('working');
                                 data.context.find('label').eq(0).html("上传成功, 正在生成链接...");
@@ -92,13 +92,13 @@ $(function() {
                         fail : function(e, data) {
                             // Something has gone wrong!
                             data.context.addClass('error');
-                            data.context.find('label').eq(0).html("图片上传失败");
+                            data.context.find('label').eq(0).html("文件上传失败");
 
                         },
                         done : function(e, data) {
                             var filename = data.result.path;
                             if (filename) {
-                                data.context.find('label').eq(0).html("图片上传失败");
+                                data.context.find('label').eq(0).html("文件上传失败");
                             }
                             content = "<a target='_blank' href='";
                             content += filename;
