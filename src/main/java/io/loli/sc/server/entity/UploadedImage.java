@@ -22,7 +22,9 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 @Entity
 @Table(name = "uploaded_image")
-@NamedQueries(value = { @NamedQuery(name = "UploadedImage.listByUId", query = "SELECT u FROM UploadedImage u  WHERE u.user.id=:u_id and u.delFlag=false order by u.date desc") })
+@NamedQueries(value = {
+        @NamedQuery(name = "UploadedImage.listByUId", query = "SELECT u FROM UploadedImage u  WHERE u.user.id=:u_id and u.delFlag=false order by u.date desc"),
+        @NamedQuery(name = "UploadedImage.listByUIdAndFileName", query = "SELECT u FROM UploadedImage u  WHERE u.originName like :file_name and u.user.id=:u_id and u.delFlag=false order by u.date desc") })
 public class UploadedImage implements Serializable {
 
     private static final long serialVersionUID = 1398371509051853854L;

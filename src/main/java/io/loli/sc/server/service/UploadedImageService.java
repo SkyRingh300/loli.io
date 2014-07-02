@@ -32,9 +32,11 @@ public class UploadedImageService {
     public void delete(int id) {
         UploadedImage image = this.findById(id);
         StorageBucket sb = image.getStorageBucket();
-        StorageUploader.newInstance(sb).delete(
-                image.getPath().substring(image.getPath().lastIndexOf("/") + 1));
-        System.out.println(image.getPath().substring(image.getPath().indexOf("/") + 1));
+        StorageUploader.newInstance(sb)
+                .delete(image.getPath().substring(
+                        image.getPath().lastIndexOf("/") + 1));
+        System.out.println(image.getPath().substring(
+                image.getPath().indexOf("/") + 1));
         image.setDelFlag(true);
     }
 
@@ -74,6 +76,18 @@ public class UploadedImageService {
         return this.listByUId(u_id, firstPosition, maxResults);
     }
 
+    public List<UploadedImage> listByUIdAndFileName(int u_id, String fileName,
+            int firstPosition) {
+        return this.listByUIdAndFileName(u_id, fileName, firstPosition,
+                maxResults);
+    }
+
+    public List<UploadedImage> listByUIdAndFileName(int u_id, String fileName,
+            int firstPosition, int maxResults) {
+        return ud.listByUIdAndFileName(u_id, fileName, firstPosition,
+                maxResults);
+    }
+
     public int countByUId(int u_id) {
         return ud.countByUId(u_id);
     }
@@ -84,6 +98,10 @@ public class UploadedImageService {
 
     public void setMaxResults(int maxResults) {
         this.maxResults = maxResults;
+    }
+
+    public int countByUIdAndFileName(int u_id, String fileName) {
+        return ud.countByUIdAndFileName(u_id,fileName);
     }
 
 }

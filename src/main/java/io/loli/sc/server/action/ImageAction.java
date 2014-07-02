@@ -16,6 +16,7 @@ import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.http.Consts;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,7 +62,41 @@ public class ImageAction {
         request.setAttribute("hasLast", hasLast);
         request.setAttribute("hasNext", hasNext);
         request.setAttribute("currentPage", current);
+        request.setAttribute("count", totalCount);
+        model.addAttribute("imgList", list);
+        return "image/list";
+    }
 
+    @RequestMapping(value = "/search")
+    public String search(@RequestParam(value = "fileName") String fileName,
+            @RequestParam(value = "page", required = false) Integer page,
+            HttpServletRequest request, Model model) {
+        if (page == null || page == 0) {
+            page = 1;
+        }
+        int firstPosition = (page - 1) * imageService.getMaxResults();
+        User user = (User) request.getSession().getAttribute("user");
+        if (user == null) {
+            return "redirect:/user/login";
+        }
+        int u_id = ((User) request.getSession().getAttribute("user")).getId();
+
+        List<UploadedImage> list = imageService.listByUIdAndFileName(u_id,
+                fileName, firstPosition);
+        int totalCount = imageService.countByUIdAndFileName(u_id, fileName);
+        int count = imageService.countByUId(u_id);
+        int pageCount = (int) Math.ceil((float) totalCount
+                / (float) imageService.getMaxResults());
+        boolean hasLast = page != 1;
+        boolean hasNext = page != pageCount;
+        int current = page;
+        request.setAttribute("totalCount", totalCount);
+        request.setAttribute("count", count);
+        request.setAttribute("pageCount", pageCount);
+        request.setAttribute("hasLast", hasLast);
+        request.setAttribute("hasNext", hasNext);
+        request.setAttribute("currentPage", current);
+        request.setAttribute("fileName", fileName);
         model.addAttribute("imgList", list);
         return "image/list";
     }

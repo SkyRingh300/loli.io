@@ -56,5 +56,22 @@ public class UploadedImageDao {
                 .getResultList().size();
 
     }
-    
+
+    public List<UploadedImage> listByUIdAndFileName(int u_id, String fileName,
+            int firstPosition, int maxResults) {
+        return em
+                .createNamedQuery("UploadedImage.listByUIdAndFileName",
+                        UploadedImage.class)
+                .setParameter("file_name", "%" + fileName + "%")
+                .setParameter("u_id", u_id).setFirstResult(firstPosition)
+                .setMaxResults(maxResults).getResultList();
+    }
+
+    public int countByUIdAndFileName(int u_id, String fileName) {
+        return em
+                .createNamedQuery("UploadedImage.listByUIdAndFileName",
+                        UploadedImage.class).setParameter("u_id", u_id)
+                .setParameter("file_name", "%" + fileName + "%")
+                .getResultList().size();
+    }
 }
