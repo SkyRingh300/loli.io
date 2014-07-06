@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+
 <head>
 <title>SCREENSHOT.PICS-好用的图床</title>
 <link href="static/ext/uploader/style.css" rel="stylesheet" />
@@ -8,11 +10,12 @@
 
 <META content="图床,免费图床,屏幕截图" name="keywords" />
 <meta name="description" content="一个好用的免费图床" />
-<script src="${pageContext.request.contextPath}/static/js/jquery.js"></script>
 <script
-	src="${pageContext.request.contextPath}/static/js/bootstrap.min.js"></script>
+	src="<spring:message code="staticPath"></spring:message>/jquery.js"></script>
+<script
+	src="<spring:message code="staticPath"></spring:message>/bootstrap.min.js"></script>
 <link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/static/css/bootstrap.min.css">
+	href="<spring:message code="staticPath"></spring:message>/bootstrap.min.css">
 <link href="${pageContext.request.contextPath}/static/css/styles.css"
 	type="text/css" rel='stylesheet' />
 <!-- Google web fonts -->

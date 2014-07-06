@@ -4,25 +4,30 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <head>
 <title>SCREENSHOT.PICS-网盘(BETA)</title>
-<link href="static/ext/uploader/style.css" rel="stylesheet" />
+<link
+	href="<spring:message code="staticPath"></spring:message>/style.css"
+	rel="stylesheet" />
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<script src="${pageContext.request.contextPath}/static/js/jquery.js"></script>
 <script
-	src="${pageContext.request.contextPath}/static/js/bootstrap.min.js"></script>
+	src="<spring:message code="staticPath"></spring:message>/jquery.js"></script>
+<script
+	src="<spring:message code="staticPath"></spring:message>/bootstrap.min.js"></script>
 <link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/static/css/bootstrap.min.css">
-<link href="${pageContext.request.contextPath}/static/css/styles.css"
+	href="<spring:message code="staticPath"></spring:message>/bootstrap.min.css">
+<link
+	href="<spring:message code="staticPath"></spring:message>/styles.css"
 	type="text/css" rel='stylesheet' />
 <!-- Google web fonts -->
-<link href="${pageContext.request.contextPath}/static/css/font.css"
+<link
+	href="<spring:message code="staticPath"></spring:message>/font.css"
 	rel='stylesheet' />
 <script type="text/javascript">
     
 </script>
 <style>
-#upload ul li p{
-left: 0px !important;
+#upload ul li p {
+	left: 0px !important;
 }
 </style>
 </head>
@@ -62,10 +67,14 @@ left: 0px !important;
 <jsp:include page="../bottom.jsp"></jsp:include>
 
 
-<script src="static/ext/uploader/jquery.knob.js"></script>
+<script
+	src="<spring:message code="staticPath"></spring:message>/jquery.knob.js"></script>
 
-<script src="static/ext/uploader/jquery.ui.widget.js"></script>
-<script src="static/ext/uploader/jquery.iframe-transport.js"></script>
-<script src="static/ext/uploader/jquery.fileupload.js"></script>
+<script
+	src="<spring:message code="staticPath"></spring:message>/jquery.ui.widget.js"></script>
+<script
+	src="<spring:message code="staticPath"></spring:message>/jquery.iframe-transport.js"></script>
+<script
+	src="<spring:message code="staticPath"></spring:message>/jquery.fileupload.js"></script>
 
 <script src="static/ext/uploader/file.script.js"></script>

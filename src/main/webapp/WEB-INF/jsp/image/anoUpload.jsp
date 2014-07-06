@@ -1,17 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
 <style>
 #upload ul li span {
 	background:
-		url('${pageContext.request.contextPath}/static/ext/uploader/icons.png')
+		url('<spring:message code="staticPath"></spring:message>/icons.png')
 		no-repeat !important;
 }
 
 #drop {
 	border-image:
-		url('${pageContext.request.contextPath}/static/ext/uploader/border-image.png')
+		url('<spring:message code="staticPath"></spring:message>/border-image.png')
 		25 repeat !important;
 }
 </style>
@@ -53,10 +54,13 @@
 </div>
 
 
-<script src="static/ext/uploader/jquery.knob.js"></script>
+<script
+	src="<spring:message code="staticPath"></spring:message>/jquery.knob.js"></script>
+<script
+	src="<spring:message code="staticPath"></spring:message>/jquery.ui.widget.js"></script>
+<script
+	src="<spring:message code="staticPath"></spring:message>/jquery.iframe-transport.js"></script>
+<script
+	src="<spring:message code="staticPath"></spring:message>/jquery.fileupload.js"></script>
 
-<script src="static/ext/uploader/jquery.ui.widget.js"></script>
-<script src="static/ext/uploader/jquery.iframe-transport.js"></script>
-<script src="static/ext/uploader/jquery.fileupload.js"></script>
-
-<script src="static/ext/uploader/script.js"></script>
+<script src="<spring:message code="staticPath"></spring:message>/script.js"></script>

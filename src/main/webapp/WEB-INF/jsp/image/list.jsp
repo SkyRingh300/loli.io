@@ -3,20 +3,27 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+
 <head>
 <title>SCREENSHOT.PICS-查看已上传文件</title>
-<link href="static/ext/uploader/style.css" rel="stylesheet" />
+<link
+	href="<spring:message code="staticPath"></spring:message>/style.css"
+	rel="stylesheet" />
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<script src="${pageContext.request.contextPath}/static/js/jquery.js"></script>
 <script
-	src="${pageContext.request.contextPath}/static/js/bootstrap.min.js"></script>
+	src="<spring:message code="staticPath"></spring:message>/jquery.js"></script>
+<script
+	src="<spring:message code="staticPath"></spring:message>/bootstrap.min.js"></script>
 <link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/static/css/bootstrap.min.css">
-<link href="${pageContext.request.contextPath}/static/css/styles.css"
+	href="<spring:message code="staticPath"></spring:message>/bootstrap.min.css">
+<link
+	href="<spring:message code="staticPath"></spring:message>/styles.css"
 	type="text/css" rel='stylesheet' />
 <!-- Google web fonts -->
-<link href="${pageContext.request.contextPath}/static/css/font.css"
+<link
+	href="<spring:message code="staticPath"></spring:message>/font.css"
 	rel='stylesheet' />
 <script type="text/javascript">
     $(document).ready(function(e) {
