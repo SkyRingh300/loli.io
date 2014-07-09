@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -20,7 +21,9 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 @Entity
 @Table(name = "user")
-@NamedQueries(value = { @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email=:email") })
+@NamedQueries(value = {
+        @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email=:email"),
+        @NamedQuery(name = "User.listByToken", query = "SELECT u FROM User u WHERE u.loginStatus.token=:token") })
 public class User implements Serializable {
 
     private static final long serialVersionUID = -6060393006470256261L;
@@ -35,6 +38,10 @@ public class User implements Serializable {
     @Column
     @JsonIgnore
     private String password;
+
+    @OneToOne(mappedBy = "user")
+    @JsonIgnore
+    private LoginStatus loginStatus;
 
     @OneToMany(mappedBy = "user")
     @JsonIgnore
@@ -78,5 +85,13 @@ public class User implements Serializable {
 
     public void setImageList(List<UploadedImage> imageList) {
         this.imageList = imageList;
+    }
+
+    public LoginStatus getLoginStatus() {
+        return loginStatus;
+    }
+
+    public void setLoginStatus(LoginStatus loginStatus) {
+        this.loginStatus = loginStatus;
     }
 }

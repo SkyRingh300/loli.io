@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -134,12 +135,6 @@ public class UserLogin {
         if (trueUser != null
                 && user.getPassword().equals(trueUser.getPassword())) {
             session.setAttribute("user", trueUser);
-
-            HttpSession sess = request.getSession();
-            Cookie cookie = new Cookie("JSESSIONID", sess.getId());
-            cookie.setMaxAge(24 * 60 * 60 * 60);
-            response.addCookie(cookie);
-
             redirectAttributes.addFlashAttribute("info", "登陆成功");
             return "redirect:/";
         } else {
@@ -152,11 +147,15 @@ public class UserLogin {
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logOut(HttpServletRequest request,
-            RedirectAttributes redirectAttributes) {
+            HttpServletResponse response, RedirectAttributes redirectAttributes) {
         User user = (User) request.getSession().getAttribute("user");
         if (user != null) {
             request.getSession().removeAttribute("user");
             redirectAttributes.addFlashAttribute("info", "您已成功退出");
+            Cookie cookie = new Cookie("token", "");
+            cookie.setMaxAge(0);
+            cookie.setPath(request.getServletContext().getContextPath());
+            response.addCookie(cookie);
         } else {
             // TODO 用户未登录时的操作
         }
