@@ -64,7 +64,7 @@ public class LoginStatusFilter implements Filter {
                         }
                         Cookie cookie = new Cookie("token", ls.getToken());
                         cookie.setMaxAge(3600 * 24 * 365);
-                        cookie.setPath(req.getServletContext().getContextPath());
+                        cookie.setPath("/");
                         res.addCookie(cookie);
                     }
                 }
