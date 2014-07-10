@@ -154,7 +154,7 @@ public class UserLogin {
             redirectAttributes.addFlashAttribute("info", "您已成功退出");
             Cookie cookie = new Cookie("token", "");
             cookie.setMaxAge(0);
-            cookie.setPath(request.getServletContext().getContextPath());
+            cookie.setPath("/");
             response.addCookie(cookie);
         } else {
             // TODO 用户未登录时的操作
