@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/c" prefix="c"%>
+<jsp:directive.include file="taglib.jsp" />
 <style>
 .navbar-default {
 	background-color: rgb(94, 94, 94) !important;
@@ -52,6 +52,7 @@
 						data-toggle="dropdown">${sessionScope.user.email} <b
 							class="caret"></b></a>
 						<ul class="dropdown-menu">
+							<li><a href="${pageContext.request.contextPath}/user/edit">修改密码</a></li>
 							<li><a href="${pageContext.request.contextPath}/img/list">查看已上传图片</a></li>
 						</ul></li>
 

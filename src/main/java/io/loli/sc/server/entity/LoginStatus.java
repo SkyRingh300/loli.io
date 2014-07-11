@@ -14,8 +14,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "login_status")
 @NamedQueries(value = { @NamedQuery(name = "LoginStatus.findByUId", query = "SELECT c FROM LoginStatus c WHERE c.user.id=:uid") })
 public class LoginStatus implements Serializable {
     private static final long serialVersionUID = -8086904075643989154L;

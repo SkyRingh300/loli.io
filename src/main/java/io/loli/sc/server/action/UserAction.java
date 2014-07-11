@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Named
 @RequestMapping(value = { "/user" })
-public class UserLogin {
+public class UserAction {
     @Inject
     private UserService userService;
 
@@ -166,5 +165,39 @@ public class UserLogin {
     public String welcome() {
 
         return "user/welcome";
+    }
+
+    @RequestMapping(value = "/edit", method = RequestMethod.GET)
+    public String changePwdForm(HttpServletRequest request, Model model,
+            RedirectAttributes redirectAttributes) {
+        Object user = request.getSession().getAttribute("user");
+        if (user == null) {
+            redirectAttributes.addFlashAttribute("info", "非法请求");
+            return "redirect:user/login";
+        }
+        model.addAttribute("user", user);
+        return "user/edit";
+    }
+
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
+    public String changePwdSubmit(HttpServletRequest request, Model model,
+            RedirectAttributes redirectAttributes,
+            @RequestParam(required = true) String password_re,
+            @RequestParam(required = true) String password_old) {
+        Object user = request.getSession().getAttribute("user");
+        if (user == null) {
+            redirectAttributes.addFlashAttribute("info", "非法请求");
+            return "redirect:user/login";
+        }
+
+        if (((User) user).getPassword().equals(password_old)) {
+            ((User) user).setPassword(password_re);
+            userService.update((User) user);
+            redirectAttributes.addFlashAttribute("message", "更新密码成功");
+            return "redirect:edit";
+        } else {
+            redirectAttributes.addFlashAttribute("message", "原密码错误");
+            return "redirect:edit";
+        }
     }
 }

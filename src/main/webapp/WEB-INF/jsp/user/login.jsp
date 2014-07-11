@@ -1,26 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
-<%
-    String rootPath = request.getServletContext().getContextPath();
-    request.setAttribute("rootPath", rootPath);
-%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
+<jsp:directive.include file="../taglib.jsp" />
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>登陆</title>
-<!-- <script src="${rootPath}/static/js/jquery.js"></script> -->
-<script src="${rootPath}/static/js/md5.js"></script>
-<script
-    src="${pageContext.request.contextPath}/static/js/jquery.js"></script>
-<script src="${rootPath}/static/js/login.js"></script>
-<script src="${rootPath}/static/js/bootstrap.min.js"></script>
-<link rel="stylesheet" type="text/css"
-	href="${rootPath}/static/css/bootstrap.min.css">
-<link href="${pageContext.request.contextPath}/static/css/styles.css"
-	type="text/css" rel='stylesheet' />
+
+
+<jsp:include page="../static.jsp"></jsp:include>
+<script src="${pageContext.request.contextPath}/static/js/login.js"></script>
+<script src="${pageContext.request.contextPath}/static/js/md5.js"></script>
 
 <style type="text/css">
 .login-form {
@@ -40,8 +30,8 @@
 	margin: auto;
 }
 
-.footer{
-margin-top: 160px;
+.footer {
+	margin-top: 160px;
 }
 </style>
 </head>

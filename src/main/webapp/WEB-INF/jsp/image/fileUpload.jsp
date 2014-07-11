@@ -1,8 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<jsp:directive.include file="../taglib.jsp" />
+<!DOCTYPE html>
 <head>
 <title>SCREENSHOT.PICS-网盘(BETA)</title>
 <link
@@ -10,19 +9,8 @@
 	rel="stylesheet" />
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<script
-	src="<spring:message code="staticPath"></spring:message>/jquery.js"></script>
-<script
-	src="<spring:message code="staticPath"></spring:message>/bootstrap.min.js"></script>
-<link rel="stylesheet" type="text/css"
-	href="<spring:message code="staticPath"></spring:message>/bootstrap.min.css">
-<link
-	href="<spring:message code="staticPath"></spring:message>/styles.css"
-	type="text/css" rel='stylesheet' />
-<!-- Google web fonts -->
-<link
-	href="<spring:message code="staticPath"></spring:message>/font.css"
-	rel='stylesheet' />
+
+<jsp:include page="../static.jsp"></jsp:include>
 <script type="text/javascript">
     
 </script>
@@ -70,12 +58,10 @@
 
 <script
 	src="<spring:message code="staticPath"></spring:message>/jquery.knob.js"></script>
-
 <script
 	src="<spring:message code="staticPath"></spring:message>/jquery.ui.widget.js"></script>
 <script
 	src="<spring:message code="staticPath"></spring:message>/jquery.iframe-transport.js"></script>
 <script
 	src="<spring:message code="staticPath"></spring:message>/jquery.fileupload.js"></script>
-
-<script src="static/ext/uploader/file.script.js"></script>
+<script src="${pageContext.request.contextPath}/static/ext/uploader/file.script.js"></script>

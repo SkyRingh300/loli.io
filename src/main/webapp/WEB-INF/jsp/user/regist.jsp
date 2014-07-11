@@ -1,23 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%
-    String rootPath = request.getServletContext().getContextPath();
-			request.setAttribute("rootPath", rootPath);
-%>
+<!DOCTYPE html>
+<jsp:directive.include file="../taglib.jsp" />
+
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>用户注册</title>
-<!-- <script src="${rootPath}/static/js/jquery.js"></script> -->
-<script
-    src="${pageContext.request.contextPath}/static/js/jquery.js"></script>
-<script src="${rootPath}/static/js/md5.js"></script>
-<script src="${rootPath}/static/js/regist.js"></script>
-<script src="${rootPath}/static/js/bootstrap.min.js"></script>
-<link rel="stylesheet" type="text/css"
-	href="${rootPath}/static/css/bootstrap.min.css">
-<link href="${pageContext.request.contextPath}/static/css/styles.css"
-	type="text/css" rel='stylesheet' />
+
+
+<jsp:include page="../static.jsp"></jsp:include>
+<script src="${pageContext.request.contextPath}/static/js/regist.js"></script>
+<script src="${pageContext.request.contextPath}/static/js/md5.js"></script>
 
 <style type="text/css">
 .register-form {
