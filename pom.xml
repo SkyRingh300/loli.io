@@ -206,12 +206,12 @@
         <dependency>
             <groupId>io.loli</groupId>
             <artifactId>util</artifactId>
-            <version>0.0.5</version>
+            <version>0.0.6</version>
         </dependency>
         <dependency>
             <groupId>io.loli.util</groupId>
             <artifactId>mail</artifactId>
-            <version>0.0.5</version>
+            <version>0.0.6</version>
         </dependency>
         <dependency>
             <groupId>javax.mail</groupId>
