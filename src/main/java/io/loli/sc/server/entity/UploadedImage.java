@@ -61,6 +61,9 @@ public class UploadedImage implements Serializable {
     @Column(name = "origin_name")
     private String originName;
 
+    @Column(name = "redirect_code")
+    private String redirectCode;
+
     @Column
     private String path;
 
@@ -156,5 +159,13 @@ public class UploadedImage implements Serializable {
 
     public void setUa(String ua) {
         this.ua = ua;
+    }
+
+    public String getRedirectCode() {
+        return redirectCode;
+    }
+
+    public void setRedirectCode(String redirectCode) {
+        this.redirectCode = redirectCode;
     }
 }

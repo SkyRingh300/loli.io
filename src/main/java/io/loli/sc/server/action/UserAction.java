@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,23 @@ public class UserAction {
     private UserService userService;
 
     /**
+     * 注册的INPUT地址
+     */
+    private static final String REG_INPUT = "/user/regist";
+
+    private static final String LOGIN_INPUT = "/user/login";
+
+    private static final String EDIT_INPUT = "/user/login";
+
+    private static final String MSG_NAME = "message";
+
+    private static final String TOKEN_NAME = "token";
+
+    private static final String EMAIL_NAME = "email";
+
+    private static Logger logger = Logger.getLogger(UserAction.class);
+
+    /**
      * 用户注册GET, 定向至注册页面
      * 
      * @param model
@@ -37,13 +55,8 @@ public class UserAction {
     public String setUpReg(Model model) {
         User user = new User();
         model.addAttribute("user", user);
-        return REGINPUT;
+        return REG_INPUT;
     }
-
-    /**
-     * 注册的INPUT地址
-     */
-    private static String REGINPUT = "/user/regist";
 
     /**
      * 用户注册POST提交
@@ -54,26 +67,28 @@ public class UserAction {
      * @param password_md5 客户端js自动生成的密码md5值, 用以验证非法提交
      */
     @RequestMapping(value = { "/regist" }, method = RequestMethod.POST)
-    public String submitReg(@ModelAttribute User user,
-            @RequestParam("token") String token, Model model,
-            @RequestParam(required = true) String password_re,
+    public String submitReg(
+            @ModelAttribute User user,
+            @RequestParam(TOKEN_NAME) String token,
+            Model model,
+            @RequestParam(required = true, value = "password_re") String passwordRe,
             HttpServletRequest request, RedirectAttributes redirectAttributes) {
         Map<String, String> msgMap = new HashMap<String, String>();
-        request.setAttribute("message", msgMap);
-        Object tokenInSession = request.getSession().getAttribute("token");
+        request.setAttribute(MSG_NAME, msgMap);
+        Object tokenInSession = request.getSession().getAttribute(TOKEN_NAME);
         if (null != tokenInSession && null != token
                 && !token.equals(tokenInSession)) {
-            msgMap.put("token", "验证码不正确");
-            return REGINPUT;
+            msgMap.put(TOKEN_NAME, "验证码不正确");
+            return REG_INPUT;
         } else {
-            request.getSession().removeAttribute("token");
+            request.getSession().removeAttribute(TOKEN_NAME);
         }
 
         // 没有md5加密
         if (user.getPassword().length() != 32
-                || !user.getPassword().equals(password_re)) {
-            msgMap.put("email", "非法请求");
-            return REGINPUT;
+                || !user.getPassword().equals(passwordRe)) {
+            msgMap.put(EMAIL_NAME, "非法请求");
+            return REG_INPUT;
         }
 
         // 用户注册日期
@@ -81,19 +96,20 @@ public class UserAction {
         try {
             userService.save(user);
         } catch (DBException e) {
+            logger.info("已经存在此邮箱" + e);
             // 已经存在此邮箱，抛出异常
-            msgMap.put("email", e.getMessage());
-            return REGINPUT;
+            msgMap.put(EMAIL_NAME, e.getMessage());
+            return REG_INPUT;
         }
         redirectAttributes.addFlashAttribute("info", "您已成功注册");
-        return "redirect:/user/login";
+        return "redirect:" + LOGIN_INPUT;
     }
 
     @RequestMapping(value = { "/login" }, method = RequestMethod.GET)
     public String setUpLogin(Model model) {
         User user = new User();
         model.addAttribute("user", user);
-        return "/user/login";
+        return LOGIN_INPUT;
     }
 
     /**
@@ -109,7 +125,7 @@ public class UserAction {
             RedirectAttributes redirectAttributes, HttpServletResponse response) {
         // 保存页面显示信息的map
         Map<String, String> msgMap = new HashMap<String, String>();
-        request.setAttribute("message", msgMap);
+        request.setAttribute(MSG_NAME, msgMap);
 
         // 是否验证通过
         boolean flag = true;
@@ -124,8 +140,8 @@ public class UserAction {
         // 当验证失败时，跳转回登陆界面
         if (!flag) {
             // 非法请求
-            msgMap.put("email", "非法请求");
-            return "/user/login";
+            msgMap.put(EMAIL_NAME, "非法请求");
+            return LOGIN_INPUT;
         }
 
         // 根据此email查询出用户
@@ -138,9 +154,9 @@ public class UserAction {
             return "redirect:/";
         } else {
             // 邮箱或者密码错误
-            msgMap.put("email", "用户名或者密码错误");
-            request.setAttribute("email", user.getEmail());
-            return "/user/login";
+            msgMap.put(EMAIL_NAME, "用户名或者密码错误");
+            request.setAttribute(EMAIL_NAME, user.getEmail());
+            return LOGIN_INPUT;
         }
     }
 
@@ -151,14 +167,14 @@ public class UserAction {
         if (user != null) {
             request.getSession().removeAttribute("user");
             redirectAttributes.addFlashAttribute("info", "您已成功退出");
-            Cookie cookie = new Cookie("token", "");
+            Cookie cookie = new Cookie(TOKEN_NAME, "");
             cookie.setMaxAge(0);
             cookie.setPath("/");
             response.addCookie(cookie);
         } else {
             // TODO 用户未登录时的操作
         }
-        return "redirect:/user/login";
+        return "redirect:" + LOGIN_INPUT;
     }
 
     @RequestMapping(value = "/welcome", method = RequestMethod.GET)
@@ -173,30 +189,32 @@ public class UserAction {
         Object user = request.getSession().getAttribute("user");
         if (user == null) {
             redirectAttributes.addFlashAttribute("info", "非法请求");
-            return "redirect:user/login";
+            return "redirect:" + LOGIN_INPUT;
         }
         model.addAttribute("user", user);
         return "user/edit";
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public String changePwdSubmit(HttpServletRequest request, Model model,
+    public String changePwdSubmit(
+            HttpServletRequest request,
+            Model model,
             RedirectAttributes redirectAttributes,
-            @RequestParam(required = true) String password_re,
-            @RequestParam(required = true) String password_old) {
+            @RequestParam(required = true, value = "password_re") String passwordRe,
+            @RequestParam(required = true, value = "password_old") String passwordOld) {
         Object user = request.getSession().getAttribute("user");
         if (user == null) {
             redirectAttributes.addFlashAttribute("info", "非法请求");
-            return "redirect:user/login";
+            return "redirect:" + LOGIN_INPUT;
         }
 
-        if (((User) user).getPassword().equals(password_old)) {
-            ((User) user).setPassword(password_re);
+        if (((User) user).getPassword().equals(passwordOld)) {
+            ((User) user).setPassword(passwordRe);
             userService.update((User) user);
-            redirectAttributes.addFlashAttribute("message", "更新密码成功");
+            redirectAttributes.addFlashAttribute(MSG_NAME, "更新密码成功");
             return "redirect:edit";
         } else {
-            redirectAttributes.addFlashAttribute("message", "原密码错误");
+            redirectAttributes.addFlashAttribute(MSG_NAME, "原密码错误");
             return "redirect:edit";
         }
     }

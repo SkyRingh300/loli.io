@@ -149,4 +149,6 @@
 <script
 	src="<spring:message code="staticPath"></spring:message>/jquery.fileupload.js"></script>
 <script
-	src="<spring:message code="staticPath"></spring:message>/script.js"></script>
+	src="${pageContext.request.contextPath}/static/ext/uploader/script.js"></script>
+<input type="hidden" id="redirectPath"
+	value="<spring:message code="redirectPath"></spring:message>">

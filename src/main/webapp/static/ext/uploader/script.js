@@ -48,9 +48,7 @@ $(function() {
                                     + ' data-fgColor="#0788a5" data-readOnly="1" data-bgColor="#3e4043" />--><img class="thumb"><p class="name"></p><!--<span></span>--><label class="path">图片上传中...</label>');
 
                             // Append the file name and file size
-                            tpl.find('p').text(data.files[0].name).append(
-                                    '<i>' + formatFileSize(data.files[0].size)
-                                            + '</i>');
+                            tpl.find('p').text(data.files[0].name).append('<i>' + formatFileSize(data.files[0].size) + '</i>');
 
                             // Add the HTML to the UL element
                             data.context = tpl.appendTo(ul);
@@ -83,16 +81,14 @@ $(function() {
                         progress : function(e, data) {
 
                             // Calculate the completion percentage of the upload
-                            var progress = parseInt(data.loaded / data.total
-                                    * 100, 10);
+                            var progress = parseInt(data.loaded / data.total * 100, 10);
 
                             // Update the hidden input field and trigger a
                             // change
                             // so that the jQuery knob plugin knows to update
                             // the dial
 
-                            data.context.find('label').eq(0).html(
-                                    "图片上传中:" + progress + "%");
+                            data.context.find('label').eq(0).html("图片上传中:" + progress + "%");
                             if (progress == 100) {
                                 data.context.removeClass('working');
                                 data.context.find('label').eq(0).html("上传成功, 正在生成链接...");
@@ -106,7 +102,13 @@ $(function() {
 
                         },
                         done : function(e, data) {
-                            var filename = data.result.path;
+                            var filename = data.result.redirectCode;
+                            var prefix = $("#redirectPath").val();
+                            if (prefix) {
+                                filename = prefix + filename;
+                            } else {
+                                filename = data.result.path;
+                            }
                             if (filename) {
                                 data.context.find('label').eq(0).html("图片上传失败");
                             }

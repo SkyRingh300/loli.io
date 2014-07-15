@@ -133,7 +133,17 @@ public class ImageClientUpload {
         }
         imageObj.setIp(ip);
         imageObj.setUa(request.getHeader("user-agent"));
-        File file = saveImage(imageFile);
+        String fileName = "";
+        if (imageFile.getOriginalFilename().contains(".")) {
+            fileName = ShortUrl.shortText(new Date().getTime()
+                    + imageFile.getOriginalFilename())[0];
+        } else {
+            fileName = ShortUrl.shortText(new Date().getTime()
+                    + imageFile.getOriginalFilename())[0].toLowerCase();
+        }
+        imageObj.setRedirectCode(fileName);
+
+        File file = saveImage(imageFile, fileName);
         String ref = null;
         if ((ref = request.getHeader("REFERER")) != null) {
             if (ref.contains("file")) {
@@ -210,24 +220,19 @@ public class ImageClientUpload {
      * @param image
      * @return 保存后的图片File对象
      */
-    private File saveImage(MultipartFile image) {
-        File file = null;
+    private File saveImage(MultipartFile image, String fileName) {
         if (image.getOriginalFilename().contains(".")) {
-            file = new File(System.getProperty("java.io.tmpdir"),
-                    ShortUrl.shortText(new Date().getTime()
-                            + image.getOriginalFilename())[0]
-                            + "."
-                            // 获取图片扩展名，jpg,png
-                            + image.getOriginalFilename()
-                                    .substring(
-                                            image.getOriginalFilename()
-                                                    .lastIndexOf(".") + 1)
-                                    .toLowerCase());
-        } else {
-            file = new File(System.getProperty("java.io.tmpdir"),
-                    ShortUrl.shortText(new Date().getTime()
-                            + image.getOriginalFilename())[0].toLowerCase());
+            fileName += "."
+                    // 获取图片扩展名，jpg,png
+                    + image.getOriginalFilename()
+                            .substring(
+                                    image.getOriginalFilename()
+                                            .lastIndexOf(".") + 1)
+                            .toLowerCase();
         }
+
+        File file = new File(System.getProperty("java.io.tmpdir"), fileName);
+
         if (!file.getParentFile().exists()) {
             file.getParentFile().mkdir();
         }
@@ -239,5 +244,4 @@ public class ImageClientUpload {
         }
         return file;
     }
-
 }
