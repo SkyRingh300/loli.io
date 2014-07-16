@@ -137,6 +137,15 @@
             var html = getCode("[img]", "[/img]\n", result);
             $("#result-area").html(html);
         });
+		
+		$('#html').on('click', function(){
+			$("#result-area").html("");
+            var result = getPaths();
+            var html = getCode("", "\n", result);
+            $("#result-area").html(html);
+			$('.modal .btn-group label').eq(0).addClass('active');
+		});
+		
     });
 </script>
 
