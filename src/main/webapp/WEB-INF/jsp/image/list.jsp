@@ -82,7 +82,7 @@
 						<td><fmt:formatDate value="${img.date}"
 								pattern="yyyy-MM-dd HH:mm:ss" /></td>
 						<td><a
-							href="<spring:message name="redirectPath"></spring:message>${img.redirectCode}"
+							href="<spring:message code="redirectPath"></spring:message>${img.redirectCode}"
 							target="_blank">${img.path}</a></td>
 						<td><a type="button" class="btn-danger delete btn btn-xs"
 							href="${pageContext.request.contextPath}/img/delete?id=${img.id}">删除</a></td>
