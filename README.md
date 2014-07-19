@@ -1,5 +1,7 @@
 sc-server
 =========
+[![Build Status](https://drone.io/github.com/chocotan/sc-server/status.png)](https://drone.io/github.com/chocotan/sc-server/latest)
+
 
 一个图床
 支持使用阿里云、七牛云存储
