@@ -53,8 +53,11 @@ public class ImageClientUpload {
     @Inject
     @Named("fileFetchService")
     private FileFetchService ffs;
+    
 
     private Logger LOGGER = Logger.getLogger(ImageClientUpload.class);
+    
+    private static final String LOCAL_HOST = "127.0.0.1";
 
     @RequestMapping(value = { "/token" }, method = { RequestMethod.GET,
             RequestMethod.POST })
@@ -128,7 +131,7 @@ public class ImageClientUpload {
             imageObj.setUser(user);
         }
         String ip = request.getRemoteAddr();
-        if (ip != null && "127.0.0.1".equals(ip)) {
+        if (ip != null && LOCAL_HOST.equals(ip)) {
             ip = request.getHeader("X-Real-IP");
         }
         imageObj.setIp(ip);
