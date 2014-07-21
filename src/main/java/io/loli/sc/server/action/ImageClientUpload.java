@@ -54,7 +54,7 @@ public class ImageClientUpload {
     @Named("fileFetchService")
     private FileFetchService ffs;
 
-    private Logger logger = Logger.getLogger(ImageClientUpload.class);
+    private Logger LOGGER = Logger.getLogger(ImageClientUpload.class);
 
     @RequestMapping(value = { "/token" }, method = { RequestMethod.GET,
             RequestMethod.POST })
@@ -73,7 +73,7 @@ public class ImageClientUpload {
             if (ct != null) {
                 // 当已有该email的token时，把token返回
                 token = ct.getToken();
-                logger.info(email + "已有token，将已经存在的token返回");
+                LOGGER.info(email + "已有token，将已经存在的token返回");
             } else {
                 // 当没有该email的token时，新建一个token保存至数据库，然后返回
                 ct = new ClientToken();
@@ -83,12 +83,12 @@ public class ImageClientUpload {
                 try {
                     token = MD5Util.hash(word);
                 } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
+                    LOGGER.error(e);
                 }
                 ct.setToken(token);
                 ct.setUser(trueUser);
                 cts.save(ct);
-                logger.info(email + "生成新token");
+                LOGGER.info(email + "生成新token");
             }
             return ct;
         }
@@ -116,7 +116,7 @@ public class ImageClientUpload {
             imageObj.setDesc(imageFile.getOriginalFilename());
         } else {
             if (!cts.checkTokenBelongToUser(token, email)) {
-                logger.info(email + "使用错误的token上传");
+                LOGGER.info(email + "使用错误的token上传");
                 return new UploadedImage();
             } else {
                 imageObj.setUser(userService.findByEmail(email));
@@ -161,10 +161,10 @@ public class ImageClientUpload {
         imageObj.setOriginName(imageFile.getOriginalFilename());
         uic.save(imageObj);
         if (imageObj.getUser() == null) {
-            logger.info("匿名上传文件:" + imageObj.getOriginName() + ", 链接为"
+            LOGGER.info("匿名上传文件:" + imageObj.getOriginName() + ", 链接为"
                     + imageObj.getPath());
         } else {
-            logger.info(imageObj.getUser().getEmail() + "上传文件:"
+            LOGGER.info(imageObj.getUser().getEmail() + "上传文件:"
                     + imageObj.getOriginName() + ", 链接为" + imageObj.getPath());
         }
         return imageObj;
@@ -205,10 +205,10 @@ public class ImageClientUpload {
         imageObj.setOriginName(imageFile.getName());
         uic.save(imageObj);
         if (imageObj.getUser() == null) {
-            logger.info("匿名上传文件:" + imageObj.getOriginName() + ", 链接为"
+            LOGGER.info("匿名上传文件:" + imageObj.getOriginName() + ", 链接为"
                     + imageObj.getPath());
         } else {
-            logger.info(imageObj.getUser().getEmail() + "上传文件:"
+            LOGGER.info(imageObj.getUser().getEmail() + "上传文件:"
                     + imageObj.getOriginName() + ", 链接为" + imageObj.getPath());
         }
         return imageObj;
@@ -239,8 +239,7 @@ public class ImageClientUpload {
         try {
             FileUtils.writeByteArrayToFile(file, image.getBytes());
         } catch (IOException e) {
-            e.printStackTrace();
-            // TODO
+            LOGGER.error(e);
         }
         return file;
     }
