@@ -112,6 +112,7 @@ public class ImageAction {
         } else {
             try {
                 imageService.delete(id);
+               
                 redirectAttributes.addFlashAttribute("message", "删除成功");
             } catch (Exception e) {
             	logger.error(e);
