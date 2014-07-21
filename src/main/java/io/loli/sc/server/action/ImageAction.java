@@ -16,6 +16,7 @@ import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +27,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Named
 @RequestMapping(value = "/img")
 public class ImageAction {
-
+	private static final Logger LOGGER = Logger.getLogger(ImageAction.class);
     @Inject
     @Named("imageService")
     private UploadedImageService imageService;
@@ -98,7 +99,7 @@ public class ImageAction {
         request.setAttribute("fileName", fileName);
         model.addAttribute("imgList", list);
         return "image/list";
-    }
+    } 
 
     @RequestMapping(value = "/delete")
     public String delete(@RequestParam(value = "id") int id,
@@ -111,9 +112,10 @@ public class ImageAction {
         } else {
             try {
                 imageService.delete(id);
+               
                 redirectAttributes.addFlashAttribute("message", "删除成功");
             } catch (Exception e) {
-                e.printStackTrace();
+            	LOGGER.error(e);
                 redirectAttributes.addFlashAttribute("message",
                         "删除失败，原因是" + e.getMessage());
             }
@@ -141,26 +143,26 @@ public class ImageAction {
                     out.write(buff, 0, bytesRead);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+            	LOGGER.error(e);
             } finally {
                 if (out != null)
                     try {
                         out.close();
                     } catch (IOException e) {
-                        e.printStackTrace();
+                    	LOGGER.error(e);
                     }
                 if (in != null)
                     try {
                         in.close();
                     } catch (IOException e) {
-                        e.printStackTrace();
+                    	LOGGER.error(e);
                     }
             }
         } else {
             try {
                 response.getWriter().println("File does not exists");
             } catch (IOException e) {
-                e.printStackTrace();
+            	LOGGER.error(e);
             }
         }
     }

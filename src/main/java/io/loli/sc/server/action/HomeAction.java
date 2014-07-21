@@ -6,11 +6,13 @@ import java.util.List;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Named
 @RequestMapping(value = { "/" })
 public class HomeAction {
+	private static final Logger LOGGER = Logger.getLogger(HomeAction.class);
 
     @RequestMapping(value = { "/" })
     public String index() {
@@ -30,7 +32,7 @@ public class HomeAction {
             request.setAttribute("list", list);
             request.setAttribute("current", current);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error(e);
         }
         return "download";
     }
