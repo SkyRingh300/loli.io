@@ -32,8 +32,8 @@ public class AliStorageUploader extends StorageUploader {
     @Override
     public String upload(File file) {
         // 初始化一个OSSClient
-        OSSClient client = new OSSClient(uploadUrl, accessKeyId,
-                accessKeySecret);
+        OSSClient client = new OSSClient(uploadUrl.trim(), accessKeyId.trim(),
+                accessKeySecret.trim());
         // 获取指定文件的输入流
         InputStream content = null;
         try {
