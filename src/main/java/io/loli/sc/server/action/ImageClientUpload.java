@@ -128,7 +128,7 @@ public class ImageClientUpload {
             imageObj.setUser(user);
         }
         String ip = request.getRemoteAddr();
-        if (ip != null && ip.equals("127.0.0.1")) {
+        if (ip != null && "127.0.0.1".equals(ip)) {
             ip = request.getHeader("X-Real-IP");
         }
         imageObj.setIp(ip);
