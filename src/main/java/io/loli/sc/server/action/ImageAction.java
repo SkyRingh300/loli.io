@@ -99,7 +99,7 @@ public class ImageAction {
         request.setAttribute("fileName", fileName);
         model.addAttribute("imgList", list);
         return "image/list";
-    }
+    } 
 
     @RequestMapping(value = "/delete")
     public String delete(@RequestParam(value = "id") int id,
