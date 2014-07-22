@@ -266,9 +266,9 @@
 
      <pluginRepository>
 
-         <id>Codehaus repository</id>
+         <id>Codehaus Snapshot repository</id>
 
-         <url>http://repository.codehaus.org/</url>
+         <url>https://nexus.codehaus.org/content/groups/snapshots-group/</url>
 
      </pluginRepository>
 
