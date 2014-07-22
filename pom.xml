@@ -260,6 +260,21 @@
         </dependency>
 
     </dependencies>
+    
+    
+    <pluginRepositories>
+
+     <pluginRepository>
+
+         <id>Codehaus repository</id>
+
+         <url>http://repository.codehaus.org/</url>
+
+     </pluginRepository>
+
+    </pluginRepositories>
+    
+    
     <build>
         <plugins>
             <plugin>
