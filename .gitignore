@@ -1,7 +1,9 @@
 /target
-/.settings
-.project
 .classpath
 /.git
 src/main/webapp/img
 .springBeans
+/build
+.settings/
+.project
+
