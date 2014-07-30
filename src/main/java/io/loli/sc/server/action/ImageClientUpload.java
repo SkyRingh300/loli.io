@@ -158,7 +158,6 @@ public class ImageClientUpload {
         imageObj.setOriginName(imageFile.getOriginalFilename());
 
         imageObj.setGeneratedName(file.getName());
-        LOGGER.info(imageObj.getStorageBucket().getInternalUrl() + "/" + imageFile.getName());
         imageObj.setInternalPath(imageObj.getStorageBucket().getInternalUrl() + "/"
                 + imageFile.getName());
 
