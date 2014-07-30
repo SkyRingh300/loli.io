@@ -34,6 +34,9 @@ public class StorageBucket implements Serializable {
     @Column(name = "upload_url")
     private String uploadUrl;
 
+    @Column(name = "internal_url")
+    private String internalUrl;
+
     @Column(name = "file_type")
     private String fileType;
 
@@ -115,6 +118,14 @@ public class StorageBucket implements Serializable {
 
     public void setFileType(String fileType) {
         this.fileType = fileType;
+    }
+
+    public String getInternalUrl() {
+        return internalUrl;
+    }
+
+    public void setInternalUrl(String internalUrl) {
+        this.internalUrl = internalUrl;
     }
 
 }

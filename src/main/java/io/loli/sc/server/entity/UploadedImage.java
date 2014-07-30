@@ -67,6 +67,12 @@ public class UploadedImage implements Serializable {
     @Column
     private String path;
 
+    @Column(name = "generated_name")
+    private String generatedName;
+
+    @Column(name = "internal_path")
+    private String internalPath;
+
     @Column(name = "del_flag")
     private Boolean delFlag = false;
 
@@ -167,5 +173,21 @@ public class UploadedImage implements Serializable {
 
     public void setRedirectCode(String redirectCode) {
         this.redirectCode = redirectCode;
+    }
+
+    public String getGeneratedName() {
+        return generatedName;
+    }
+
+    public void setGeneratedName(String generatedName) {
+        this.generatedName = generatedName;
+    }
+
+    public String getInternalPath() {
+        return internalPath;
+    }
+
+    public void setInternalPath(String internalPath) {
+        this.internalPath = internalPath;
     }
 }
