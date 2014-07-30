@@ -198,7 +198,7 @@ public class ImageClientUpload {
         imageObj.setGeneratedName(imageFile.getName());
 
         imageObj.setPath(uploader.upload(imageFile));
-        imageObj.setInternalPath(imageObj.getStorageBucket().getUploadUrl() + "/"
+        imageObj.setInternalPath(imageObj.getStorageBucket().getInternalUrl() + "/"
                 + imageFile.getName());
         imageObj.setOriginName(imageFile.getName());
         uic.save(imageObj);
