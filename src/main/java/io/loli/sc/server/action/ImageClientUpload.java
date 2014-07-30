@@ -159,7 +159,7 @@ public class ImageClientUpload {
 
         imageObj.setGeneratedName(file.getName());
         imageObj.setInternalPath(imageObj.getStorageBucket().getInternalUrl() + "/"
-                + imageFile.getName());
+                + file.getName());
 
         uic.save(imageObj);
         if (imageObj.getUser() == null) {
