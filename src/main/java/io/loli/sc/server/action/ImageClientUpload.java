@@ -138,6 +138,7 @@ public class ImageClientUpload {
             fileName = ShortUrl.shortText(new Date().getTime() + imageFile.getOriginalFilename())[0]
                     .toLowerCase();
         }
+
         imageObj.setRedirectCode(fileName);
 
         File file = saveImage(imageFile, fileName);
@@ -155,6 +156,12 @@ public class ImageClientUpload {
         StorageUploader uploader = StorageUploader.newInstance(imageObj.getStorageBucket());
         imageObj.setPath(uploader.upload(file));
         imageObj.setOriginName(imageFile.getOriginalFilename());
+
+        imageObj.setGeneratedName(file.getName());
+
+        imageObj.setInternalPath(imageObj.getStorageBucket().getInternalUrl() + "/"
+                + imageFile.getName());
+
         uic.save(imageObj);
         if (imageObj.getUser() == null) {
             LOGGER.info("匿名上传文件:" + imageObj.getOriginName() + ", 链接为" + imageObj.getPath());
