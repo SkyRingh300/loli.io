@@ -44,15 +44,18 @@
 		</div>
 		<button id="clear" type="button" class="btn btn-sm btn-primary">清空上传列表</button>
 		&nbsp;
-		<button id="html" type="button" class="btn btn-sm btn-primary"
-			data-toggle="modal" data-target="#htmlSelect">获取代码</button>
+		<c:if test="${sessionScope.user ne null}">
+			<button id="html" type="button" class="btn btn-sm btn-primary"
+				data-toggle="modal" data-target="#htmlSelect">获取代码</button>
+		</c:if>
+
 		<ul id="fileList">
 		</ul>
 	</form>
 	<div id="message">
 		<h4>更新日志</h4>
 		<ul>
-			<li>2014-07-21: 非注册用户每天只允许上传10张图片, 请登陆后再上传, 如有疑问请发送邮件至页面底部的邮箱 </li>
+			<li>2014-07-21: 非注册用户每天只允许上传10张图片, 请登陆后再上传, 如有疑问请发送邮件至页面底部的邮箱</li>
 			<li>2014-07-12: 增加获取图片html代码的按钮</li>
 			<li>2014-07-11: 完善登陆状态的保存</li>
 			<li>2014-07-02: 增加文件名搜索功能</li>
@@ -138,15 +141,15 @@
             var html = getCode("[img]", "[/img]\n", result);
             $("#result-area").html(html);
         });
-		
-		$('#html').on('click', function(){
-			$("#result-area").html("");
+
+        $('#html').on('click', function() {
+            $("#result-area").html("");
             var result = getPaths();
             var html = getCode("", "\n", result);
             $("#result-area").html(html);
-			$('.modal .btn-group label').eq(0).addClass('active');
-		});
-		
+            $('.modal .btn-group label').eq(0).addClass('active');
+        });
+
     });
 </script>
 
