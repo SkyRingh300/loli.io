@@ -101,7 +101,7 @@ $(function() {
                         done : function(e, data) {
                             var filename = data.result.redirectCode;
                             var prefix = $("#redirectPath").val();
-                            if (!prefix) {
+                            if (prefix) {
                                 filename = prefix + filename;
                             } else {
                                 filename = data.result.path;
