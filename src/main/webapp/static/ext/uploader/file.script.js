@@ -39,6 +39,13 @@ $(function() {
                         // queue;
                         // either via the browse button, or via drag/drop:
                         add : function(e, data) {
+                            if (!data.files[0].type.indexOf("image") < 0) {
+                                alert("您选择的是图片文件，请到首页上传");
+                                return;
+                            }
+                            
+                            
+                            
                             var tpl = $('<li class="working"><!--<input type="text" value="0" data-width="48" data-height="48"'
                                     + ' data-fgColor="#0788a5" data-readOnly="1" data-bgColor="#3e4043" />--><p class="name"></p><!--<span></span>--><label class="path">文件上传中...</label>');
 
