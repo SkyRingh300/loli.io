@@ -39,7 +39,7 @@ $(function() {
                         // queue;
                         // either via the browse button, or via drag/drop:
                         add : function(e, data) {
-                            if (!data.files[0].type.indexOf("image") < 0) {
+                            if (data.files[0].type.indexOf("image") > -1) {
                                 alert("您选择的是图片文件，请到首页上传");
                                 return;
                             }
