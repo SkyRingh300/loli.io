@@ -133,9 +133,11 @@ public class ImageClientUpload {
         imageObj.setUa(request.getHeader("user-agent"));
         String fileName = "";
         if (imageFile.getOriginalFilename().contains(".")) {
-            fileName = ShortUrl.shortText(new Date().getTime() + imageFile.getOriginalFilename())[0];
+            fileName = ShortUrl
+                    .shortText(new Date().getTime() + imageFile.getOriginalFilename(), 8)[0];
         } else {
-            fileName = ShortUrl.shortText(new Date().getTime() + imageFile.getOriginalFilename())[0]
+            fileName = ShortUrl
+                    .shortText(new Date().getTime() + imageFile.getOriginalFilename(), 8)[0]
                     .toLowerCase();
         }
 
