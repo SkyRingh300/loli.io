@@ -54,6 +54,7 @@
 						<ul class="dropdown-menu">
 							<li><a href="${pageContext.request.contextPath}/user/edit">修改密码</a></li>
 							<li><a href="${pageContext.request.contextPath}/img/list">查看已上传图片</a></li>
+							<li><a href="${pageContext.request.contextPath}/pan">网盘(BETA)</a></li>
 						</ul></li>
 
 					<li><a href="${pageContext.request.contextPath}/user/logout"

@@ -1,5 +1,7 @@
 package io.loli.sc.server.entity.pan;
 
+import io.loli.sc.server.entity.StorageBucket;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -23,9 +25,23 @@ public class UserFile implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     @Column(name = "file_name")
-    private String fileName;
+    private String originName;
+
+    @Column(name = "new_name")
+    private String newName;
+
+    @Column(name = "full_path")
+    private String fullPath;
+
+    @ManyToOne
+    @JoinColumn(name = "bucket_id")
+    private StorageBucket storageBucket;
+
+    private String key;
+
     @Column
     private String md5;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
     private Date createDate;
@@ -34,10 +50,6 @@ public class UserFile implements Serializable {
     @ManyToOne
     @JoinColumn(name = "folder_id")
     private Folder folder;
-    // 所属的Cat
-    @ManyToOne
-    @JoinColumn(name = "cat_id")
-    private Category category;
 
     public int getId() {
         return id;
@@ -45,14 +57,6 @@ public class UserFile implements Serializable {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
     }
 
     public String getMd5() {
@@ -79,11 +83,43 @@ public class UserFile implements Serializable {
         this.folder = folder;
     }
 
-    public Category getCategory() {
-        return category;
+    public String getOriginName() {
+        return originName;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setOriginName(String originName) {
+        this.originName = originName;
+    }
+
+    public String getNewName() {
+        return newName;
+    }
+
+    public void setNewName(String newName) {
+        this.newName = newName;
+    }
+
+    public String getFullPath() {
+        return fullPath;
+    }
+
+    public void setFullPath(String fullPath) {
+        this.fullPath = fullPath;
+    }
+
+    public StorageBucket getStorageBucket() {
+        return storageBucket;
+    }
+
+    public void setStorageBucket(StorageBucket storageBucket) {
+        this.storageBucket = storageBucket;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }

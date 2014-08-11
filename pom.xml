@@ -199,9 +199,9 @@
         </dependency>
         <!-- 阿里云oss -->
         <dependency>
-            <groupId>com.aliyun.openservices</groupId>
-            <artifactId>aliyun-openservices</artifactId>
-            <version>1.2.2</version>
+            <groupId>io.loli.storage</groupId>
+            <artifactId>sdk-aliyun</artifactId>
+            <version>0.0.8-SNAPSHOT</version>
         </dependency>
 
         <dependency>

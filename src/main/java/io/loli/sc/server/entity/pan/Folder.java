@@ -18,7 +18,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-
 @Table(name = "folder")
 @Entity
 public class Folder implements Serializable {
@@ -27,11 +26,7 @@ public class Folder implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    // 所属的Cat，如果此folder为子目录，则为其父目录的Cat
-    @ManyToOne
-    @JoinColumn(name = "cat_id")
-    private Category category;
-    // 和上面的category相对，如果是直属于Cat的文件，则parent为空
+
     @ManyToOne
     @JoinColumn(name = "parent_id")
     private Folder parent;
@@ -60,14 +55,6 @@ public class Folder implements Serializable {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
     }
 
     public Folder getParent() {

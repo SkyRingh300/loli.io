@@ -5,10 +5,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>网盘(内测中)-SCREENSHOT.PICS</title>
 </head>
 <jsp:include page="../static.jsp"></jsp:include>
 <body>
 	<jsp:include page="head.jsp"></jsp:include>
-	<jsp:include page="main.jsp"></body>
+	<jsp:include page="main.jsp"></jsp:include></body>
 </html>
