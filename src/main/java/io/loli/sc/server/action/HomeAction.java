@@ -12,11 +12,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Named
 @RequestMapping(value = { "/" })
 public class HomeAction {
-	private static final Logger LOGGER = Logger.getLogger(HomeAction.class);
+    private static final Logger LOGGER = Logger.getLogger(HomeAction.class);
 
     @RequestMapping(value = { "/" })
     public String index() {
         return "index";
+    }
+
+    @RequestMapping(value = { "/comment" })
+    public String comment() {
+        return "comment";
     }
 
     @RequestMapping(value = { "/download" })
@@ -62,4 +67,5 @@ public class HomeAction {
             return "";
         }
     }
+
 }
