@@ -47,6 +47,10 @@ public class User implements Serializable {
     @JsonIgnore
     private List<UploadedImage> imageList;
 
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<Tag> tagList;
+
     public int getId() {
         return id;
     }
@@ -93,5 +97,13 @@ public class User implements Serializable {
 
     public void setLoginStatus(LoginStatus loginStatus) {
         this.loginStatus = loginStatus;
+    }
+
+    public List<Tag> getTagList() {
+        return tagList;
+    }
+
+    public void setTagList(List<Tag> tagList) {
+        this.tagList = tagList;
     }
 }

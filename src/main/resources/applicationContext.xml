@@ -107,4 +107,15 @@
         </property>
     </bean>
 
+
+
+
+    <mvc:interceptors>
+        <bean name="openEntityManagerInViewInterceptor"
+            class="org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor">
+            <property name="entityManagerFactory">
+                <ref bean="entityManagerFactory" />
+            </property>
+        </bean>
+    </mvc:interceptors>
 </beans>
