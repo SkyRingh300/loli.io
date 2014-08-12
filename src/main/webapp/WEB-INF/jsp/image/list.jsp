@@ -45,13 +45,14 @@
                 span.show();
 
             } else {
-                if ($(tag).val() == "" || $(tag).val().trim() == "") {
+                if ($(tag).val() == 0) {
                     return;
                 }
                 if (span.attr("tag-id") != $(tag).val()) {
                     span.text($(tag).find("option:selected").text());
                     span.show();
                     var id = $(tag).val();
+
                     $(tag).remove();
                     $.post("${pageContext.request.contextPath}/tag/add", {
                         id : id,
