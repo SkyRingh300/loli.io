@@ -15,7 +15,8 @@
     function change(tag) {
         if ((!$(tag).attr("type")) && $(tag).val() == 0) {
             var html = '<input type="text" class="col-md-2 form-control tag-input" onblur="updateTag(this)">';
-            $(tag).before(html);
+            $(tag).after(html);
+            $(tag).parent().find("input").focus();
             $(tag).remove();
             return;
         }
@@ -23,37 +24,46 @@
     function updateTag(tag) {
         if ($(tag).val() != "" && $(tag).val().trim() != "") {
             var imageId = $(tag).parent().parent().attr("id");
-            if ((!$(tag).attr("type")) && $(tag).val() == 0) {
-                var html = '<input type="text" class="col-md-2 form-control tag-input" onblur="updateTag(this)">';
-                $(tag).before(html);
-                $(tag).remove();
-                return;
-            }
+
             var span = $(tag).parent().find("span");
 
             if ($(tag).attr("type")) {
-                span.text($(tag).val());
-                $.post("${pageContext.request.contextPath}/tag/add", {
-                    name : $(tag).val(),
-                    imageId : imageId
-                }, function(result) {
-                    span.attr("tag-id", result);
-                    span.show();
+
+                if ($(tag).val() == "" || $(tag).val().trim() == "") {
+                } else {
+                    span.text($(tag).val());
+                    var name = $(tag).val();
+
                     $(tag).remove();
-                });
+                    $.post("${pageContext.request.contextPath}/tag/add", {
+                        name : $(tag).val(),
+                        imageId : imageId
+                    }, function(result) {
+                        span.attr("tag-id", result);
+                    });
+                }
+                span.show();
+
             } else {
+                if ($(tag).val() == "" || $(tag).val().trim() == "") {
+                    return;
+                }
                 if (span.attr("tag-id") != $(tag).val()) {
                     span.text($(tag).find("option:selected").text());
+                    span.show();
+                    var id = $(tag).val();
+                    $(tag).remove();
                     $.post("${pageContext.request.contextPath}/tag/add", {
-                        id : $(tag).val(),
+                        id : id,
                         imageId : imageId
                     }, function(result) {
                         span.attr("tag-id", $(tag).val());
-                        span.show();
-                        $(tag).remove();
                     });
                 }
             }
+        } else {
+            $(tag).parent().find("span").show();
+            $(tag).remove();
         }
 
     }
@@ -80,7 +90,7 @@
                         html += result[i].name;
                         html += "</option>"
                     }
-                    html += "<option value='0'>添加新相册</option>"
+                    html += "<option value='0'>添加新分类</option>"
                     html += "</select>";
                 } else {
                     html += '<input type="text" class="col-md-2 form-control tag-input" onblur="updateTag(this)">';
