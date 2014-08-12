@@ -60,6 +60,9 @@
                     }, function(result) {
                         span.attr("tag-id", $(tag).val());
                     });
+                }else{
+                    $(tag).remove();
+                    span.show();
                 }
             }
         } else {
