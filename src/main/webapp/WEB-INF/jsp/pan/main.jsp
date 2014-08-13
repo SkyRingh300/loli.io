@@ -2,24 +2,33 @@
 	pageEncoding="UTF-8"%>
 <style>
 .left {
-	max-width: 500px;
-	width: 15%;
-	min-width: 200px;
-	height: 100%;
+	width: 200px;
 	background-color: rgb(240, 240, 240);
 }
 
 #top {
 	margin-bottom: 0px !important;
+	height: auto%;
+	height: 51px;
+}
+
+.navbar-nav.navbar-right:last-child {
+	margin-right: 0px !important;
 }
 
 .main {
-	margin: 0;
-	height: 100%
+	width: 100%;
+	margin: 0 auto;
+	text-align: left;
+	height: 100%;
+	padding-top: 51px;
+	position: absolute;
+	top: 0;
 }
 
 .left-menu {
 	padding-top: 10px;
+	height: 100%;
 }
 
 .left-menu>li.active>a,.left-menu>li.active>a:hover,.left-menu>li.active>a:focus
@@ -34,12 +43,33 @@
 	border-top-left-radius: 0px !important;
 	border-top-right-radius: 0px !important;
 }
-.left-menu>li>a{
-    color: rgb(0, 0, 0);
+
+.left-menu>li>a {
+	color: rgb(0, 0, 0);
 }
+
 .left-menu>li>a:hover,.left-menu>li>a:focus {
 	color: rgb(0, 0, 0);
 	background-color: rgb(220, 220, 220);
+}
+
+.controller {
+	height: 40px;
+	background-color: rgb(240, 240, 240);
+	padding: 5;
+	box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+}
+
+.left {
+	float: left;
+	height: 100%;
+	box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+}
+
+.right {
+	width: 100%;
+	height: 100%;
+	padding-left: 200px;
 }
 </style>
 <script>
@@ -54,7 +84,18 @@
 		</ul>
 	</div>
 	<div class="right">
-		<div class="controller"></div>
+
+		<div class="controller">
+			<button type="button" class="btn btn-primary btn-sm">
+				<span class="glyphicon glyphicon-circle-arrow-up"></span>上传文件
+			</button>
+			<button type="button" class="btn btn-sm">
+				<span class="glyphicon glyphicon-plus-sign"></span> 新建文件夹
+			</button>
+			<button type="button" class="btn btn-sm">
+				<span class="glyphicon glyphicon-share"></span>分享
+			</button>
+		</div>
 		<div class="filelist"></div>
 	</div>
 </div>
