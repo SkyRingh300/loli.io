@@ -44,7 +44,7 @@ public class UserAction {
 
     private static final String EMAIL_NAME = "email";
 
-    private static final Logger LOGGER = Logger.getLogger(UserAction.class);
+    private static final Logger logger = Logger.getLogger(UserAction.class);
 
     /**
      * 用户注册GET, 定向至注册页面
@@ -96,7 +96,7 @@ public class UserAction {
         try {
             userService.save(user);
         } catch (DBException e) {
-            LOGGER.info("已经存在此邮箱" + e);
+            logger.info("已经存在此邮箱" + e);
             // 已经存在此邮箱，抛出异常
             msgMap.put(EMAIL_NAME, e.getMessage());
             return REG_INPUT;
