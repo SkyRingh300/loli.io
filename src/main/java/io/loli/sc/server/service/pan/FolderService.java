@@ -39,7 +39,8 @@ public class FolderService {
             folderDao.save(f);
         } else {
             if (pid == 0) {
-                result = folderDao.listByUserAndPath(user.getId(), "/");
+                result = folderDao.listByUserAndParent(user.getId(), this.findRootByUser(user)
+                        .getId());
             } else {
                 result = folderDao.listByUserAndParent(user.getId(), pid);
             }
@@ -52,13 +53,23 @@ public class FolderService {
         return folderDao.findById(id);
     }
 
-    // @Transactional
-    // public FolderEntity findByUser(User user) {
-    // List<FolderEntity> list = folderDao.listByUserAndPath(user.getId(), "/");
-    //
-    // if (!list.isEmpty()) {
-    //
-    // }
-    // }
+    @Transactional
+    public FolderEntity findRootByUser(User user) {
+        List<FolderEntity> list = folderDao.listByUserAndPath(user.getId(), "/");
+        FolderEntity root = null;
+        if (!list.isEmpty()) {
+            root = list.get(0);
+        } else {
+            FolderEntity f = new FolderEntity();
+            f.setParent(null);
+            f.setUser(user);
+            f.setCreateDate(new Date());
+            f.setFullPath("/");
+            f.setName("");
+            folderDao.save(f);
+            root = f;
+        }
+        return root;
+    }
 
 }

@@ -30,6 +30,6 @@ public class FolderDao {
 
     public List<FolderEntity> listByUserAndParent(int userId, int pid) {
         return em.createNamedQuery("FolderEntity.listByUserAndParent", FolderEntity.class)
-                .setParameter("u_id", userId).setParameter("parentId", pid).getResultList();
+                .setParameter("userId", userId).setParameter("parentId", pid).getResultList();
     }
 }

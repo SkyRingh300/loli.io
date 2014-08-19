@@ -30,6 +30,7 @@ public class FileAction {
         User user = (User) request.getSession().getAttribute("user");
         List<FolderEntity> folders = fs.listByUserAndPath(user, pid);
         request.setAttribute("folderList", folders);
+        request.setAttribute("currentFolder", fs.findRootByUser(user));
         return "pan/fileList";
 
     }

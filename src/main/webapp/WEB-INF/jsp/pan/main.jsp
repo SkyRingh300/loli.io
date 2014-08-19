@@ -70,12 +70,49 @@
 	width: 100%;
 	height: 100%;
 	padding-left: 200px;
+	background-color: rgba(255, 255, 255, 1);
+}
+
+.icon-button {
+	cursor: pointer;
+}
+
+.filelist>table>tbody>tr>td:first-child {
+	width: 70%;
 }
 </style>
 <script>
-    $(document).ready(function() {
-        $(".filelist").load("${pageContext.request.contextPath}/pan/file/list?pid=0");
-    });
+    $(document).ready(
+        function() {
+            $(".filelist").load("${pageContext.request.contextPath}/pan/file/list?pid=0");
+
+            $(".btn-addFolder").click(
+                function() {
+                    if ($(".add-folder-input").size() > 0) {
+                        $(".add-folder-input").focus();
+                        return;
+                    }
+                    $(".filelist tbody tr:first").after(
+                        "<tr><td><form><input type='text' class='add-folder-input'>"
+                            + "&nbsp;<span class='glyphicon glyphicon-ok icon-button' onclick='saveFolder(this)'></span>&nbsp;"
+                            + "<span class='glyphicon glyphicon-remove icon-button' onclick='$(this).parent().parent().parent().remove()'></span>"
+                            + "</form></td><td></td><td></td></tr>");
+                    $(".add-folder-input").focus();
+                });
+        });
+
+    function saveFolder(obj) {
+        var parentId = $(".filelist table").attr("tid");
+        var name = $(obj).prev("input").val();
+        if (parentId) {
+            $.post("${pageContext.request.contextPath}/pan/file/add", {
+                pid : parentId,
+                name : name
+            }, function(result) {
+                $(".filelist").html(result);
+            });
+        }
+    }
 </script>
 <jsp:directive.include file="../taglib.jsp" />
 <div class="main">
@@ -91,7 +128,7 @@
 			<button type="button" class="btn btn-primary btn-sm">
 				<span class="glyphicon glyphicon-circle-arrow-up"></span>上传文件
 			</button>
-			<button type="button" class="btn btn-sm">
+			<button type="button" class="btn btn-sm btn-addFolder">
 				<span class="glyphicon glyphicon-plus-sign"></span> 新建文件夹
 			</button>
 			<button type="button" class="btn btn-sm">
