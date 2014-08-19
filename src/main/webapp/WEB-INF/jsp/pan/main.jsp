@@ -73,7 +73,9 @@
 }
 </style>
 <script>
-    
+    $(document).ready(function() {
+        $(".filelist").load("${pageContext.request.contextPath}/pan/file/list?pid=0");
+    });
 </script>
 <jsp:directive.include file="../taglib.jsp" />
 <div class="main">

@@ -25,22 +25,17 @@ public class BucketService {
             bucketList = bucketDao.list();
         }
         if (bucketArray == null) {
-            bucketArray = bucketList.toArray(new StorageBucket[bucketList
-                    .size()]);
+            bucketArray = bucketList.toArray(new StorageBucket[bucketList.size()]);
         }
         if (imageArray == null) {
-            List<StorageBucket> list = bucketList
-                    .stream()
-                    .filter(item -> item.getFileType().equals(
-                            StorageBucket.IMG_TYPE))
+            List<StorageBucket> list = bucketList.stream()
+                    .filter(item -> item.getFileType().equals(StorageBucket.IMG_TYPE))
                     .collect(Collectors.toList());
             imageArray = list.toArray(new StorageBucket[list.size()]);
         }
         if (fileArray == null) {
-            List<StorageBucket> list = bucketList
-                    .stream()
-                    .filter(item -> item.getFileType().equals(
-                            StorageBucket.FILE_TYPE))
+            List<StorageBucket> list = bucketList.stream()
+                    .filter(item -> item.getFileType().equals(StorageBucket.FILE_TYPE))
                     .collect(Collectors.toList());
             fileArray = list.toArray(new StorageBucket[list.size()]);
         }
@@ -65,6 +60,10 @@ public class BucketService {
         double d = Math.random();
         int i = (int) (d * fileArray.length);
         return fileArray[i];
+    }
+
+    public StorageBucket singleFileBucket() {
+        return fileArray[0];
     }
 
     public StorageBucket randomBucket() {

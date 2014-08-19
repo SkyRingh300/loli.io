@@ -10,16 +10,16 @@ import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Named
-@RequestMapping(value = { "/" })
+@RequestMapping(value = { "" })
 public class HomeAction {
-	private static final Logger LOGGER = Logger.getLogger(HomeAction.class);
+    private static final Logger LOGGER = Logger.getLogger(HomeAction.class);
 
-    @RequestMapping(value = { "/" })
+    @RequestMapping(value = { "" })
     public String index() {
         return "index";
     }
 
-    @RequestMapping(value = { "/download" })
+    @RequestMapping(value = { "download" })
     public String download(HttpServletRequest request) {
         try {
             String userAgent = request.getHeader("user-agent");
@@ -37,7 +37,7 @@ public class HomeAction {
         return "download";
     }
 
-    @RequestMapping(value = { "/file" })
+    @RequestMapping(value = { "file" })
     public String fileUpload(HttpServletRequest request) {
         String userAgent = request.getHeader("user-agent");
         List<String> list = new ArrayList<>();

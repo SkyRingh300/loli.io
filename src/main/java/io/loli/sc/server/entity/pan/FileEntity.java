@@ -16,9 +16,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-@Table(name = "user_file")
+@Table(name = "storage_file")
 @Entity
-public class UserFile implements Serializable {
+public class FileEntity implements Serializable {
 
     private static final long serialVersionUID = -2369576302405913467L;
     @Id
@@ -37,6 +37,7 @@ public class UserFile implements Serializable {
     @JoinColumn(name = "bucket_id")
     private StorageBucket storageBucket;
 
+    @Column(name = "file_key")
     private String key;
 
     @Column
@@ -49,7 +50,7 @@ public class UserFile implements Serializable {
     // 所属的父文件夹
     @ManyToOne
     @JoinColumn(name = "folder_id")
-    private Folder folder;
+    private FolderEntity folder;
 
     public int getId() {
         return id;
@@ -75,11 +76,11 @@ public class UserFile implements Serializable {
         this.createDate = createDate;
     }
 
-    public Folder getFolder() {
+    public FolderEntity getFolder() {
         return folder;
     }
 
-    public void setFolder(Folder folder) {
+    public void setFolder(FolderEntity folder) {
         this.folder = folder;
     }
 
