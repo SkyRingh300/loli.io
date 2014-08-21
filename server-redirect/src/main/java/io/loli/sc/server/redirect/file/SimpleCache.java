@@ -1,6 +1,6 @@
 package io.loli.sc.server.redirect.file;
 
-import io.loli.sc.server.redirect.socket.RedirectHandler;
+import io.loli.storage.redirect.RedirectHandler;
 
 import java.io.IOException;
 import java.io.InputStream;

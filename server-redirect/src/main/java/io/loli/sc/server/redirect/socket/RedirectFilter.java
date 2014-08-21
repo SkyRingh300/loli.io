@@ -5,6 +5,8 @@ import io.loli.sc.server.redirect.dao.ImageDao;
 import io.loli.sc.server.redirect.dao.LogDao;
 import io.loli.sc.server.redirect.file.ByteCache;
 import io.loli.sc.server.redirect.file.Cache;
+import io.loli.storage.redirect.RedirectHandler;
+import io.loli.storage.redirect.RequestAuthFilter;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -15,7 +17,6 @@ import java.util.concurrent.ExecutorService;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.glassfish.grizzly.http.server.HttpHandler;
 import org.glassfish.grizzly.http.server.Request;
 import org.glassfish.grizzly.http.server.Response;
 import org.glassfish.grizzly.http.util.Header;
@@ -23,7 +24,7 @@ import org.glassfish.grizzly.http.util.HttpStatus;
 import org.glassfish.grizzly.threadpool.GrizzlyExecutorService;
 import org.glassfish.grizzly.threadpool.ThreadPoolConfig;
 
-public class RedirectHandler extends HttpHandler {
+public class RedirectFilter implements RequestAuthFilter {
     private static ImageDao imageDao = new ImageDao();
     private static LogDao logDao = new LogDao();
     private static final Cache cache = new ByteCache(Config.maxCount);
@@ -36,7 +37,7 @@ public class RedirectHandler extends HttpHandler {
     /*
      * 当配置为使用缓存且(未配置exclude或者url不包含exclude字符串)时，使用缓存
      */
-    public void service(final Request request, final Response response) throws Exception {
+    public void filter(final Request request, final Response response) {
         response.suspend();
         complexAppExecutorService
                 .execute(() -> {

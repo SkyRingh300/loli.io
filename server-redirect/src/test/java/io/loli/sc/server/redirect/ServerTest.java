@@ -1,6 +1,7 @@
 package io.loli.sc.server.redirect;
 
-import io.loli.sc.server.redirect.socket.RedirectServer;
+import io.loli.sc.server.redirect.socket.Main;
+import io.loli.storage.redirect.RedirectServer;
 
 import java.io.IOException;
 
@@ -15,7 +16,7 @@ public class ServerTest {
             @Override
             public void run() {
                 try {
-                    RedirectServer.start();
+                    Main.start();
                 } catch (Exception e) {
                 }
             }
@@ -25,6 +26,6 @@ public class ServerTest {
     @Test
     public void testStartStop() throws IOException, InterruptedException {
         Thread.sleep(2000);
-        RedirectServer.stop();
+        Main.stop();
     }
 }
