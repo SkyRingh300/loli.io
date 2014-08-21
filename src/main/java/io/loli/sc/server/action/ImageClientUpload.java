@@ -14,6 +14,7 @@ import io.loli.util.string.ShortUrl;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.spi.FileSystemProvider;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
