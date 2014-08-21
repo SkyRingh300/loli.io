@@ -117,7 +117,7 @@ public class ImageAction {
         User user = (User) request.getSession().getAttribute("user");
         UploadedImage image = imageService.findById(id);
         if (user == null || image == null || image.getUser().getId() != user.getId()) {
-            redirectAttributes.addFlashAttribute("message", "非法登陆");
+            redirectAttributes.addFlashAttribute("message", "非法登录");
         } else {
             try {
                 imageService.delete(id);

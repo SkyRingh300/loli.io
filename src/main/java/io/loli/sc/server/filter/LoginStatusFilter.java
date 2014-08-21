@@ -47,7 +47,7 @@ public class LoginStatusFilter implements Filter {
         try {
             HttpSession session = req.getSession();
             Object obj = session.getAttribute("user");
-            // 如果已经登陆, 则无视
+            // 如果已经登录, 则无视
             if (obj != null) {
                 User user = (User) obj;
 

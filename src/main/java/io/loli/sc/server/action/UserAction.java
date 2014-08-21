@@ -113,7 +113,7 @@ public class UserAction {
     }
 
     /**
-     * 用户登陆POST提交
+     * 用户登录POST提交
      * 
      * @param user
      * @param model
@@ -137,7 +137,7 @@ public class UserAction {
                 || user.getPassword().length() != 32) {
             flag = false;
         }
-        // 当验证失败时，跳转回登陆界面
+        // 当验证失败时，跳转回登录界面
         if (!flag) {
             // 非法请求
             msgMap.put(EMAIL_NAME, "非法请求");
@@ -150,7 +150,7 @@ public class UserAction {
         if (trueUser != null
                 && user.getPassword().equals(trueUser.getPassword())) {
             session.setAttribute("user", trueUser);
-            redirectAttributes.addFlashAttribute("info", "登陆成功");
+            redirectAttributes.addFlashAttribute("info", "登录成功");
             return "redirect:/";
         } else {
             // 邮箱或者密码错误
