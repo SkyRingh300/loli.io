@@ -10,8 +10,8 @@
         <class>io.loli.sc.server.entity.UploadedImage</class>
         <class>io.loli.sc.server.entity.StorageBucket</class>
         <class>io.loli.sc.server.entity.LoginStatus</class>
-        <class>io.loli.sc.server.entity.pan.UserFile</class>
-        <class>io.loli.sc.server.entity.pan.Folder</class>
+        <class>io.loli.sc.server.entity.pan.FolderEntity</class>
+        <class>io.loli.sc.server.entity.pan.FileEntity</class>
         <class>io.loli.sc.server.entity.Tag</class>
     </persistence-unit>
 

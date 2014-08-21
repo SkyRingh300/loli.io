@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="debug" name="XMLConfigTest"
+    packages="org.apache.logging.log4j.test">
+    <Properties>
+        <Property name="filename">target/redirect.log</Property>
+    </Properties>
+    <ThresholdFilter level="trace" />
+
+    <Appenders>
+        <Console name="STDOUT">
+            <PatternLayout pattern="%d %p %C [%t] %m%n" />
+        </Console>
+        <Console name="FLOW">
+            <!-- this pattern outputs class name and line number -->
+            <PatternLayout pattern="%C{1}.%M %m %ex%n" />
+            <filters>
+                <MarkerFilter marker="FLOW" onMatch="ACCEPT"
+                    onMismatch="NEUTRAL" />
+                <MarkerFilter marker="EXCEPTION" onMatch="ACCEPT"
+                    onMismatch="DENY" />
+            </filters>
+        </Console>
+        <File name="File" fileName="${filename}">
+            <PatternLayout>
+                <pattern>%d %p %C [%t] %m%n</pattern>
+            </PatternLayout>
+        </File>
+
+        <RollingFile name="ROLLING" fileName="${filename}"
+            filePattern="${filename}-%i.log">
+            <Loggers>
+                <Root level="INFO">
+                    <AppenderRef ref="File" />
+                    <AppenderRef ref="ROLLING" />
+                    <AppenderRef ref="STDOUT" />
+                    <AppenderRef ref="FLOW " />
+                </Root>
+            </Loggers>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="error">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="File" />
+            <AppenderRef ref="ROLLING" />
+        </Root>
+        <Root level="info">
+            <AppenderRef ref="STDOUT" />
+            <AppenderRef ref="File" />
+            <AppenderRef ref="ROLLING" />
+        </Root>
+    </Loggers>
+</Configuration>
