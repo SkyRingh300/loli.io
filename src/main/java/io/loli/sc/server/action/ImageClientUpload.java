@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * 负责客户端登陆验证和图片上传的类
+ * 负责客户端登录验证和图片上传的类
  * 
  * @author choco
  * 

@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>登陆</title>
+<title>登录</title>
 
 
 <jsp:include page="../static.jsp"></jsp:include>
@@ -48,7 +48,7 @@
 				</div>
 			</c:if>
 			<div class="login-form">
-				<h2>登陆</h2>
+				<h2>登录</h2>
 				<form class="form-horizontal" action="login" role="form"
 					method="POST" onsubmit="return md5password();">
 					<div class="form-group">
@@ -69,7 +69,7 @@
 					</div>
 					<div class="form-group">
 						<div class="col-sm-offset-4 col-sm-6">
-							<button type="submit" class="btn btn-primary">登陆</button>
+							<button type="submit" class="btn btn-primary">登录</button>
 						</div>
 					</div>
 					<input type="hidden" id="password_md5" name="password">
