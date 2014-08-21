@@ -19,6 +19,11 @@ public class HomeAction {
         return "index";
     }
 
+    @RequestMapping(value = { "/comment" })
+    public String comment() {
+        return "comment";
+    }
+
     @RequestMapping(value = { "download" })
     public String download(HttpServletRequest request) {
         try {
@@ -62,4 +67,5 @@ public class HomeAction {
             return "";
         }
     }
+
 }

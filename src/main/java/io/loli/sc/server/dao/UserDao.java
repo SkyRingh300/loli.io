@@ -5,6 +5,7 @@ import io.loli.sc.server.entity.User;
 import java.util.List;
 
 import javax.inject.Named;
+import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -29,8 +30,7 @@ public class UserDao {
      * @return 查询出的User实体
      */
     public User findByEmail(String email) {
-        List<User> resultList = em
-                .createNamedQuery("User.findByEmail", User.class)
+        List<User> resultList = em.createNamedQuery("User.findByEmail", User.class)
                 .setParameter("email", email).getResultList();
         User result = null;
         if (resultList.size() >= 1) {
@@ -58,5 +58,13 @@ public class UserDao {
     public User findById(int id) {
         User result = em.find(User.class, id);
         return result;
+    }
+
+    public void merge(User user) {
+        em.merge(user);
+    }
+    
+    public void refresh(User user) {
+        em.refresh(user);
     }
 }

@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "redirect_log")
@@ -21,6 +23,7 @@ public class RedirectLog {
     private String referer;
     private String ip;
     @Column(name = "created_date")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
 
     public String getUrl() {

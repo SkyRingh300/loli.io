@@ -24,7 +24,8 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 @Table(name = "uploaded_image")
 @NamedQueries(value = {
         @NamedQuery(name = "UploadedImage.listByUId", query = "SELECT u FROM UploadedImage u  WHERE u.user.id=:u_id and u.delFlag=false order by u.date desc"),
-        @NamedQuery(name = "UploadedImage.listByUIdAndFileName", query = "SELECT u FROM UploadedImage u  WHERE u.originName like :file_name and u.user.id=:u_id and u.delFlag=false order by u.date desc") })
+        @NamedQuery(name = "UploadedImage.listByUIdAndFileName", query = "SELECT u FROM UploadedImage u  WHERE u.originName like :file_name and u.user.id=:u_id and u.delFlag=false order by u.date desc"),
+        @NamedQuery(name = "UploadedImage.listByUIdAndFileNameAndTag", query = "SELECT u FROM UploadedImage u  WHERE u.originName like :file_name and u.user.id=:u_id and u.delFlag=false and u.tag.id=:tag_id order by u.date desc") })
 public class UploadedImage implements Serializable {
 
     private static final long serialVersionUID = 1398371509051853854L;
@@ -42,6 +43,10 @@ public class UploadedImage implements Serializable {
 
     private String ip;
     private String ua;
+
+    @ManyToOne
+    @JoinColumn(name = "tag_id")
+    private Tag tag;
 
     /**
      * 图片描述显示在alt标签中
@@ -189,5 +194,13 @@ public class UploadedImage implements Serializable {
 
     public void setInternalPath(String internalPath) {
         this.internalPath = internalPath;
+    }
+
+    public Tag getTag() {
+        return tag;
+    }
+
+    public void setTag(Tag tag) {
+        this.tag = tag;
     }
 }

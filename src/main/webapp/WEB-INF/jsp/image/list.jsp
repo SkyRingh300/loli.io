@@ -12,6 +12,65 @@
 
 <jsp:include page="../static.jsp"></jsp:include>
 <script type="text/javascript">
+    function change(tag) {
+        if ((!$(tag).attr("type")) && $(tag).val() == 0) {
+            var html = '<input type="text" class="col-md-2 form-control tag-input" onblur="updateTag(this)">';
+            $(tag).after(html);
+            $(tag).parent().find("input").focus();
+            $(tag).remove();
+            return;
+        }
+    }
+    function updateTag(tag) {
+        if ($(tag).val() != "" && $(tag).val().trim() != "") {
+            var imageId = $(tag).parent().parent().attr("id");
+
+            var span = $(tag).parent().find("span");
+
+            if ($(tag).attr("type")) {
+
+                if ($(tag).val() == "" || $(tag).val().trim() == "") {
+                } else {
+                    span.text($(tag).val());
+                    var name = $(tag).val();
+
+                    $(tag).remove();
+                    $.post("${pageContext.request.contextPath}/tag/add", {
+                        name : $(tag).val(),
+                        imageId : imageId
+                    }, function(result) {
+                        span.attr("tag-id", result);
+                    });
+                }
+                span.show();
+
+            } else {
+                if ($(tag).val() == 0) {
+                    return;
+                }
+                if (span.attr("tag-id") != $(tag).val()) {
+                    span.text($(tag).find("option:selected").text());
+                    span.show();
+                    var id = $(tag).val();
+
+                    $(tag).remove();
+                    $.post("${pageContext.request.contextPath}/tag/add", {
+                        id : id,
+                        imageId : imageId
+                    }, function(result) {
+                        span.attr("tag-id", $(tag).val());
+                    });
+                }else{
+                    $(tag).remove();
+                    span.show();
+                }
+            }
+        } else {
+            $(tag).parent().find("span").show();
+            $(tag).remove();
+        }
+
+    }
     $(document).ready(function(e) {
         $(".delete").click(function(e) {
             if (window.confirm("删除后无法恢复！ 确认删除吗？")) {
@@ -19,11 +78,43 @@
                 e.preventDefault();
             }
         });
+        $(".tag-span").click(function(e) {
+            var td = this;
+            $.post("${pageContext.request.contextPath}/tag/list", function(result) {
+                var html = "";
+                if (result.length > 0) {
+                    html += "<select onchange='change(this)' onblur='updateTag(this)'>";
+                    for (i = 0; i < result.length; i++) {
+
+                        html += "<option value='" + result[i].id + "' ";
+                        if ($(td).attr("tag-id") == result[i].id) {
+                            html += "selected";
+                        }
+                        html += ">";
+                        html += result[i].name;
+                        html += "</option>"
+                    }
+                    html += "<option value='0'>添加新分类</option>"
+                    html += "</select>";
+                } else {
+                    html += '<input type="text" class="col-md-2 form-control tag-input" onblur="updateTag(this)">';
+                }
+                $(td).parent().find("span").hide();
+                $(td).parent().append($(html));
+                $(td).next().focus();
+            });
+        });
+
     });
 </script>
 <style>
 .search-form {
 	padding-left: 0px !important;
+}
+
+.tag-input {
+	padding: 0 !important;
+	height: 22px !important;
 }
 
 .bg-info {
@@ -51,13 +142,25 @@
 				${param.message}
 			</div>
 		</c:if>
-		<div class="search-form col-md-4">
-			<form role="form"
+		<div class="col-md-8">
+			<form role="form" class="form-inline"
 				action="${pageContext.request.contextPath}/img/search">
 				<div class="input-group">
 					<input type="text" name="fileName" value="${requestScope.fileName}"
-						placeholder="文件名" class="form-control" required> <span
-						class="input-group-btn">
+						placeholder="文件名" class="form-control">
+				</div>
+				<div class="input-group col-md-3">
+					<select name="tag" class="form-control">
+						<option value="0">所有分类</option>
+						<c:forEach items="${tagList}" var="tag">
+							<option value="${tag.id}"
+								<c:if test="${param.tag eq tag.id}">selected</c:if>><c:out
+									value="${tag.name}"></c:out></option>
+						</c:forEach>
+					</select>
+				</div>
+				<div class="input-group">
+					<span class="input-group-btn">
 						<button class="btn btn-default" type="submit">搜索</button>
 					</span>
 				</div>
@@ -69,18 +172,26 @@
 		<table class="table table-hover">
 			<thead>
 				<tr>
-					<th>文件名</th>
-					<th>上传时间</th>
-					<th>链接</th>
-					<th>操作</th>
+					<th width="40%">文件名</th>
+					<th width="20%">上传时间</th>
+					<th width="10%">分类</th>
+					<th width="25%">链接</th>
+					<th width="10%">操作</th>
 				</tr>
 			</thead>
 			<tbody>
 				<c:forEach items="${imgList}" var="img">
-					<tr>
+					<tr id="${img.id}">
 						<td>${img.originName}</td>
 						<td><fmt:formatDate value="${img.date}"
 								pattern="yyyy-MM-dd HH:mm:ss" /></td>
+						<td class="tag-td"><span class="tag-span label label-default"
+							tag-id="${img.tag.id}"> <c:if test="${img.tag eq null}">无</c:if>
+								<c:if test="${img.tag ne null}">
+						${img.tag.name}
+						</c:if>
+						</span></td>
+
 						<td><c:if test="${img.redirectCode ne null}">
 								<a
 									href="<spring:message code="redirectPath"></spring:message>${img.redirectCode}"
@@ -99,16 +210,16 @@
 			<ul class="pagination">
 
 				<li <c:if test="${not hasLast}">class="disabled"</c:if>><a
-					href="${pageContext.request.contextPath}/img/<c:if test="${requestScope.fileName eq null}">list/</c:if><c:if test="${not(requestScope.fileName eq null)}">search?fileName=${requestScope.fileName}&page=</c:if><c:if test="${hasLast}">${currentPage-1}</c:if><c:if test="${not hasLast}">#</c:if>">&laquo;</a></li>
+					href="${pageContext.request.contextPath}/img/<c:if test="${requestScope.fileName eq null}">list/</c:if><c:if test="${not(requestScope.fileName eq null)}">search?fileName=${requestScope.fileName}&tag=${param.tag}&page=</c:if><c:if test="${hasLast}">${currentPage-1}</c:if><c:if test="${not hasLast}">#</c:if>">&laquo;</a></li>
 
 				<c:forEach begin="1" end="${pageCount}" varStatus="status">
 					<li
 						<c:if test="${currentPage eq status.index}">class="active"</c:if>><a
-						href="${pageContext.request.contextPath}/img/<c:if test="${requestScope.fileName eq null}">list/</c:if><c:if test="${not(requestScope.fileName eq null)}">search?fileName=${requestScope.fileName}&page=</c:if><c:if test="${currentPage eq status.index}">#</c:if><c:if test="${not (currentPage eq status.index)}">${status.index}</c:if>">${status.index}</a></li>
+						href="${pageContext.request.contextPath}/img/<c:if test="${requestScope.fileName eq null}">list/</c:if><c:if test="${not(requestScope.fileName eq null)}">search?fileName=${requestScope.fileName}&tag=${param.tag}&page=</c:if><c:if test="${currentPage eq status.index}">#</c:if><c:if test="${not (currentPage eq status.index)}">${status.index}</c:if>">${status.index}</a></li>
 
 				</c:forEach>
 				<li <c:if test="${not hasNext}">class="disabled"</c:if>><a
-					href="${pageContext.request.contextPath}/img/<c:if test="${requestScope.fileName eq null}">list/</c:if><c:if test="${not(requestScope.fileName eq null)}">search?fileName=${requestScope.fileName}&page=</c:if><c:if test="${hasNext}">${currentPage+1}</c:if><c:if test="${not hasLast}">#</c:if>">&raquo;</a></li>
+					href="${pageContext.request.contextPath}/img/<c:if test="${requestScope.fileName eq null}">list/</c:if><c:if test="${not(requestScope.fileName eq null)}">search?fileName=${requestScope.fileName}&tag=${param.tag}&page=</c:if><c:if test="${hasNext}">${currentPage+1}</c:if><c:if test="${not hasLast}">#</c:if>">&raquo;</a></li>
 			</ul>
 		</div>
 

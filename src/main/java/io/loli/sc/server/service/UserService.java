@@ -22,10 +22,10 @@ public class UserService {
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public void save(User user) {
-        if (this.findByEmail(user.getEmail()) == null) {
-            userDao.save(user);
-        } else {
+        if (user.getId() == 0 && this.findByEmail(user.getEmail()) != null) {
             throw new DBException("已经存在相同的邮箱");
+        } else {
+            userDao.save(user);
         }
     }
 
@@ -65,4 +65,5 @@ public class UserService {
         User result = userDao.findById(id);
         return result;
     }
+
 }
