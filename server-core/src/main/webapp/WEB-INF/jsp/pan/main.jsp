@@ -83,7 +83,7 @@
     $(document)
         .ready(
             function() {
-                $(".filelist").load("${pageContext.request.contextPath}/pan/file/list?pid=0");
+                loadFolder(0);
 
                 $(".btn-addFolder")
                     .click(

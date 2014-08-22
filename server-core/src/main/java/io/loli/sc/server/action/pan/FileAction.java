@@ -23,17 +23,19 @@ public class FileAction {
 
     @RequestMapping("list")
     public String list(@RequestParam(value = "pid", required = false) Integer pid, HttpServletRequest request) {
-        if (pid == null) {
-            pid = 0;
-        }
         User user = (User) request.getSession().getAttribute("user");
+        FolderEntity root = fs.findRootByUser(user);
+        if (pid == null) {
+            pid = root.getId();
+        }
         List<FolderEntity> folders = fs.listByUserAndPath(user, pid);
         request.setAttribute("folderList", folders);
-        request.setAttribute("rootFolder", fs.findRootByUser(user));
-        if (pid != 0) {
-            FolderEntity parent = fs.findById(pid);
-            request.setAttribute("parent", parent);
-        }
+
+        request.setAttribute("rootFolder", root);
+        request.setAttribute("parentList", fs.findParentsByFolder(pid));
+
+        root = fs.findById(pid);
+        request.setAttribute("parent", root);
         return "pan/fileList";
 
     }

@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <jsp:directive.include file="../taglib.jsp" />
+<h4>
+  当前路径:
+  <c:forEach items="${requestScope.parentList}" var="folder">${folder.name}/</c:forEach>
+
+</h4>
 <table class="table table-hover" tid="${requestScope.parent.id}">
   <thead>
     <tr>

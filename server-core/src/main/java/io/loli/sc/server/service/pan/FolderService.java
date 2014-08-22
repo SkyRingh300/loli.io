@@ -4,12 +4,17 @@ import io.loli.sc.server.dao.pan.FolderDao;
 import io.loli.sc.server.entity.User;
 import io.loli.sc.server.entity.pan.FolderEntity;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
+
+import org.apache.commons.collections4.ListUtils;
+
+import com.google.common.collect.Lists;
 
 @Named
 public class FolderService {
@@ -39,8 +44,7 @@ public class FolderService {
             folderDao.save(f);
         } else {
             if (pid == 0) {
-                result = folderDao.listByUserAndParent(user.getId(), this.findRootByUser(user)
-                        .getId());
+                result = folderDao.listByUserAndParent(user.getId(), this.findRootByUser(user).getId());
             } else {
                 result = folderDao.listByUserAndParent(user.getId(), pid);
             }
@@ -70,6 +74,24 @@ public class FolderService {
             root = f;
         }
         return root;
+    }
+
+    public List<FolderEntity> findParentsByFolder(Integer pid) {
+        FolderEntity child = this.findById(pid);
+        List<FolderEntity> list = Lists.newArrayList();
+        boolean flag = true;
+        FolderEntity temp = child;
+        while (flag) {
+            if (temp == null) {
+                flag = false;
+            } else {
+                list.add(temp);
+                temp = temp.getParent();
+            }
+        }
+        Collections.reverse(list);
+        return list;
+
     }
 
 }
