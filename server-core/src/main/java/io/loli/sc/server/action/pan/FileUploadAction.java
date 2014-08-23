@@ -16,8 +16,9 @@ public class FileUploadAction {
 
     @RequestMapping(value = "", method = { RequestMethod.PUT, RequestMethod.POST })
     @ResponseBody
-    public FileEntity upload(@RequestParam(value = "file", required = true) MultipartFile file) {
-        
+    public FileEntity upload(@RequestParam int folderId,
+        @RequestParam(value = "file", required = true) MultipartFile file) {
+
         return null;
     }
 
