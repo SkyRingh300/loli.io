@@ -1,4 +1,4 @@
-package io.loli.sc.server.redirect
+
 
 import io.loli.sc.server.redirect.config.Config;
 import io.loli.sc.server.redirect.socket.RedirectFilter;

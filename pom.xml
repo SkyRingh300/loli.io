@@ -37,6 +37,7 @@
     <modules>
         <module>server-core</module>
         <module>server-redirect</module>
+        <module>server-script</module>
     </modules>
 
     <repositories>
