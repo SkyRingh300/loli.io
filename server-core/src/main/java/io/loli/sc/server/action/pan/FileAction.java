@@ -25,7 +25,7 @@ public class FileAction {
     public String list(@RequestParam(value = "pid", required = false) Integer pid, HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute("user");
         FolderEntity root = fs.findRootByUser(user);
-        if (pid == null) {
+        if (pid == null || pid == 0) {
             pid = root.getId();
         }
         List<FolderEntity> folders = fs.listByUserAndPath(user, pid);
@@ -37,7 +37,6 @@ public class FileAction {
         root = fs.findById(pid);
         request.setAttribute("parent", root);
         return "pan/fileList";
-
     }
 
     @RequestMapping("add")

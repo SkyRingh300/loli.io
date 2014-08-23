@@ -1,8 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <jsp:directive.include file="../taglib.jsp" />
 <h4>
-  当前路径:
-  <c:forEach items="${requestScope.parentList}" var="folder">${folder.name}/</c:forEach>
+  当前路径: <a href="javascript:void(0)" onclick="loadFolder(0)">全部文件</a>
+  <c:forEach items="${requestScope.parentList}" var="folder">
+    <a href="javascript:void(0)" onclick="loadFolder(${folder.id})">${folder.name}</a>/</c:forEach>
 
 </h4>
 <table class="table table-hover" tid="${requestScope.parent.id}">
