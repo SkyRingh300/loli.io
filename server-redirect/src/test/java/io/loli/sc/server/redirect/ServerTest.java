@@ -18,6 +18,7 @@ public class ServerTest {
                 try {
                     Main.start();
                 } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }.start();
