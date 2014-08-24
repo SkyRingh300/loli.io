@@ -1,6 +1,6 @@
 package io.loli.sc.server.entity.pan;
 
-import io.loli.sc.server.entity.StorageBucket;
+import io.loli.sc.server.entity.User;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -16,6 +16,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Table(name = "storage_file")
 @Entity
 public class FileEntity implements Serializable {
@@ -29,14 +31,7 @@ public class FileEntity implements Serializable {
 
     @Column(name = "new_name")
     private String newName;
-
-    @Column(name = "full_path")
-    private String fullPath;
-
-    @ManyToOne
-    @JoinColumn(name = "bucket_id")
-    private StorageBucket storageBucket;
-
+    
     @Column(name = "file_key")
     private String key;
 
@@ -51,6 +46,19 @@ public class FileEntity implements Serializable {
     @ManyToOne
     @JoinColumn(name = "folder_id")
     private FolderEntity folder;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public int getId() {
         return id;
@@ -98,22 +106,6 @@ public class FileEntity implements Serializable {
 
     public void setNewName(String newName) {
         this.newName = newName;
-    }
-
-    public String getFullPath() {
-        return fullPath;
-    }
-
-    public void setFullPath(String fullPath) {
-        this.fullPath = fullPath;
-    }
-
-    public StorageBucket getStorageBucket() {
-        return storageBucket;
-    }
-
-    public void setStorageBucket(StorageBucket storageBucket) {
-        this.storageBucket = storageBucket;
     }
 
     public String getKey() {

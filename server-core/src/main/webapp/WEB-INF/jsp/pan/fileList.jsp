@@ -30,4 +30,16 @@
   </tbody>
 </table>
 
-<input type="hidden" id="folderId" value="${requestScope.parent.id}">
+
+<form enctype="multipart/form-data" method="post" action="${pageContext.request.contextPath}/pan/file/upload"
+  class="upload-form">
+  <div id="drop-area">
+    <input type="file" name="file" multiple />
+  </div>
+  <input type="hidden" id="folderId" name="folderId" value="${requestScope.parent.id}">
+</form>
+
+<script>
+bindUploadFile();
+
+</script>

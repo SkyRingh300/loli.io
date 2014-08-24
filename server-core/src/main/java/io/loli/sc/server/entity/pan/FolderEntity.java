@@ -20,6 +20,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Table(name = "storage_folder")
 @Entity
 @NamedQueries(value = {
@@ -34,10 +36,12 @@ public class FolderEntity implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "parent_id")
+    @JsonIgnore
     private FolderEntity parent;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     @Column
@@ -52,10 +56,12 @@ public class FolderEntity implements Serializable {
 
     // 直属子文件夹
     @OneToMany(mappedBy = "parent")
+    @JsonIgnore
     private List<FolderEntity> children;
 
     // 直属子文件
     @OneToMany(mappedBy = "folder")
+    @JsonIgnore
     private List<FileEntity> fileList;
 
     public int getId() {

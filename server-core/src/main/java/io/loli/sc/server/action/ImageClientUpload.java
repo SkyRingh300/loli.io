@@ -228,8 +228,8 @@ public class ImageClientUpload {
      */
     private File saveImage(MultipartFile image, String fileName) {
         if (image.getOriginalFilename().contains(".")) {
-            fileName += "."
             // 获取图片扩展名，jpg,png
+            fileName += "."
                     + image.getOriginalFilename()
                             .substring(image.getOriginalFilename().lastIndexOf(".") + 1)
                             .toLowerCase();

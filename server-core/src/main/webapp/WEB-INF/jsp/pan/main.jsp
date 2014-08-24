@@ -1,82 +1,90 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <style>
 .left {
- width: 200px;
- background-color: rgb(240, 240, 240);
+    width: 200px;
+    background-color: rgb(240, 240, 240);
 }
 
 #top {
- margin-bottom: 0px !important;
- height: auto%;
- height: 51px;
+    margin-bottom: 0px !important;
+    height: auto%;
+    height: 51px;
 }
 
 .navbar-nav.navbar-right:last-child {
- margin-right: 0px !important;
+    margin-right: 0px !important;
 }
 
 .main {
- width: 100%;
- margin: 0 auto;
- text-align: left;
- height: 100%;
- padding-top: 51px;
- position: absolute;
- top: 0;
+    width: 100%;
+    margin: 0 auto;
+    text-align: left;
+    height: 100%;
+    padding-top: 51px;
+    position: absolute;
+    top: 0;
 }
 
 .left-menu {
- padding-top: 10px;
- height: 100%;
+    padding-top: 10px;
+    height: 100%;
 }
 
 .left-menu>li.active>a, .left-menu>li.active>a:hover, .left-menu>li.active>a:focus {
- color: rgb(0, 0, 0);
- background-color: rgb(200, 200, 200);
+    color: rgb(0, 0, 0);
+    background-color: rgb(200, 200, 200);
 }
 
 .left-menu a {
- border-bottom-left-radius: 0px !important;
- border-bottom-right-radius: 0px !important;
- border-top-left-radius: 0px !important;
- border-top-right-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 0px !important;
 }
 
 .left-menu>li>a {
- color: rgb(0, 0, 0);
+    color: rgb(0, 0, 0);
 }
 
 .left-menu>li>a:hover, .left-menu>li>a:focus {
- color: rgb(0, 0, 0);
- background-color: rgb(220, 220, 220);
+    color: rgb(0, 0, 0);
+    background-color: rgb(220, 220, 220);
 }
 
 .controller {
- height: 40px;
- background-color: rgb(240, 240, 240);
- padding: 5;
- box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+    height: 40px;
+    background-color: rgb(240, 240, 240);
+    padding: 5;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
 }
 
 .left {
- float: left;
- height: 100%;
- box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+    float: left;
+    height: 100%;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
 }
 
 .right {
- width: 100%;
- height: 100%;
- padding-left: 200px;
- background-color: rgba(255, 255, 255, 1);
+    width: 100%;
+    height: 100%;
+    padding-left: 200px;
+    background-color: rgba(255, 255, 255, 1);
 }
 
 .icon-button {
- cursor: pointer;
+    cursor: pointer;
 }
 
 .filelist>table>tbody>tr>td:first-child {
- width: 70%;
+    width: 70%;
+}
+
+#drop-area input {
+    display: none;
+}
+
+.upload-form {
+    float: left;
 }
 </style>
 <script>
@@ -85,7 +93,7 @@
             function() {
                 loadFolder(0);
 
-                $(".btn-addFolder")
+                $(".btn-add-folder")
                     .click(
                         function() {
                             if ($(".add-folder-input").size() > 0) {
@@ -100,7 +108,35 @@
                                         + "</form></td><td></td><td></td></tr>");
                             $(".add-folder-input").focus();
                         });
+
+                bindUploadFile();
+
             });
+
+    function bindUploadFile() {
+        $(".btn-upload-file").unbind("click");
+        $(".btn-upload-file").click(function() {
+            $(".upload-form").find('input').click();
+        });
+        $('#drop-area').fileupload({
+            add : function(e, data) {
+                alert("");
+                var jqXHR = data.submit();
+            },
+
+            progress : function(e, data) {
+
+            },
+
+            fail : function(e, data) {
+
+            },
+            done : function(e, data) {
+
+            }
+
+        });
+    }
 
     function saveFolder(obj) {
         var parentId = $(".filelist table").attr("tid");
@@ -131,10 +167,10 @@
   <div class="right">
 
     <div class="controller">
-      <button type="button" class="btn btn-primary btn-sm">
+      <button type="button" class="btn btn-primary btn-sm btn-upload-file">
         <span class="glyphicon glyphicon-circle-arrow-up"></span>上传文件
       </button>
-      <button type="button" class="btn btn-sm btn-addFolder">
+      <button type="button" class="btn btn-sm btn-add-folder">
         <span class="glyphicon glyphicon-plus-sign"></span> 新建文件夹
       </button>
       <button type="button" class="btn btn-sm">
