@@ -1,5 +1,6 @@
 package io.loli.sc.server.service.pan;
 
+import io.loli.sc.server.config.FileListConfig;
 import io.loli.sc.server.dao.pan.FolderDao;
 import io.loli.sc.server.entity.User;
 import io.loli.sc.server.entity.pan.FolderEntity;
@@ -27,12 +28,12 @@ public class FolderService {
     }
 
     @Transactional
-    public List<FolderEntity> listByUserAndPath(User user, int pid) {
+    public List<FolderEntity> listByUserAndPath(User user, int pid, int startIndex, int maxCount) {
         List<FolderEntity> result;
         if (pid == 0) {
             result = folderDao.listByUserAndPath(user.getId(), "/");
         } else {
-            result = folderDao.listByUserAndParent(user.getId(), pid);
+            result = folderDao.listByUserAndParent(user.getId(), pid, 0, FileListConfig.PAGE_DEFAULT_COUNT);
         }
         if (result.isEmpty()) {
             FolderEntity f = new FolderEntity();
@@ -44,9 +45,10 @@ public class FolderService {
             folderDao.save(f);
         } else {
             if (pid == 0) {
-                result = folderDao.listByUserAndParent(user.getId(), this.findRootByUser(user).getId());
+                result = folderDao.listByUserAndParent(user.getId(), this.findRootByUser(user).getId(), startIndex,
+                    maxCount);
             } else {
-                result = folderDao.listByUserAndParent(user.getId(), pid);
+                result = folderDao.listByUserAndParent(user.getId(), pid, startIndex, maxCount);
             }
         }
 

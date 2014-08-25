@@ -12,6 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -20,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Table(name = "storage_file")
 @Entity
+@NamedQueries(value = { @NamedQuery(name = "FileEntity.listByUserIdAndFolderId", query = "SELECT f FROM FileEntity f WHERE f.user.id=:userId and f.folder.id=:folderId") })
 public class FileEntity implements Serializable {
 
     private static final long serialVersionUID = -2369576302405913467L;
@@ -31,7 +34,7 @@ public class FileEntity implements Serializable {
 
     @Column(name = "new_name")
     private String newName;
-    
+
     @Column(name = "file_key")
     private String key;
 

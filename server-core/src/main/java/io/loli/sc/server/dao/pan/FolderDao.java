@@ -19,8 +19,8 @@ public class FolderDao {
     }
 
     public List<FolderEntity> listByUserAndPath(int userId, String path) {
-        return em.createNamedQuery("FolderEntity.listByUserAndPath", FolderEntity.class)
-                .setParameter("userId", userId).setParameter("path", path).getResultList();
+        return em.createNamedQuery("FolderEntity.listByUserAndPath", FolderEntity.class).setParameter("userId", userId)
+            .setParameter("path", path).getResultList();
 
     }
 
@@ -28,8 +28,9 @@ public class FolderDao {
         return em.find(FolderEntity.class, id);
     }
 
-    public List<FolderEntity> listByUserAndParent(int userId, int pid) {
+    public List<FolderEntity> listByUserAndParent(int userId, int pid, int startIndex, int maxCount) {
         return em.createNamedQuery("FolderEntity.listByUserAndParent", FolderEntity.class)
-                .setParameter("userId", userId).setParameter("parentId", pid).getResultList();
+            .setParameter("userId", userId).setParameter("parentId", pid).setFirstResult(startIndex)
+            .setMaxResults(maxCount).getResultList();
     }
 }

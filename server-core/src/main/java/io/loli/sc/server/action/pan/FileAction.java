@@ -1,5 +1,6 @@
 package io.loli.sc.server.action.pan;
 
+import io.loli.sc.server.config.FileListConfig;
 import io.loli.sc.server.entity.User;
 import io.loli.sc.server.entity.pan.FolderEntity;
 import io.loli.sc.server.service.pan.FolderService;
@@ -22,13 +23,25 @@ public class FileAction {
     private FolderService fs;
 
     @RequestMapping("list")
-    public String list(@RequestParam(value = "pid", required = false) Integer pid, HttpServletRequest request) {
+    public String list(@RequestParam(value = "pid", required = false) Integer pid, HttpServletRequest request,
+        @RequestParam(value = "start", required = false) Integer startIndex,
+        @RequestParam(value = "max", required = false) Integer maxCount
+
+    ) {
         User user = (User) request.getSession().getAttribute("user");
         FolderEntity root = fs.findRootByUser(user);
         if (pid == null || pid == 0) {
             pid = root.getId();
         }
-        List<FolderEntity> folders = fs.listByUserAndPath(user, pid);
+
+        if (startIndex == null) {
+            startIndex = 0;
+        }
+        if (maxCount == null) {
+            maxCount = FileListConfig.PAGE_DEFAULT_COUNT;
+        }
+
+        List<FolderEntity> folders = fs.listByUserAndPath(user, pid, startIndex, maxCount);
         request.setAttribute("folderList", folders);
 
         request.setAttribute("rootFolder", root);
@@ -53,6 +66,6 @@ public class FileAction {
 
         fe.setUser(user);
         fs.save(fe);
-        return this.list(parentId, request);
+        return this.list(parentId, request, 0, FileListConfig.PAGE_DEFAULT_COUNT);
     }
 }
