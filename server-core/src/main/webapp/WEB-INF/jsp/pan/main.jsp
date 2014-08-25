@@ -84,6 +84,7 @@
     padding-top: 40px;
     margin-top: -40px;
     height: 100%;
+    margin-top: -40px;
 }
 
 #drop-area input {
@@ -92,6 +93,10 @@
 
 .upload-form {
     float: left;
+}
+
+.file-list-table {
+    margin-bottom: 0px !important;
 }
 </style>
 <script>
@@ -117,8 +122,22 @@
                         });
 
                 bindUploadFile();
-
+                bindFileListScroll();
             });
+    var canList = true;
+    function bindFileListScroll() {
+        var $win = $(".filelist");
+
+        $win.scroll(function() {
+            console.log($win.height() + $win.scrollTop() + "|"
+                + ($(".file-list-table").height() + $(".controller").height()));
+            if (canList
+                && $win.height() + $win.scrollTop() > $(".file-list-table").height() + $(".controller").height()) {
+                canList = false;
+                // TODO, ajax，如果返回有值，canList = true，否则=false
+            }
+        });
+    }
 
     function bindUploadFile() {
         $(".btn-upload-file").unbind("click");

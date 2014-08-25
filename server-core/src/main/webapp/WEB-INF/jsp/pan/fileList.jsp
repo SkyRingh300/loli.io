@@ -6,7 +6,7 @@
     <a href="javascript:void(0)" onclick="loadFolder(${folder.id})">${folder.name}</a>/</c:forEach>
 
 </h4>
-<table class="table table-hover" tid="${requestScope.parent.id}">
+<table class="table table-hover file-list-table" tid="${requestScope.parent.id}">
   <thead>
     <tr>
       <th>文件名</th>
