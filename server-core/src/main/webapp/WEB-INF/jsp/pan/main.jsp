@@ -79,6 +79,13 @@
     width: 70%;
 }
 
+.filelist {
+    overflow: auto;
+    padding-top: 40px;
+    margin-top: -40px;
+    height: 100%;
+}
+
 #drop-area input {
     display: none;
 }
