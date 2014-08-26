@@ -100,11 +100,12 @@
 }
 </style>
 <script>
+    var pageCount = 0;
+
     $(document)
         .ready(
             function() {
                 loadFolder(0);
-
                 $(".btn-add-folder")
                     .click(
                         function() {
@@ -127,14 +128,15 @@
     var canList = true;
     function bindFileListScroll() {
         var $win = $(".filelist");
-
         $win.scroll(function() {
-            console.log($win.height() + $win.scrollTop() + "|"
-                + ($(".file-list-table").height() + $(".controller").height()));
+            //console.log($win.height() + $win.scrollTop() + "|"
+            //    + ($(".file-list-table").height() + $(".controller").height()));
             if (canList
                 && $win.height() + $win.scrollTop() > $(".file-list-table").height() + $(".controller").height()) {
                 canList = false;
                 // TODO, ajax，如果返回有值，canList = true，否则=false
+                var folderId = $("#folderId").val();
+                loadFolder(folderId, pageCount);
             }
         });
     }
@@ -178,8 +180,16 @@
         }
     }
 
-    function loadFolder(id) {
-        $(".filelist").load("${pageContext.request.contextPath}/pan/file/list?pid=" + id);
+    function loadFolder(id, start) {
+        if (start) {
+            $.post("${pageContext.request.contextPath}/pan/file/list?pid=" + id + "&start=" + start, function(result) {
+
+                $(".filelist tbody").append(result);
+            });
+
+        } else {
+            $(".filelist").load("${pageContext.request.contextPath}/pan/file/list?pid=" + id);
+        }
     }
 </script>
 <jsp:directive.include file="../taglib.jsp" />

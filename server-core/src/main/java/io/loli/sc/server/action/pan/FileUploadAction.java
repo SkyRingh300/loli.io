@@ -4,6 +4,7 @@ import io.loli.aliyun.oss.StorageFile;
 import io.loli.sc.server.entity.User;
 import io.loli.sc.server.entity.pan.FileEntity;
 import io.loli.sc.server.entity.pan.FolderEntity;
+import io.loli.sc.server.service.pan.FileService;
 import io.loli.sc.server.service.pan.FolderService;
 import io.loli.sc.server.util.StorageFolders;
 import io.loli.util.string.MD5Util;
@@ -35,6 +36,9 @@ public class FileUploadAction {
     @Inject
     private FolderService sfs;
 
+    @Inject
+    private FileService fs;
+
     private final static Logger logger = Logger.getLogger(FileUploadAction.class);
 
     @RequestMapping(value = "", method = { RequestMethod.PUT, RequestMethod.POST })
@@ -62,11 +66,11 @@ public class FileUploadAction {
         entity.setUser(user);
         entity.setCreateDate(new Date());
         entity.setFolder(parent);
-        entity.setKey(uploadedFile.getKey());
+        entity.setKey(uploadedFile.getObject().getKey());
         entity.setNewName(originName);
         entity.setOriginName(originName);
-        
-        
+        fs.save(entity);
+
         return entity;
     }
 

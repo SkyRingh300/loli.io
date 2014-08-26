@@ -30,12 +30,14 @@ public class FileAction {
     ) {
         User user = (User) request.getSession().getAttribute("user");
         FolderEntity root = fs.findRootByUser(user);
+        boolean begin = false;
         if (pid == null || pid == 0) {
             pid = root.getId();
         }
 
-        if (startIndex == null) {
+        if (startIndex == null || startIndex == 0) {
             startIndex = 0;
+            begin = true;
         }
         if (maxCount == null) {
             maxCount = FileListConfig.PAGE_DEFAULT_COUNT;
@@ -49,6 +51,7 @@ public class FileAction {
 
         root = fs.findById(pid);
         request.setAttribute("parent", root);
+        request.setAttribute("begin", begin);
         return "pan/fileList";
     }
 
