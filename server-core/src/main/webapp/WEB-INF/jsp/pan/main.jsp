@@ -101,7 +101,7 @@
 </style>
 <script>
     var pageCount = 0;
-
+    var fileCount = 0;
     $(document)
         .ready(
             function() {
@@ -182,11 +182,15 @@
 
     function loadFolder(id, start) {
         if (start) {
-            $.post("${pageContext.request.contextPath}/pan/file/list?pid=" + id + "&start=" + start, function(result) {
-
-                $(".filelist tbody").append(result);
-            });
-
+            var type = "folder";
+            if (fileCount > 0) {
+                type = "file";
+                start = fileCount;
+            }
+            $.post("${pageContext.request.contextPath}/pan/file/list?pid=" + id + "&start=" + start + "&type=" + type,
+                function(result) {
+                    $(".filelist tbody").append(result);
+                });
         } else {
             $(".filelist").load("${pageContext.request.contextPath}/pan/file/list?pid=" + id);
         }

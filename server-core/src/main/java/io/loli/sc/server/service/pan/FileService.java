@@ -19,10 +19,9 @@ public class FileService {
         fd.save(file);
     }
 
-    public List<FileEntity> listByUserIdAndFolderId(int userId, int folderId) {
-        
-        
-        return fd.listByUserIdAndFolderId(userId,folderId);
+    public List<FileEntity> listByUserIdAndFolderId(int userId, int folderId, int startIndex, int maxCount) {
+
+        return fd.listByUserIdAndFolderId(userId, folderId, startIndex, maxCount);
     }
 
 }

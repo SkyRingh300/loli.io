@@ -18,8 +18,6 @@
       </tr>
     </thead>
     <tbody>
-
-
       <tr>
         <td><a href="javascript:void(0)" onclick="loadFolder(${requestScope.parent.parent.id})">...返回上一级</a></td>
         <td></td>
@@ -27,7 +25,7 @@
       </tr>
       </c:if>
 
-      <c:if test="${fn:length(requestScope.folderList) eq 0 && requestScope.begin}">
+      <c:if test="${fn:length(requestScope.folderList)+fn:length(requestScope.fileList) eq 0 && requestScope.begin}">
         <tr>
           <td>该文件夹木有任何内容</td>
           <td>-</td>
@@ -42,6 +40,16 @@
           <td><fmt:formatDate value="${folder.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
         </tr>
       </c:forEach>
+      <c:forEach items="${requestScope.fileList}" var="file">
+        <tr>
+          <td><a href="javascript:void(0)">${file.originName}</a></td>
+          <td>文件大小</td>
+          <td><fmt:formatDate value="${file.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
+        </tr>
+
+      </c:forEach>
+
+
       <c:if test="${requestScope.begin}">
     </tbody>
   </table>
@@ -57,5 +65,14 @@
 </c:if>
 <script>
 bindUploadFile();
+<c:if test="${requestScope.begin}">
+pageCount = ${fn:length(requestScope.folderList)};
+fileCount = ${fn:length(requestScope.fileList)};
+</c:if>
+<c:if test="${not requestScope.begin}">
 pageCount = pageCount + ${fn:length(requestScope.folderList)};
+fileCount = fileCount + ${fn:length(requestScope.fileList)};
+</c:if>
+canList = true;
+
 </script>

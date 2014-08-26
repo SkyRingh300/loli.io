@@ -2,9 +2,12 @@ package io.loli.sc.server.action.pan;
 
 import io.loli.sc.server.config.FileListConfig;
 import io.loli.sc.server.entity.User;
+import io.loli.sc.server.entity.pan.FileEntity;
 import io.loli.sc.server.entity.pan.FolderEntity;
+import io.loli.sc.server.service.pan.FileService;
 import io.loli.sc.server.service.pan.FolderService;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,10 +25,14 @@ public class FileAction {
     @Inject
     private FolderService fs;
 
+    @Inject
+    private FileService fis;
+
     @RequestMapping("list")
     public String list(@RequestParam(value = "pid", required = false) Integer pid, HttpServletRequest request,
         @RequestParam(value = "start", required = false) Integer startIndex,
-        @RequestParam(value = "max", required = false) Integer maxCount
+        @RequestParam(value = "max", required = false) Integer maxCount,
+        @RequestParam(value = "type", required = false) String type
 
     ) {
         User user = (User) request.getSession().getAttribute("user");
@@ -39,13 +46,30 @@ public class FileAction {
             startIndex = 0;
             begin = true;
         }
+
+        if (type == null) {
+            type = "folder";
+        }
         if (maxCount == null) {
             maxCount = FileListConfig.PAGE_DEFAULT_COUNT;
         }
 
-        List<FolderEntity> folders = fs.listByUserAndPath(user, pid, startIndex, maxCount);
-        request.setAttribute("folderList", folders);
+        List<FolderEntity> folders = null;
+        List<FileEntity> files = null;
+        if (type.equals("folder")) {
 
+            folders = fs.listByUserAndPath(user, pid, startIndex, maxCount);
+            int folderSize = folders.size();
+            int fileSize = folderSize < maxCount ? maxCount - folderSize : 0;
+
+            files = fis.listByUserIdAndFolderId(user.getId(), pid, 0, fileSize);
+
+        } else {
+            folders = new ArrayList<>();
+            files = fis.listByUserIdAndFolderId(user.getId(), pid, startIndex, maxCount);
+        }
+        request.setAttribute("folderList", folders);
+        request.setAttribute("fileList", files);
         request.setAttribute("rootFolder", root);
         request.setAttribute("parentList", fs.findParentsByFolder(pid));
 
@@ -64,11 +88,9 @@ public class FileAction {
         fe.setName(folderName);
         fe.setFullPath(parent.getFullPath() + folderName + "/");
         fe.setCreateDate(new Date());
-
         User user = (User) request.getSession().getAttribute("user");
-
         fe.setUser(user);
         fs.save(fe);
-        return this.list(parentId, request, 0, FileListConfig.PAGE_DEFAULT_COUNT);
+        return this.list(parentId, request, 0, FileListConfig.PAGE_DEFAULT_COUNT, "folder");
     }
 }

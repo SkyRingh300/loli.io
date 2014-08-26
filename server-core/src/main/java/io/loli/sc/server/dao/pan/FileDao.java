@@ -18,9 +18,10 @@ public class FileDao {
         em.persist(file);
     }
 
-    public List<FileEntity> listByUserIdAndFolderId(int userId, int folderId) {
+    public List<FileEntity> listByUserIdAndFolderId(int userId, int folderId, int startIndex, int maxCount) {
         return em.createNamedQuery("FileEntity.listByUserIdAndFolderId", FileEntity.class)
-            .setParameter("userId", userId).setParameter("folderId", folderId).getResultList();
+            .setParameter("userId", userId).setParameter("folderId", folderId).setFirstResult(startIndex)
+            .setMaxResults(maxCount).getResultList();
     }
 
 }
