@@ -29,27 +29,25 @@ public class FolderService {
 
     @Transactional
     public List<FolderEntity> listByUserAndPath(User user, int pid, int startIndex, int maxCount) {
-        List<FolderEntity> result;
+        List<FolderEntity> result = null;
         if (pid == 0) {
             result = folderDao.listByUserAndPath(user.getId(), "/");
-        } else {
-            result = folderDao.listByUserAndParent(user.getId(), pid, 0, FileListConfig.PAGE_DEFAULT_COUNT);
-        }
-        if (result.isEmpty()) {
-            FolderEntity f = new FolderEntity();
-            f.setParent(null);
-            f.setUser(user);
-            f.setCreateDate(new Date());
-            f.setFullPath("/");
-            f.setName("");
-            folderDao.save(f);
-        } else {
-            if (pid == 0) {
-                result = folderDao.listByUserAndParent(user.getId(), this.findRootByUser(user).getId(), startIndex,
-                    maxCount);
-            } else {
-                result = folderDao.listByUserAndParent(user.getId(), pid, startIndex, maxCount);
+            if (result.isEmpty()) {
+                FolderEntity f = new FolderEntity();
+                f.setParent(null);
+                f.setUser(user);
+                f.setCreateDate(new Date());
+                f.setFullPath("/");
+                f.setName("");
+                folderDao.save(f);
             }
+        }
+
+        if (pid == 0) {
+            result = folderDao.listByUserAndParent(user.getId(), this.findRootByUser(user).getId(), startIndex,
+                maxCount);
+        } else {
+            result = folderDao.listByUserAndParent(user.getId(), pid, startIndex, maxCount);
         }
 
         return result;
