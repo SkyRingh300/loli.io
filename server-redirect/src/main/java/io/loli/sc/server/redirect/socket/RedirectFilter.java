@@ -31,8 +31,6 @@ public class RedirectFilter implements RequestAuthFilter {
     private static final Cache cache = new ByteCache(Config.maxCount);
 
     private static final Logger logger = LogManager.getLogger(RedirectHandler.class);
-    private final static ExecutorService complexAppExecutorService = GrizzlyExecutorService
-        .createInstance(ThreadPoolConfig.defaultConfig().copy().setCorePoolSize(10).setMaxPoolSize(50));
 
     /*
      * 当配置为使用缓存且(未配置exclude或者url不包含exclude字符串)时，使用缓存
@@ -43,70 +41,68 @@ public class RedirectFilter implements RequestAuthFilter {
         } catch (Exception e) {
             logger.error(e);
         }
-        complexAppExecutorService.execute(() -> {
-            try {
-                String code = request.getRequestURI();
-                logger.info("用户请求的url为:" + code);
-                if (code.startsWith("/")) {
-                    code = code.substring(1);
-                }
-                String url = imageDao.findUrlByCode(code);
-                if (null == url || "".equals(url.trim())) {
-                    logger.warn("url为空");
-                    response.setStatus(HttpStatus.NOT_FOUND_404);
-                } else {
-
-                    logger.info("找到url为:" + url);
-                    String referer = request.getHeader(Header.Referer);
-                    String ip = request.getRemoteAddr();
-                    if (ip != null && ip.equals("127.0.0.1")) {
-                        ip = request.getHeader("X-Real-IP");
-                    }
-                    String ua = request.getHeader(Header.UserAgent);
-                    logDao.save(url, ua, referer, ip, new Date());
-                    InputStream input = null;
-
-                    try (OutputStream output = response.getOutputStream();) {
-                        if (Config.useCache && ((!"".equals(Config.exclude)) || !url.contains(Config.exclude))) {
-                            byte[] bytes = cache.getBytes(url);
-                            input = new BufferedInputStream(new ByteArrayInputStream(bytes));
-                        } else {
-                            input = cache.get(url);
-                        }
-
-                        if (url.endsWith("png"))
-                            response.setContentType(ContentType.newContentType("image/png"));
-                        if (url.endsWith("jpg"))
-                            response.setContentType(ContentType.newContentType("image/jpg"));
-                        if (url.endsWith("jpeg"))
-                            response.setContentType(ContentType.newContentType("image/jpg"));
-                        if (url.endsWith("bmp"))
-                            response.setContentType(ContentType.newContentType("image/bmp"));
-                        if (url.endsWith("gif"))
-                            response.setContentType(ContentType.newContentType("image/gif"));
-
-                        byte[] buffer = new byte[2048];
-                        for (int length = 0; (length = input.read(buffer)) > 0;) {
-                            output.write(buffer, 0, length);
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        logger.error(e);
-                        response.sendRedirect(url);
-                    } finally {
-                        if (input != null) {
-                            input.close();
-                        }
-                    }
-                }
-
-            } catch (Exception e) {
+        try {
+            String code = request.getRequestURI();
+            logger.info("用户请求的url为:" + code);
+            if (code.startsWith("/")) {
+                code = code.substring(1);
+            }
+            String url = imageDao.findUrlByCode(code);
+            if (null == url || "".equals(url.trim())) {
+                logger.warn("url为空");
                 response.setStatus(HttpStatus.NOT_FOUND_404);
-                logger.error("系统内部错误500:" + e);
-            } finally {
-                response.resume();
+            } else {
+
+                logger.info("找到url为:" + url);
+                String referer = request.getHeader(Header.Referer);
+                String ip = request.getRemoteAddr();
+                if (ip != null && ip.equals("127.0.0.1")) {
+                    ip = request.getHeader("X-Real-IP");
+                }
+                String ua = request.getHeader(Header.UserAgent);
+                logDao.save(url, ua, referer, ip, new Date());
+                InputStream input = null;
+
+                try (OutputStream output = response.getOutputStream();) {
+                    if (Config.useCache && ((!"".equals(Config.exclude)) || !url.contains(Config.exclude))) {
+                        byte[] bytes = cache.getBytes(url);
+                        input = new BufferedInputStream(new ByteArrayInputStream(bytes));
+                    } else {
+                        input = cache.get(url);
+                    }
+
+                    if (url.endsWith("png"))
+                        response.setContentType(ContentType.newContentType("image/png"));
+                    if (url.endsWith("jpg"))
+                        response.setContentType(ContentType.newContentType("image/jpg"));
+                    if (url.endsWith("jpeg"))
+                        response.setContentType(ContentType.newContentType("image/jpg"));
+                    if (url.endsWith("bmp"))
+                        response.setContentType(ContentType.newContentType("image/bmp"));
+                    if (url.endsWith("gif"))
+                        response.setContentType(ContentType.newContentType("image/gif"));
+                    response.setHeader("Cache-Control", "max-age=15552000");
+                    byte[] buffer = new byte[2048];
+                    for (int length = 0; (length = input.read(buffer)) > 0;) {
+                        output.write(buffer, 0, length);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    logger.error(e);
+                    response.sendRedirect(url);
+                } finally {
+                    if (input != null) {
+                        input.close();
+                    }
+                }
             }
 
-        });
+        } catch (Exception e) {
+            response.setStatus(HttpStatus.NOT_FOUND_404);
+            logger.error("系统内部错误500:" + e);
+        } finally {
+            response.resume();
+        }
+
     }
 }
