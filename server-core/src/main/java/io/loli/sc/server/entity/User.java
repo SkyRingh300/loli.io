@@ -17,13 +17,12 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "user")
-@NamedQueries(value = {
-        @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email=:email"),
-        @NamedQuery(name = "User.listByToken", query = "SELECT u FROM User u WHERE u.loginStatus.token=:token") })
+@NamedQueries(value = { @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email=:email"),
+    @NamedQuery(name = "User.listByToken", query = "SELECT u FROM User u WHERE u.loginStatus.token=:token") })
 public class User implements Serializable {
 
     private static final long serialVersionUID = -6060393006470256261L;
