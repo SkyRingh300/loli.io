@@ -1,6 +1,5 @@
 package io.loli.sc.server.redirect.config;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
@@ -25,10 +24,9 @@ public class Config {
     static {
         Properties prop = null;
         prop = new Properties();
-        try (InputStream is = ClassLoader.getSystemClassLoader().getResourceAsStream(
-                "config.properties");) {
+        try (InputStream is = ClassLoader.getSystemClassLoader().getResourceAsStream("config.properties");) {
             prop.load(is);
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.error(e);
         }
         if (prop != null) {

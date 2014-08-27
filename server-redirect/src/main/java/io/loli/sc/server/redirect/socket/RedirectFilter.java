@@ -19,6 +19,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.glassfish.grizzly.http.server.Request;
 import org.glassfish.grizzly.http.server.Response;
+import org.glassfish.grizzly.http.util.ContentType;
 import org.glassfish.grizzly.http.util.Header;
 import org.glassfish.grizzly.http.util.HttpStatus;
 import org.glassfish.grizzly.threadpool.GrizzlyExecutorService;
@@ -37,7 +38,11 @@ public class RedirectFilter implements RequestAuthFilter {
      * 当配置为使用缓存且(未配置exclude或者url不包含exclude字符串)时，使用缓存
      */
     public void filter(final Request request, final Response response) {
-        response.suspend();
+        try {
+            response.suspend();
+        } catch (Exception e) {
+            logger.error(e);
+        }
         complexAppExecutorService.execute(() -> {
             try {
                 String code = request.getRequestURI();
@@ -69,11 +74,23 @@ public class RedirectFilter implements RequestAuthFilter {
                             input = cache.get(url);
                         }
 
+                        if (url.endsWith("png"))
+                            response.setContentType(ContentType.newContentType("image/png"));
+                        if (url.endsWith("jpg"))
+                            response.setContentType(ContentType.newContentType("image/jpg"));
+                        if (url.endsWith("jpeg"))
+                            response.setContentType(ContentType.newContentType("image/jpg"));
+                        if (url.endsWith("bmp"))
+                            response.setContentType(ContentType.newContentType("image/bmp"));
+                        if (url.endsWith("gif"))
+                            response.setContentType(ContentType.newContentType("image/gif"));
+
                         byte[] buffer = new byte[2048];
                         for (int length = 0; (length = input.read(buffer)) > 0;) {
                             output.write(buffer, 0, length);
                         }
                     } catch (Exception e) {
+                        e.printStackTrace();
                         logger.error(e);
                         response.sendRedirect(url);
                     } finally {
