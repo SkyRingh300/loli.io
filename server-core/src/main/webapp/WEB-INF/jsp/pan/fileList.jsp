@@ -34,16 +34,16 @@
       </c:if>
 
       <c:forEach items="${requestScope.folderList}" var="folder">
-        <tr>
-          <td><i class="glyphicon glyphicon-folder-close icon"></i><a href="javascript:void(0)"
+        <tr class="folder-tr">
+          <td><input type="checkbox" class="file-checkbox"><i class="glyphicon glyphicon-folder-close icon"></i><a href="javascript:void(0)"
             onclick="loadFolder(${folder.id})">${folder.name}</a></td>
           <td>-</td>
           <td><fmt:formatDate value="${folder.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
         </tr>
       </c:forEach>
       <c:forEach items="${requestScope.fileList}" var="file">
-        <tr>
-          <td><i class="glyphicon glyphicon-cloud icon"></i><a href="javascript:void(0)">${file.originName}</a></td>
+        <tr class="file-tr">
+          <td><input type="checkbox" class="file-checkbox"><i class="glyphicon glyphicon-cloud icon"></i><a href="javascript:void(0)">${file.originName}</a></td>
           <td>${file.size}</td>
           <td><fmt:formatDate value="${file.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
         </tr>
