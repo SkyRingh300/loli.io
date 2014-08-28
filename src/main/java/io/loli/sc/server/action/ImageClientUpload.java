@@ -139,8 +139,6 @@ public class ImageClientUpload {
                     .toLowerCase();
         }
 
-        imageObj.setRedirectCode(fileName);
-
         File file = saveImage(imageFile, fileName);
         String ref = null;
         if ((ref = request.getHeader("REFERER")) != null) {
@@ -160,6 +158,7 @@ public class ImageClientUpload {
         imageObj.setGeneratedName(file.getName());
         imageObj.setInternalPath(imageObj.getStorageBucket().getInternalUrl() + "/"
                 + file.getName());
+        imageObj.setRedirectCode(file.getName());
 
         uic.save(imageObj);
         if (imageObj.getUser() == null) {
