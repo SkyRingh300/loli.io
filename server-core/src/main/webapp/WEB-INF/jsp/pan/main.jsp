@@ -136,7 +136,7 @@
                 canList = false;
                 // TODO, ajax，如果返回有值，canList = true，否则=false
                 var folderId = $("#folderId").val();
-                loadFolder(folderId, pageCount);
+                loadFolder(folderId);
             }
         });
     }
@@ -148,7 +148,6 @@
         });
         $('#drop-area').fileupload({
             add : function(e, data) {
-                alert("");
                 var jqXHR = data.submit();
             },
 
@@ -160,7 +159,8 @@
 
             },
             done : function(e, data) {
-
+                var folderId = $("#folderId").val();
+                loadFolder(folderId);
             }
 
         });

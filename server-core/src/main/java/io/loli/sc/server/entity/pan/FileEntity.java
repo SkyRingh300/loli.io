@@ -17,6 +17,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -37,6 +38,41 @@ public class FileEntity implements Serializable {
 
     @Column(name = "file_key")
     private String key;
+
+    @Column(name = "length")
+    private Long length;
+
+    public Long getLength() {
+        return length;
+    }
+
+    public void setLength(Long length) {
+        this.length = length;
+    }
+
+    @Transient
+    private String size;
+
+    public String getSize() {
+        if (length == null) {
+            return "";
+        }
+        String size = "";
+        if (length < 1024) {
+            size = length + " Byte";
+        }
+        if (1024 <= length && length < 1024 * 1024) {
+            size = String.format("%.2f", (double) length / 1024) + "KB";
+        }
+        if (1024 * 1024 <= length && length < 1024 * 1024 * 1024) {
+            size = String.format("%.2f", (double) length / 1024 / 1024) + "MB";
+        }
+
+        if (1024 * 1024 * 1024 <= length && length < 1024 * 1024 * 1024 * 1024) {
+            size = String.format("%.2f", (double) length / 1024 / 1024) + "GB";
+        }
+        return size;
+    }
 
     @Column
     private String md5;

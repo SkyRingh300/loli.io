@@ -44,7 +44,7 @@ public class FileUploadAction {
     @RequestMapping(value = "", method = { RequestMethod.PUT, RequestMethod.POST })
     @ResponseBody
     public FileEntity upload(@RequestParam int folderId,
-        @RequestParam(value = "file", required = true) MultipartFile file, HttpSession session) {
+        @RequestParam(value = "file", required = true) MultipartFile file, HttpSession session) throws IOException {
         User user = (User) session.getAttribute("user");
 
         String originName = file.getOriginalFilename();
@@ -58,19 +58,19 @@ public class FileUploadAction {
             logger.error(e);
             e.printStackTrace();
         }
-
         File f = this.saveFile(file, generatedName);
         StorageFile uploadedFile = storageFolders.uploadFile(f);
         FolderEntity parent = sfs.findById(folderId);
         FileEntity entity = new FileEntity();
         entity.setUser(user);
+        entity.setLength(file.getSize());
         entity.setCreateDate(new Date());
         entity.setFolder(parent);
         entity.setKey(uploadedFile.getObject().getKey());
         entity.setNewName(originName);
         entity.setOriginName(originName);
+        entity.setMd5(io.loli.util.file.FileUtils.md5Hash(file.getBytes()));
         fs.save(entity);
-
         return entity;
     }
 

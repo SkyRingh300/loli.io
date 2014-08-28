@@ -43,7 +43,7 @@
       <c:forEach items="${requestScope.fileList}" var="file">
         <tr>
           <td><a href="javascript:void(0)">${file.originName}</a></td>
-          <td>文件大小</td>
+          <td>${file.size}</td>
           <td><fmt:formatDate value="${file.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
         </tr>
 
