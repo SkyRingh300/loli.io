@@ -31,7 +31,7 @@ public class Config {
         }
         if (prop != null) {
             try {
-                useCache = "0".equals(prop.getProperty("useCache")) ? false : true;
+                useCache = "1".equals(prop.getProperty("useCache")) ? true : false;
                 port = Integer.parseInt(prop.getProperty("port"));
                 maxCount = Integer.parseInt(prop.getProperty("maxCount"));
                 if (!useCache) {

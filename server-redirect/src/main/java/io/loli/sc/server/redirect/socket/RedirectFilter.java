@@ -59,7 +59,7 @@ public class RedirectFilter implements RequestAuthFilter {
                 InputStream input = null;
 
                 try (OutputStream output = response.getOutputStream();) {
-                    if (Config.useCache && ((!"".equals(Config.exclude)) || !url.contains(Config.exclude))) {
+                    if (Config.useCache) {
                         byte[] bytes = cache.getBytes(url);
                         input = new BufferedInputStream(new ByteArrayInputStream(bytes));
                     } else {
