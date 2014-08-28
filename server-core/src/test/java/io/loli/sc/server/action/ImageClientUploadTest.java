@@ -34,8 +34,7 @@ import org.springframework.web.context.WebApplicationContext;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
 @WebAppConfiguration
-public class ImageClientUploadTest extends
-        AbstractTransactionalJUnit4SpringContextTests {
+public class ImageClientUploadTest extends AbstractTransactionalJUnit4SpringContextTests {
 
     private MockMvc mockMvc;
     @Inject
@@ -53,27 +52,19 @@ public class ImageClientUploadTest extends
     public void testGetToken() throws Exception {
         User user = UserServiceTest.newInstence();
         us.save(user);
-        mockMvc.perform(
-                post("/api/token")
-                        .param("email", user.getEmail())
-                        .param("password", user.getPassword())
-                        .accept(MediaType
-                                .parseMediaType("application/json;charset=UTF-8")))
-                .andExpect(status().isOk())
-                .andExpect(
-                        content()
-                                .contentType(
-                                        MediaType
-                                                .parseMediaType("application/json;charset=UTF-8")))
-                .andExpect(jsonPath("$.token").value(
-                // 匿名内部类，自定义Matcher，判断返回的json文的token属性是否是32个字符长的md5密文
-                        new CustomMatcher<String>("长度为32的字符串") {
-                            public boolean matches(Object object) {
-                                return ((object instanceof String)
-                                        && !((String) object).isEmpty() && ((String) object)
-                                        .length() == 32);
-                            }
-                        }));
+        mockMvc
+            .perform(
+                post("/api/token").param("email", user.getEmail()).param("password", user.getPassword())
+                    .accept(MediaType.parseMediaType("application/json;charset=UTF-8"))).andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.parseMediaType("application/json;charset=UTF-8")))
+            .andExpect(jsonPath("$.token").value(
+            // 匿名内部类，自定义Matcher，判断返回的json文的token属性是否是32个字符长的md5密文
+                new CustomMatcher<String>("长度为32的字符串") {
+                    public boolean matches(Object object) {
+                        return ((object instanceof String) && !((String) object).isEmpty() && ((String) object)
+                            .length() == 32);
+                    }
+                }));
     }
 
 }

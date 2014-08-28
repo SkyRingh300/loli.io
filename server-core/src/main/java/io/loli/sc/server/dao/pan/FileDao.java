@@ -24,4 +24,9 @@ public class FileDao {
             .setMaxResults(maxCount).getResultList();
     }
 
+    public int updateMd5(int id, String md5) {
+        return em.createQuery("update FileEntity set md5=:md5 where id=:id").setParameter("md5", md5)
+            .setParameter("id", id).executeUpdate();
+    }
+
 }

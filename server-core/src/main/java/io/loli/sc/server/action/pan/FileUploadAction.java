@@ -6,6 +6,7 @@ import io.loli.sc.server.entity.pan.FileEntity;
 import io.loli.sc.server.entity.pan.FolderEntity;
 import io.loli.sc.server.service.pan.FileService;
 import io.loli.sc.server.service.pan.FolderService;
+import io.loli.sc.server.util.Md5Utils;
 import io.loli.sc.server.util.StorageFolders;
 import io.loli.util.string.MD5Util;
 
@@ -39,6 +40,9 @@ public class FileUploadAction {
     @Inject
     private FileService fs;
 
+    @Inject
+    private Md5Utils md5Utils;
+
     private final static Logger logger = Logger.getLogger(FileUploadAction.class);
 
     @RequestMapping(value = "", method = { RequestMethod.PUT, RequestMethod.POST })
@@ -69,8 +73,8 @@ public class FileUploadAction {
         entity.setKey(uploadedFile.getObject().getKey());
         entity.setNewName(originName);
         entity.setOriginName(originName);
-        entity.setMd5(io.loli.util.file.FileUtils.md5Hash(file.getBytes()));
         fs.save(entity);
+        md5Utils.addTask(f, entity.getId());
         return entity;
     }
 

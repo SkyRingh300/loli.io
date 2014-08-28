@@ -24,4 +24,9 @@ public class FileService {
         return fd.listByUserIdAndFolderId(userId, folderId, startIndex, maxCount);
     }
 
+    @Transactional
+    public int updateMd5(int id, String md5) {
+        return fd.updateMd5(id, md5);
+    }
+
 }

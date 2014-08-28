@@ -38,6 +38,7 @@
         <module>server-core</module>
         <module>server-redirect</module>
         <module>server-script</module>
+        <module>server-social</module>
     </modules>
 
     <repositories>
