@@ -103,6 +103,10 @@
     margin-bottom: 0px !important;
 }
 
+.file-list-table .tr-selected {
+    background-color: rgb(245, 245, 245);
+}
+
 .icon {
     margin-left: 10px;
     margin-right: 5px;
@@ -115,10 +119,28 @@
 .guide-link {
     color: rgb(95, 95, 95);
 }
+
+.guide-title {
+    margin-left: 10px;
+}
+
+.list-title {
+    margin-left: 10px;
+    float: left;
+}
+
+.file-checkbox-all {
+    float: left;
+}
+
+.list-title .selected {
+    display: none;
+}
 </style>
 <script>
     var pageCount = 0;
     var fileCount = 0;
+    var selectedCount = 0;
     $(document)
         .ready(
             function() {
@@ -211,6 +233,20 @@
         } else {
             $(".filelist").load("${pageContext.request.contextPath}/pan/file/list?pid=" + id);
         }
+    }
+
+    function updateSelected() {
+        selectedCount = $(".tr-selected").size();
+        if (selectedCount == 0) {
+            $(".list-title .non-selected").show();
+            $(".list-title .selected").hide();
+
+        } else {
+            $(".list-title .non-selected").hide();
+            $(".list-title .selected .selected-count").text(selectedCount);
+            $(".list-title .selected").show();
+        }
+
     }
 </script>
 <jsp:directive.include file="../taglib.jsp" />
