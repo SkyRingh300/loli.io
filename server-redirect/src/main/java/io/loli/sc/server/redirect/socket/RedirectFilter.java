@@ -37,11 +37,6 @@ public class RedirectFilter implements RequestAuthFilter {
      */
     public void filter(final Request request, final Response response) {
         try {
-            response.suspend();
-        } catch (Exception e) {
-            logger.error(e);
-        }
-        try {
             String code = request.getRequestURI();
             logger.info("用户请求的url为:" + code);
             if (code.startsWith("/")) {
@@ -100,8 +95,6 @@ public class RedirectFilter implements RequestAuthFilter {
         } catch (Exception e) {
             response.setStatus(HttpStatus.NOT_FOUND_404);
             logger.error("系统内部错误500:" + e);
-        } finally {
-            response.resume();
         }
 
     }
