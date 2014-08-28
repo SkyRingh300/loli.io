@@ -153,7 +153,7 @@
                                 return;
                             }
                             $(".filelist tbody tr:first")
-                                .after(
+                                .before(
                                     "<tr><td><form><input type='text' class='add-folder-input'>"
                                         + "&nbsp;<span class='glyphicon glyphicon-ok icon-button' onclick='saveFolder(this)'></span>&nbsp;"
                                         + "<span class='glyphicon glyphicon-remove icon-button' onclick='$(this).parent().parent().parent().remove()'></span>"
