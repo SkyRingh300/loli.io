@@ -3,9 +3,9 @@
 
 <c:if test="${requestScope.begin}">
   <h4>
-    当前路径: <a href="javascript:void(0)" onclick="loadFolder(0)">全部文件</a>
+    当前路径: <a href="javascript:void(0)" onclick="loadFolder(0)" class="guide-link">全部文件</a>
     <c:forEach items="${requestScope.parentList}" var="folder">
-      <a href="javascript:void(0)" onclick="loadFolder(${folder.id})">${folder.name}</a>/</c:forEach>
+      <a href="javascript:void(0)" onclick="loadFolder(${folder.id})" class="guide-link">${folder.name}</a>/</c:forEach>
   </h4>
 
 
@@ -35,14 +35,15 @@
 
       <c:forEach items="${requestScope.folderList}" var="folder">
         <tr>
-          <td><a href="javascript:void(0)" onclick="loadFolder(${folder.id})">${folder.name}</a></td>
+          <td><i class="glyphicon glyphicon-folder-close icon"></i><a href="javascript:void(0)"
+            onclick="loadFolder(${folder.id})">${folder.name}</a></td>
           <td>-</td>
           <td><fmt:formatDate value="${folder.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
         </tr>
       </c:forEach>
       <c:forEach items="${requestScope.fileList}" var="file">
         <tr>
-          <td><a href="javascript:void(0)">${file.originName}</a></td>
+          <td><i class="glyphicon glyphicon-cloud icon"></i><a href="javascript:void(0)">${file.originName}</a></td>
           <td>${file.size}</td>
           <td><fmt:formatDate value="${file.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
         </tr>

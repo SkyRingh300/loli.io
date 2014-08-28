@@ -87,6 +87,10 @@
     margin-top: -40px;
 }
 
+.file-list-table tr {
+    margin-left: 10px;
+}
+
 #drop-area input {
     display: none;
 }
@@ -97,6 +101,19 @@
 
 .file-list-table {
     margin-bottom: 0px !important;
+}
+
+.icon {
+    margin-left: 10px;
+    margin-right: 5px;
+}
+
+.file-list-table tr a, a:visited {
+    color: rgb(95, 95, 95);
+}
+
+.guide-link {
+    color: rgb(95, 95, 95);
 }
 </style>
 <script>
