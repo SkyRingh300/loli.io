@@ -28,9 +28,8 @@ public class FileFetchService {
             response = httpclient.execute(get);
             StatusLine statusLine = response.getStatusLine();
             if (statusLine.getStatusCode() == 200) {
-                file = new File(System.getProperty("java.io.tmpdir")
-                        + File.separator
-                        + ShortUrl.shortText(new Date().getTime() + path));
+                file = new File(System.getProperty("java.io.tmpdir") + File.separator
+                    + ShortUrl.shortText(new Date().getTime() + path, 8));
                 FileOutputStream outputStream = new FileOutputStream(file);
 
                 InputStream inputStream = response.getEntity().getContent();

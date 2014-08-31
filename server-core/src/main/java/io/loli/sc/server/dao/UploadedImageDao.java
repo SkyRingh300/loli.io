@@ -41,41 +41,42 @@ public class UploadedImageDao {
      */
     public List<UploadedImage> listByUId(int u_id, int firstPosition, int maxResults) {
 
-        return em.createNamedQuery("UploadedImage.listByUId", UploadedImage.class)
-                .setParameter("u_id", u_id).setFirstResult(firstPosition).setMaxResults(maxResults)
-                .getResultList();
+        return em.createNamedQuery("UploadedImage.listByUId", UploadedImage.class).setParameter("u_id", u_id)
+            .setFirstResult(firstPosition).setMaxResults(maxResults).getResultList();
     }
 
     public int countByUId(int u_id) {
-        return em.createNamedQuery("UploadedImage.listByUId", UploadedImage.class)
-                .setParameter("u_id", u_id).getResultList().size();
+        return em.createNamedQuery("UploadedImage.listByUId", UploadedImage.class).setParameter("u_id", u_id)
+            .getResultList().size();
 
     }
 
-    public List<UploadedImage> listByUIdAndFileName(int u_id, String fileName, int firstPosition,
-            int maxResults) {
+    public List<UploadedImage> listByUIdAndFileName(int u_id, String fileName, int firstPosition, int maxResults) {
         return em.createNamedQuery("UploadedImage.listByUIdAndFileName", UploadedImage.class)
-                .setParameter("file_name", "%" + fileName + "%").setParameter("u_id", u_id)
-                .setFirstResult(firstPosition).setMaxResults(maxResults).getResultList();
+            .setParameter("file_name", "%" + fileName + "%").setParameter("u_id", u_id).setFirstResult(firstPosition)
+            .setMaxResults(maxResults).getResultList();
     }
 
-    public List<UploadedImage> listByUIdAndFileName(int u_id, String fileName, int firstPosition,
-            int maxResults, int tag) {
+    public List<UploadedImage> listByUIdAndFileName(int u_id, String fileName, int firstPosition, int maxResults,
+        int tag) {
         return em.createNamedQuery("UploadedImage.listByUIdAndFileNameAndTag", UploadedImage.class)
-                .setParameter("file_name", "%" + fileName + "%").setParameter("u_id", u_id)
-                .setParameter("tag_id", tag).setFirstResult(firstPosition)
-                .setMaxResults(maxResults).getResultList();
+            .setParameter("file_name", "%" + fileName + "%").setParameter("u_id", u_id).setParameter("tag_id", tag)
+            .setFirstResult(firstPosition).setMaxResults(maxResults).getResultList();
     }
 
     public int countByUIdAndFileName(int u_id, String fileName) {
         return em.createNamedQuery("UploadedImage.listByUIdAndFileName", UploadedImage.class)
-                .setParameter("u_id", u_id).setParameter("file_name", "%" + fileName + "%")
-                .getResultList().size();
+            .setParameter("u_id", u_id).setParameter("file_name", "%" + fileName + "%").getResultList().size();
     }
 
     public int countByUIdAndFileName(int u_id, String fileName, int tag) {
         return em.createNamedQuery("UploadedImage.listByUIdAndFileNameAndTag", UploadedImage.class)
-                .setParameter("u_id", u_id).setParameter("file_name", "%" + fileName + "%")
-                .setParameter("tag_id", tag).getResultList().size();
+            .setParameter("u_id", u_id).setParameter("file_name", "%" + fileName + "%").setParameter("tag_id", tag)
+            .getResultList().size();
+    }
+
+    public List<UploadedImage> checkExists(String code) {
+        return em.createQuery("from UploadedImage where generated_code=:code", UploadedImage.class)
+            .setParameter("code", code).getResultList();
     }
 }

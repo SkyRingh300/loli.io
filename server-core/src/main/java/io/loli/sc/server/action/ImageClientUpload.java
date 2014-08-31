@@ -104,7 +104,6 @@ public class ImageClientUpload {
         @RequestParam(value = "email", required = false) String email,
         @RequestParam(value = "desc", required = false) String desc,
         @RequestParam(value = "image", required = true) MultipartFile imageFile, HttpServletRequest request) {
-
         UploadedImage imageObj = new UploadedImage();
         imageObj.setDate(new Date());
 
@@ -130,11 +129,7 @@ public class ImageClientUpload {
         imageObj.setIp(ip);
         imageObj.setUa(request.getHeader("user-agent"));
         String fileName = "";
-        if (imageFile.getOriginalFilename().contains(".")) {
-            fileName = ShortUrl.shortText(new Date().getTime() + imageFile.getOriginalFilename(), 8)[0];
-        } else {
-            fileName = ShortUrl.shortText(new Date().getTime() + imageFile.getOriginalFilename(), 8)[0].toLowerCase();
-        }
+        fileName = getFileName(imageFile);
 
         File file = saveImage(imageFile, fileName);
         String ref = null;
@@ -154,6 +149,8 @@ public class ImageClientUpload {
 
         imageObj.setGeneratedName(file.getName());
         imageObj.setRedirectCode(file.getName());
+        imageObj.setGeneratedCode(file.getName().contains(".") ? file.getName().substring(0,
+            file.getName().indexOf(".")) : file.getName());
 
         imageObj.setInternalPath(imageObj.getStorageBucket().getInternalUrl() + "/" + file.getName());
 
@@ -165,6 +162,24 @@ public class ImageClientUpload {
                 + imageObj.getPath());
         }
         return imageObj;
+    }
+
+    private String getFileName(MultipartFile imageFile) {
+        String str = null;
+
+        try {
+            String[] urls = ShortUrl.shortText(new Date().getTime() + imageFile.getOriginalFilename(), 6);
+            for (String url : urls) {
+                if (!uic.checkExists(url)) {
+                    return url;
+                }
+            }
+
+            str = MD5Util.hash(String.valueOf(System.nanoTime()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return str;
     }
 
     @ResponseBody

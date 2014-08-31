@@ -34,8 +34,7 @@ public class UploadedImageService {
     public void delete(int id) {
         UploadedImage image = this.findById(id);
         StorageBucket sb = image.getStorageBucket();
-        StorageUploader.newInstance(sb).delete(
-                image.getPath().substring(image.getPath().lastIndexOf("/") + 1));
+        StorageUploader.newInstance(sb).delete(image.getPath().substring(image.getPath().lastIndexOf("/") + 1));
         System.out.println(image.getPath().substring(image.getPath().indexOf("/") + 1));
         image.setDelFlag(true);
     }
@@ -75,14 +74,13 @@ public class UploadedImageService {
         return this.listByUId(u_id, firstPosition, maxResults);
     }
 
-    public List<UploadedImage> listByUIdAndFileName(int u_id, String fileName, int firstPosition,
-            Integer tag) {
+    public List<UploadedImage> listByUIdAndFileName(int u_id, String fileName, int firstPosition, Integer tag) {
         System.out.println(tag);
         return this.listByUIdAndFileName(u_id, fileName, firstPosition, maxResults, tag);
     }
 
-    public List<UploadedImage> listByUIdAndFileName(int u_id, String fileName, int firstPosition,
-            int maxResults, Integer tag) {
+    public List<UploadedImage> listByUIdAndFileName(int u_id, String fileName, int firstPosition, int maxResults,
+        Integer tag) {
         if (tag == 0 || tag == null) {
             return ud.listByUIdAndFileName(u_id, fileName, firstPosition, maxResults);
         } else {
@@ -111,6 +109,15 @@ public class UploadedImageService {
             return ud.countByUIdAndFileName(u_id, fileName);
         } else {
             return ud.countByUIdAndFileName(u_id, fileName, tag);
+        }
+    }
+
+    public boolean checkExists(String code) {
+        List<UploadedImage> result = ud.checkExists(code);
+        if (result.isEmpty()) {
+            return false;
+        } else {
+            return true;
         }
     }
 

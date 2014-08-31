@@ -20,13 +20,12 @@ import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-
 @Entity
 @Table(name = "uploaded_image")
 @NamedQueries(value = {
-        @NamedQuery(name = "UploadedImage.listByUId", query = "SELECT u FROM UploadedImage u  WHERE u.user.id=:u_id and u.delFlag=false order by u.date desc"),
-        @NamedQuery(name = "UploadedImage.listByUIdAndFileName", query = "SELECT u FROM UploadedImage u  WHERE u.originName like :file_name and u.user.id=:u_id and u.delFlag=false order by u.date desc"),
-        @NamedQuery(name = "UploadedImage.listByUIdAndFileNameAndTag", query = "SELECT u FROM UploadedImage u  WHERE u.originName like :file_name and u.user.id=:u_id and u.delFlag=false and u.tag.id=:tag_id order by u.date desc") })
+    @NamedQuery(name = "UploadedImage.listByUId", query = "SELECT u FROM UploadedImage u  WHERE u.user.id=:u_id and u.delFlag=false order by u.date desc"),
+    @NamedQuery(name = "UploadedImage.listByUIdAndFileName", query = "SELECT u FROM UploadedImage u  WHERE u.originName like :file_name and u.user.id=:u_id and u.delFlag=false order by u.date desc"),
+    @NamedQuery(name = "UploadedImage.listByUIdAndFileNameAndTag", query = "SELECT u FROM UploadedImage u  WHERE u.originName like :file_name and u.user.id=:u_id and u.delFlag=false and u.tag.id=:tag_id order by u.date desc") })
 public class UploadedImage implements Serializable {
 
     private static final long serialVersionUID = 1398371509051853854L;
@@ -44,6 +43,17 @@ public class UploadedImage implements Serializable {
 
     private String ip;
     private String ua;
+
+    @Column(name = "generated_code")
+    private String generatedCode;
+
+    public String getGeneratedCode() {
+        return generatedCode;
+    }
+
+    public void setGeneratedCode(String generatedCode) {
+        this.generatedCode = generatedCode;
+    }
 
     @ManyToOne
     @JoinColumn(name = "tag_id")
