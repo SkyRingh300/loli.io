@@ -1,25 +1,20 @@
 .info {
-    width: 70%;
-    margin: auto;
+	width: 70%;
+	margin: auto;
 }
 
 .footer {
-    color: rgb(153, 153, 153);
-    text-align: center;
-    padding: 30px 0;
-    border-top: 1px solid rgb(229, 229, 229);
-    background-color: rgb(245, 245, 245);
+	color: rgb(153, 153, 153);
+	text-align: center;
+	padding: 30px 0;
+	margin-top: 50px;
+	border-top: 1px solid rgb(229, 229, 229);
+	background-color: rgb(245, 245, 245);
 }
 
 body {
-    font-family: Verdana, Geneva, "Microsoft YaHei", sans-serif;
+	font-family: Verdana, Geneva, "Microsoft YaHei", sans-serif;
 }
-
-html, body {
-    margin: 0px;
-    height: 100%;
-}
-
 
 #message {
     width: 55%;
