@@ -54,7 +54,7 @@ public class ImageClientUpload {
     @Named("fileFetchService")
     private FileFetchService ffs;
 
-    private Logger LOGGER = Logger.getLogger(ImageClientUpload.class);
+    private Logger logger = Logger.getLogger(ImageClientUpload.class);
 
     private static final String LOCAL_HOST = "127.0.0.1";
 
@@ -72,7 +72,7 @@ public class ImageClientUpload {
             if (ct != null) {
                 // 当已有该email的token时，把token返回
                 token = ct.getToken();
-                LOGGER.info(email + "已有token，将已经存在的token返回");
+                logger.info(email + "已有token，将已经存在的token返回");
             } else {
                 // 当没有该email的token时，新建一个token保存至数据库，然后返回
                 ct = new ClientToken();
@@ -81,12 +81,12 @@ public class ImageClientUpload {
                 try {
                     token = MD5Util.hash(word);
                 } catch (NoSuchAlgorithmException e) {
-                    LOGGER.error(e);
+                    logger.error(e);
                 }
                 ct.setToken(token);
                 ct.setUser(trueUser);
                 cts.save(ct);
-                LOGGER.info(email + "生成新token");
+                logger.info(email + "生成新token");
             }
             return ct;
         }
@@ -106,7 +106,6 @@ public class ImageClientUpload {
             @RequestParam(value = "desc", required = false) String desc,
             @RequestParam(value = "image", required = true) MultipartFile imageFile,
             HttpServletRequest request) {
-
         UploadedImage imageObj = new UploadedImage();
         imageObj.setDate(new Date());
 
@@ -114,7 +113,7 @@ public class ImageClientUpload {
             imageObj.setDesc(imageFile.getOriginalFilename());
         } else {
             if (!cts.checkTokenBelongToUser(token, email)) {
-                LOGGER.info(email + "使用错误的token上传");
+                logger.info(email + "使用错误的token上传");
                 return new UploadedImage();
             } else {
                 imageObj.setUser(userService.findByEmail(email));
@@ -132,12 +131,7 @@ public class ImageClientUpload {
         imageObj.setIp(ip);
         imageObj.setUa(request.getHeader("user-agent"));
         String fileName = "";
-        if (imageFile.getOriginalFilename().contains(".")) {
-            fileName = ShortUrl.shortText(new Date().getTime() + imageFile.getOriginalFilename())[0];
-        } else {
-            fileName = ShortUrl.shortText(new Date().getTime() + imageFile.getOriginalFilename())[0]
-                    .toLowerCase();
-        }
+        fileName = getFileName(imageFile);
 
         File file = saveImage(imageFile, fileName);
         String ref = null;
@@ -156,18 +150,40 @@ public class ImageClientUpload {
         imageObj.setOriginName(imageFile.getOriginalFilename());
 
         imageObj.setGeneratedName(file.getName());
+        imageObj.setRedirectCode(file.getName());
+        imageObj.setGeneratedCode(file.getName().contains(".") ? file.getName().substring(0,
+                file.getName().indexOf(".")) : file.getName());
+
         imageObj.setInternalPath(imageObj.getStorageBucket().getInternalUrl() + "/"
                 + file.getName());
-        imageObj.setRedirectCode(file.getName());
 
         uic.save(imageObj);
         if (imageObj.getUser() == null) {
-            LOGGER.info("匿名上传文件:" + imageObj.getOriginName() + ", 链接为" + imageObj.getPath());
+            logger.info("匿名上传文件:" + imageObj.getOriginName() + ", 链接为" + imageObj.getPath());
         } else {
-            LOGGER.info(imageObj.getUser().getEmail() + "上传文件:" + imageObj.getOriginName()
+            logger.info(imageObj.getUser().getEmail() + "上传文件:" + imageObj.getOriginName()
                     + ", 链接为" + imageObj.getPath());
         }
         return imageObj;
+    }
+
+    private String getFileName(MultipartFile imageFile) {
+        String str = null;
+
+        try {
+            String[] urls = ShortUrl.shortText(new Date().getTime()
+                    + imageFile.getOriginalFilename());
+            for (String url : urls) {
+                if (!uic.checkExists(url)) {
+                    return url;
+                }
+            }
+
+            str = MD5Util.hash(String.valueOf(System.nanoTime()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return str;
     }
 
     @ResponseBody
@@ -208,9 +224,9 @@ public class ImageClientUpload {
         imageObj.setOriginName(imageFile.getName());
         uic.save(imageObj);
         if (imageObj.getUser() == null) {
-            LOGGER.info("匿名上传文件:" + imageObj.getOriginName() + ", 链接为" + imageObj.getPath());
+            logger.info("匿名上传文件:" + imageObj.getOriginName() + ", 链接为" + imageObj.getPath());
         } else {
-            LOGGER.info(imageObj.getUser().getEmail() + "上传文件:" + imageObj.getOriginName()
+            logger.info(imageObj.getUser().getEmail() + "上传文件:" + imageObj.getOriginName()
                     + ", 链接为" + imageObj.getPath());
         }
         return imageObj;
@@ -239,7 +255,7 @@ public class ImageClientUpload {
         try {
             FileUtils.writeByteArrayToFile(file, image.getBytes());
         } catch (IOException e) {
-            LOGGER.error(e);
+            logger.error(e);
         }
         return file;
     }

@@ -78,4 +78,9 @@ public class UploadedImageDao {
                 .setParameter("u_id", u_id).setParameter("file_name", "%" + fileName + "%")
                 .setParameter("tag_id", tag).getResultList().size();
     }
+
+    public List<UploadedImage> checkExists(String code) {
+        return em.createQuery("from UploadedImage where generated_code=:code", UploadedImage.class)
+                .setParameter("code", code).getResultList();
+    }
 }

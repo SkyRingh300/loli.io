@@ -114,4 +114,13 @@ public class UploadedImageService {
         }
     }
 
+    public boolean checkExists(String code) {
+        List<UploadedImage> result = ud.checkExists(code);
+        if (result.isEmpty()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 }

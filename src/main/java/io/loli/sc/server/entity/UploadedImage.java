@@ -41,6 +41,9 @@ public class UploadedImage implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
+    @Column(name = "generated_code")
+    private String generatedCode;
+
     private String ip;
     private String ua;
 
@@ -202,5 +205,13 @@ public class UploadedImage implements Serializable {
 
     public void setTag(Tag tag) {
         this.tag = tag;
+    }
+
+    public String getGeneratedCode() {
+        return generatedCode;
+    }
+
+    public void setGeneratedCode(String generatedCode) {
+        this.generatedCode = generatedCode;
     }
 }
