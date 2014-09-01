@@ -33,6 +33,12 @@ public class FileEntity implements Serializable {
     @Column(name = "file_name")
     private String originName;
 
+    @Column(name = "sharing_status")
+    private String sharingStatus;
+
+    public static final String SHARING = "sharing";
+    public static final String PRIVATE = "private";
+
     @Column(name = "new_name")
     private String newName;
 
@@ -153,5 +159,17 @@ public class FileEntity implements Serializable {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public String getSharingStatus() {
+        return sharingStatus;
+    }
+
+    public void setSharingStatus(String sharingStatus) {
+        this.sharingStatus = sharingStatus;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
     }
 }
