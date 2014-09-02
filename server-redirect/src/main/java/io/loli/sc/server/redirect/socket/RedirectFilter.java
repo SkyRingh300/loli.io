@@ -69,9 +69,9 @@ public class RedirectFilter implements RequestAuthFilter {
                     if (url.endsWith("png"))
                         response.setContentType(ContentType.newContentType("image/png"));
                     if (url.endsWith("jpg"))
-                        response.setContentType(ContentType.newContentType("image/jpg"));
+                        response.setContentType(ContentType.newContentType("image/jpeg"));
                     if (url.endsWith("jpeg"))
-                        response.setContentType(ContentType.newContentType("image/jpg"));
+                        response.setContentType(ContentType.newContentType("image/jpeg"));
                     if (url.endsWith("bmp"))
                         response.setContentType(ContentType.newContentType("image/bmp"));
                     if (url.endsWith("gif"))
