@@ -30,6 +30,9 @@
 }
 
 .file-label {
+}
+
+.file-label, .file-checkbox {
     float: left;
 }
 
@@ -44,11 +47,11 @@
 }
 
 .mouse-on-tr .file-buttons {
-    display: inline !important;
+    display: flex !important;
 }
 
-.file-buttons button{
-    margin-right:5px;
+.file-buttons button {
+    margin-right: 5px;
 }
 
 .left-menu>li.active>a, .left-menu>li.active>a:hover, .left-menu>li.active>a:focus {
@@ -254,6 +257,7 @@
         } else {
             $(".filelist").load("${pageContext.request.contextPath}/pan/file/list?pid=" + id);
         }
+
     }
 
     function updateSelected() {

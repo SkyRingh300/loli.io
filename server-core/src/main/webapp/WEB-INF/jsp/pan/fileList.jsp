@@ -16,7 +16,7 @@
   <thead>
     <tr>
       <th><input type="checkbox" class="file-checkbox-all">
-      <div class="list-title">
+        <div class="list-title">
           <span class="non-selected">文件名</span><span class="selected">选择了<span class="selected-count">0</span>个文件/文件夹
           </span>
         </div></th>
@@ -36,20 +36,25 @@
 
     <c:forEach items="${requestScope.folderList}" var="folder">
       <tr class="folder-tr data-tr">
-        <td><input type="checkbox" class="file-checkbox"><i class="glyphicon glyphicon-folder-close icon"></i><a
-          href="javascript:void(0)" onclick="loadFolder(${folder.id})">${folder.name}</a></td>
+        <td><input type="checkbox" class="file-checkbox">
+          <div class="file-label">
+            <i class="glyphicon glyphicon-folder-close icon"></i><a href="javascript:void(0)" class="folder-a"
+              onclick="loadFolder(${folder.id});">${folder.name}</a>
+          </div></td>
         <td>-</td>
         <td><fmt:formatDate value="${folder.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
       </tr>
     </c:forEach>
     <c:forEach items="${requestScope.fileList}" var="file">
-      <tr class="file-tr data-tr">
-        <td>
+      <tr class="file-tr data-tr"">
+        <td><input type="checkbox" class="file-checkbox">
           <div class="file-label">
-          <input type="checkbox" class="file-checkbox"><i class="glyphicon glyphicon-cloud icon"></i><a
-          href="javascript:void(0)">${file.originName}</a></div>
-          <div class="file-buttons"><button type="button" class="btn btn-xs">下载</button><button type="button" class="btn btn-xs">分享</button></div>
-          </td>
+            <i class="glyphicon glyphicon-cloud icon"></i><a href="javascript:void(0)">${file.originName}</a>
+          </div>
+          <div class="file-buttons">
+            <button type="button" class="btn btn-xs">下载</button>
+            <button type="button" class="btn btn-xs">分享</button>
+          </div></td>
         <td>${file.size}</td>
         <td><fmt:formatDate value="${file.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
       </tr>
@@ -87,7 +92,6 @@ $(".file-checkbox-all").click(function(){
         
         
     }else{
-
         $(".file-checkbox").each(function(){
             $(this).removeAttr("checked");
         });
@@ -102,7 +106,6 @@ $(".file-checkbox-all").click(function(){
         
     }
     updateSelected();
-    
 });
 
 
@@ -123,29 +126,30 @@ canList = true;
 $(".data-tr").unbind("mouseenter");
 $(".data-tr").unbind("mouseleave");
 
-$(".data-tr").mouseenter(function(){
-    $(this).addClass("mouse-on-tr");
-});
 
 $(".data-tr").mouseleave(function(){
     $(this).removeClass("mouse-on-tr");
 });
 
+$(".data-tr").unbind("click");
 $(".file-checkbox").unbind("click");
-$(".file-checkbox").click(function(){
+$(".file-checkbox").click(function(e){
     if(this.checked){
         $(this).parent().parent().addClass("tr-selected");
-        updateSelected();
-        
-        
+        updateSelected();        
     } else {
         $(".file-checkbox-all").removeAttr("checked");
         $(this).parent().parent().removeClass("tr-selected");
         updateSelected();
         
     }
+    e.stopPropagation();
 });
+$(".data-tr").unbind("click");
 
+$(".data-tr").click(function(){
+    $(this).find("td").eq(0).find("input[type=checkbox]").click();
+});
 
 
 </script>
