@@ -25,9 +25,30 @@
     top: 0;
 }
 
+.file-label, .file-buttons {
+    display: inline;
+}
+
+.file-label {
+    float: left;
+}
+
+.file-buttons {
+    float: right;
+    display: none;
+}
+
 .left-menu {
     padding-top: 10px;
     height: 100%;
+}
+
+.mouse-on-tr .file-buttons {
+    display: inline !important;
+}
+
+.file-buttons button{
+    margin-right:5px;
 }
 
 .left-menu>li.active>a, .left-menu>li.active>a:hover, .left-menu>li.active>a:focus {

@@ -35,7 +35,7 @@
     </c:if>
 
     <c:forEach items="${requestScope.folderList}" var="folder">
-      <tr class="folder-tr">
+      <tr class="folder-tr data-tr">
         <td><input type="checkbox" class="file-checkbox"><i class="glyphicon glyphicon-folder-close icon"></i><a
           href="javascript:void(0)" onclick="loadFolder(${folder.id})">${folder.name}</a></td>
         <td>-</td>
@@ -43,9 +43,13 @@
       </tr>
     </c:forEach>
     <c:forEach items="${requestScope.fileList}" var="file">
-      <tr class="file-tr">
-        <td><input type="checkbox" class="file-checkbox"><i class="glyphicon glyphicon-cloud icon"></i><a
-          href="javascript:void(0)">${file.originName}</a></td>
+      <tr class="file-tr data-tr">
+        <td>
+          <div class="file-label">
+          <input type="checkbox" class="file-checkbox"><i class="glyphicon glyphicon-cloud icon"></i><a
+          href="javascript:void(0)">${file.originName}</a></div>
+          <div class="file-buttons"><button type="button" class="btn btn-xs">下载</button><button type="button" class="btn btn-xs">分享</button></div>
+          </td>
         <td>${file.size}</td>
         <td><fmt:formatDate value="${file.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
       </tr>
@@ -116,6 +120,16 @@ pageCount = pageCount + ${fn:length(requestScope.folderList)};
 fileCount = fileCount + ${fn:length(requestScope.fileList)};
 </c:if>
 canList = true;
+$(".data-tr").unbind("mouseenter");
+$(".data-tr").unbind("mouseleave");
+
+$(".data-tr").mouseenter(function(){
+    $(this).addClass("mouse-on-tr");
+});
+
+$(".data-tr").mouseleave(function(){
+    $(this).removeClass("mouse-on-tr");
+});
 
 $(".file-checkbox").unbind("click");
 $(".file-checkbox").click(function(){
