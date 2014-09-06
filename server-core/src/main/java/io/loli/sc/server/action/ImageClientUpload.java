@@ -16,6 +16,10 @@ import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -185,8 +189,17 @@ public class ImageClientUpload {
     @ResponseBody
     @RequestMapping(value = { "/fetch" }, method = { RequestMethod.POST })
     public UploadedImage fetch(String path, HttpServletRequest request) {
-        File imageFile = ffs.fetch(path);
-        if (imageFile == null) {
+        File file = null;
+        FutureTask<File> task = new FutureTask<>(() -> ffs.fetch(path));
+        new Thread(task).run();
+        try {
+            file = task.get(20, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            e.printStackTrace();
+            logger.error("Fetch image timeout:" + e);
+        }
+
+        if (file == null) {
             return new UploadedImage();
         }
         User user = null;
@@ -212,11 +225,16 @@ public class ImageClientUpload {
         }
 
         StorageUploader uploader = StorageUploader.newInstance(imageObj.getStorageBucket());
-        imageObj.setGeneratedName(imageFile.getName());
+        imageObj.setPath(uploader.upload(file));
+        imageObj.setOriginName(file.getName());
 
-        imageObj.setPath(uploader.upload(imageFile));
-        imageObj.setInternalPath(imageObj.getStorageBucket().getInternalUrl() + "/" + imageFile.getName());
-        imageObj.setOriginName(imageFile.getName());
+        imageObj.setGeneratedName(file.getName());
+        imageObj.setRedirectCode(file.getName());
+        imageObj.setGeneratedCode(file.getName().contains(".") ? file.getName().substring(0,
+            file.getName().indexOf(".")) : file.getName());
+
+        imageObj.setInternalPath(imageObj.getStorageBucket().getInternalUrl() + "/" + file.getName());
+
         uic.save(imageObj);
         if (imageObj.getUser() == null) {
             logger.info("匿名上传文件:" + imageObj.getOriginName() + ", 链接为" + imageObj.getPath());

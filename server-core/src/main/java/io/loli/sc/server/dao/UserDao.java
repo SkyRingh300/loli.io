@@ -5,7 +5,6 @@ import io.loli.sc.server.entity.User;
 import java.util.List;
 
 import javax.inject.Named;
-import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 

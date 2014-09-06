@@ -15,9 +15,11 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.log4j.Logger;
 
 @Named
 public class FileFetchService {
+    private static final Logger logger = Logger.getLogger(FileFetchService.class);
     private static CloseableHttpClient httpclient = HttpClients.createDefault();
 
     public File fetch(String path) {
@@ -29,7 +31,7 @@ public class FileFetchService {
             StatusLine statusLine = response.getStatusLine();
             if (statusLine.getStatusCode() == 200) {
                 file = new File(System.getProperty("java.io.tmpdir") + File.separator
-                    + ShortUrl.shortText(new Date().getTime() + path, 8));
+                    + ShortUrl.shortText(new Date().getTime() + path) + System.nanoTime());
                 FileOutputStream outputStream = new FileOutputStream(file);
 
                 InputStream inputStream = response.getEntity().getContent();
@@ -45,6 +47,7 @@ public class FileFetchService {
 
         } catch (IOException e) {
             e.printStackTrace();
+            logger.error(e);
         }
         return file;
     }
