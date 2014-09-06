@@ -65,7 +65,7 @@ public class ByteCache implements Cache {
     public byte[] saveFile(String path) {
         byte[] bytes = null;
         try {
-            InputStream is = get(path);
+            InputStream is = get(path).getValue();
             bytes = inputStreamToByte(is);
             logger.info("将" + path + "写入缓存");
             dataMap.put(path, bytes);

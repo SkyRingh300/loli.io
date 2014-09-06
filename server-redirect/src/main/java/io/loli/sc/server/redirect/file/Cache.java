@@ -1,5 +1,7 @@
 package io.loli.sc.server.redirect.file;
 
+import io.loli.sc.server.server.redirect.bean.Pair;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,7 +42,7 @@ public interface Cache {
      * @return 此url的输入流
      * @throws IOException 当IO出现问题时抛出异常
      */
-    default public InputStream get(String urlString) throws IOException {
+    default public Pair<Long, InputStream> get(String urlString) throws IOException {
         if (urlString.equalsIgnoreCase("")) {
             return null;
         } else if (urlString.toLowerCase().startsWith("http://")) {
@@ -55,7 +57,7 @@ public interface Cache {
         httpConnection.setDoInput(true);
         int code = httpConnection.getResponseCode();
         if (code == HttpURLConnection.HTTP_OK) {
-            return httpConnection.getInputStream();
+            return new Pair<Long, InputStream>(httpConnection.getContentLengthLong(), httpConnection.getInputStream());
         } else {
             return null;
         }

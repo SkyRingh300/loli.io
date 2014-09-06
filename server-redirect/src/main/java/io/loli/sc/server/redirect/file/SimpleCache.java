@@ -88,7 +88,7 @@ public class SimpleCache implements Cache {
         String fileName = path.substring(path.lastIndexOf("/") + 1);
         Path filePath = root.resolve(fileName);
         byte[] bytes = null;
-        try (InputStream is = get(path);) {
+        try (InputStream is = get(path).getValue();) {
             bytes = inputStreamToByte(is);
             Files.write(filePath, bytes);
             logger.info("将" + path + "写入缓存");
@@ -180,23 +180,19 @@ public class SimpleCache implements Cache {
      */
     private void refreshCache() throws IOException {
         // 获取根目录下的所有文件
-        DirectoryStream<Path> stream = Files.newDirectoryStream(root,
-                entry -> !Files.isDirectory(entry));
+        DirectoryStream<Path> stream = Files.newDirectoryStream(root, entry -> !Files.isDirectory(entry));
         List<Path> pathList = Lists.newArrayList(stream);
         // 对这些文件根据最后修改时间排序
-        Collections.sort(
-                pathList,
-                (path1, path2) -> {
-                    int result = 0;
-                    try {
-                        result = Files.getLastModifiedTime(path1).compareTo(
-                                Files.getLastModifiedTime(path2));
-                    } catch (Exception e) {
-                        logger.error(e);
-                        result = 0;
-                    }
-                    return result;
-                });
+        Collections.sort(pathList, (path1, path2) -> {
+            int result = 0;
+            try {
+                result = Files.getLastModifiedTime(path1).compareTo(Files.getLastModifiedTime(path2));
+            } catch (Exception e) {
+                logger.error(e);
+                result = 0;
+            }
+            return result;
+        });
         logger.info("当前缓存文件数:" + pathList.size());
         // 当文件数大于10时，删除最早的文件
         if (pathList.size() > maxNum) {

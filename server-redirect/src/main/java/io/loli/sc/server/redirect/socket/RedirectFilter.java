@@ -5,6 +5,7 @@ import io.loli.sc.server.redirect.dao.ImageDao;
 import io.loli.sc.server.redirect.dao.LogDao;
 import io.loli.sc.server.redirect.file.ByteCache;
 import io.loli.sc.server.redirect.file.Cache;
+import io.loli.sc.server.server.redirect.bean.Pair;
 import io.loli.storage.redirect.RedirectHandler;
 import io.loli.storage.redirect.RequestAuthFilter;
 
@@ -59,11 +60,15 @@ public class RedirectFilter implements RequestAuthFilter {
                 InputStream input = null;
 
                 try (OutputStream output = response.getOutputStream();) {
+                    long total = 0;
                     if (Config.useCache) {
                         byte[] bytes = cache.getBytes(url);
+                        total = bytes.length;
                         input = new BufferedInputStream(new ByteArrayInputStream(bytes));
                     } else {
-                        input = cache.get(url);
+                        Pair<Long, InputStream> pair = cache.get(url);
+                        input = pair.getValue();
+                        total = pair.getKey();
                     }
 
                     if (url.endsWith("png"))
@@ -77,6 +82,9 @@ public class RedirectFilter implements RequestAuthFilter {
                     if (url.endsWith("gif"))
                         response.setContentType(ContentType.newContentType("image/gif"));
                     response.setHeader("Cache-Control", "max-age=15552000");
+                    if (total != 0) {
+                        response.setContentLengthLong(total);
+                    }
                     byte[] buffer = new byte[2048];
                     for (int length = 0; (length = input.read(buffer)) > 0;) {
                         output.write(buffer, 0, length);

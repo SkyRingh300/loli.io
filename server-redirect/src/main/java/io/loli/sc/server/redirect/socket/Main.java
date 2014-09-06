@@ -4,7 +4,6 @@ import io.loli.sc.server.redirect.config.Config;
 import io.loli.storage.redirect.RedirectServer;
 
 import java.io.IOException;
-import java.util.Scanner;
 
 public class Main {
     private static RedirectServer server;
