@@ -21,3 +21,10 @@ body {
     padding: 0 30 0 10;
     margin: 0px auto 20px;
 }
+
+
+html {
+    background-image: radial-gradient(center, rgb(245, 245, 245), rgb(245, 245, 245)) !important;
+    background-image: radial-gradient(at center center, rgb(245, 245, 245), rgb(245, 245, 245)) !important;
+    background-color: rgb(245, 245, 245) !important;
+}
