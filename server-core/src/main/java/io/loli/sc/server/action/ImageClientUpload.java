@@ -266,6 +266,7 @@ public class ImageClientUpload {
         try {
             FileUtils.writeByteArrayToFile(file, image.getBytes());
         } catch (IOException e) {
+            e.printStackTrace();
             logger.error(e);
         }
         return file;
