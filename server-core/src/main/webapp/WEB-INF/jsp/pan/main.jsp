@@ -30,6 +30,7 @@
 }
 
 .file-label {
+    
 }
 
 .file-label, .file-checkbox {
@@ -160,6 +161,95 @@
 .list-title .selected {
     display: none;
 }
+
+#uploader {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 600px;
+    height: 400px;
+    left: auto;
+    top: auto;
+    background: none repeat scroll 0% 0% #FFF;
+    box-shadow: 0px 0px 20px -2px rgba(0, 0, 0, 0.5);
+    border: 0px none;
+    top: auto;
+}
+
+#uploader-header {
+    display: inline;
+    height: auto;
+    overflow: auto;
+    zoom: 1;
+    z-index: 100;
+}
+
+#uploader-header-title {
+    padding: 5px;
+    margin: 5px;
+    display: block;
+    z-index: 100;
+    left: 0px;
+}
+
+#uploader-header-control {
+    padding: 5px;
+    margin: 5px;
+    display: block;
+    right: 0px;
+    left: auto;
+    position: absolute;
+    top: 0;
+    z-index: 100;
+}
+
+#uploader-content {
+    height: 100%;
+    top: 0px;
+    position: absolute;
+    margin-top: 0px;
+    padding-top: 35px;
+    width: 100%;
+    z-index: 99;
+}
+
+#uploader-content table {
+    overflow: scroll;
+}
+
+#uploader-header-control span {
+    margin-left: 10px;
+}
+
+.upload-filelist-name div {
+    width: 240px;
+    overflow: hidden;
+}
+
+.upload-filelist-size div {
+    width: 90px;
+}
+
+.upload-filelist-folder div {
+    width: 80px;
+}
+
+.upload-filelist-progress div {
+    width: 55px;
+}
+
+.upload-filelist-button div {
+    width: 75px;
+}
+
+.uploader-min #uploader-content {
+    display: none !important;
+}
+
+.uploader-min {
+    height: auto !important;
+}
 </style>
 <script>
     var pageCount = 0;
@@ -187,20 +277,59 @@
 
                 bindUploadFile();
                 bindFileListScroll();
+                bindUploaderClick();
             });
     var canList = true;
     function bindFileListScroll() {
         var $win = $(".filelist");
         $win.scroll(function() {
-            //console.log($win.height() + $win.scrollTop() + "|"
-            //    + ($(".file-list-table").height() + $(".controller").height()));
+            console.log(canList
+                && $win.height() + $win.scrollTop() > $(".file-list-table").height() + $(".controller").height());
             if (canList
                 && $win.height() + $win.scrollTop() > $(".file-list-table").height() + $(".controller").height()) {
                 canList = false;
                 // TODO, ajax，如果返回有值，canList = true，否则=false
                 var folderId = $("#folderId").val();
-                loadFolder(folderId);
+                console.log(pageCount);
+                loadFolder(folderId, pageCount);
             }
+        });
+    }
+
+    function formatFileSize(bytes) {
+        if (typeof bytes !== 'number') {
+            return '';
+        }
+
+        if (bytes >= 1000000000) {
+            return (bytes / 1000000000).toFixed(1) + ' GB';
+        }
+
+        if (bytes >= 1000000) {
+            return (bytes / 1000000).toFixed(1) + ' MB';
+        }
+
+        return (bytes / 1000).toFixed(1) + ' KB';
+    }
+
+    function bindUploaderClick() {
+        $("#uploader-header-max").hide();
+        $(".uploader-header-min").click(function() {
+            //$("#uploader-content").hide();
+            $("#uploader").addClass("uploader-min");
+            $(this).hide();
+            $(".uploader-header-max").show();
+        });
+
+        $(".uploader-header-max").click(function() {
+            //$("#uploader-content").show();
+            $("#uploader").removeClass("uploader-min");
+            $(this).hide();
+            $(".uploader-header-min").show();
+        });
+
+        $(".uploader-header-close").click(function() {
+            $("#uploader").hide();
         });
     }
 
@@ -209,24 +338,50 @@
         $(".btn-upload-file").click(function() {
             $(".upload-form").find('input').click();
         });
-        $('#drop-area').fileupload({
-            add : function(e, data) {
-                var jqXHR = data.submit();
-            },
+        $('#drop-area').fileupload(
+            {
+                add : function(e, data) {
+                    $("#uploader").show();
+                    var filename = data.files[0].name;
+                    var filesize = formatFileSize(data.files[0].size);
+                    var progress = "0%";
+                    var folderName = $("#full-foldername").text();
+                    var tpl = $('<tr><div><td class="upload-filelist-name"><div>' + filename
+                        + '</div></td><td class="upload-filelist-size"><div>' + filesize
+                        + '<div></td><td class="upload-filelist-folder"><div>' + folderName
+                        + '</div></td><td class="upload-filelist-progress"><div>' + progress
+                        + '</div></td><td class="upload-filelist-button"><div><a href="#">取消</a></div></td></tr>');
+                    data.context = tpl.appendTo($("#uploader-content table tbody"));
+                    data.context.find("td").eq(4).find("a").eq(0).click(function() {
+                        jqXHR.abort();
+                        var progress = "已取消";
+                        data.context.find("td").eq(3).text(progress);
+                        data.context.find("td").eq(4).find("a").eq(0).hide();
+                    });
+                    var jqXHR = data.submit();
 
-            progress : function(e, data) {
+                },
 
-            },
+                progress : function(e, data) {
+                    var progress = parseInt(data.loaded / data.total * 100, 10);
+                    if (progress == 100) {
+                        data.context.find("td").eq(4).html("请等待");
+                    }
+                    progress += "%";
+                    data.context.find("td").eq(3).text(progress);
+                },
 
-            fail : function(e, data) {
+                fail : function(e, data) {
+                    data.context.find("td").eq(4).html("上传失败");
+                },
+                done : function(e, data) {
+                    var folderId = $("#folderId").val();
+                    var progress = "完成";
+                    data.context.find("td").eq(4).html(progress);
+                    loadFolder(folderId);
+                }
 
-            },
-            done : function(e, data) {
-                var folderId = $("#folderId").val();
-                loadFolder(folderId);
-            }
-
-        });
+            });
     }
 
     function saveFolder(obj) {

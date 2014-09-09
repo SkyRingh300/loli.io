@@ -5,11 +5,11 @@
   <h4 class="guide-title">
     <span><c:if test="${fn:length(requestScope.parentList) gt 0}">
         <a href="javascript:void(0)" onclick="loadFolder(${requestScope.parent.parent.id})" class="guide-link">返回上一级</a>
-      </c:if></span> 当前路径: <a href="javascript:void(0)" onclick="loadFolder(0)" class="guide-link">全部文件</a>
-    <c:forEach items="${requestScope.parentList}" var="folder">
-      <a href="javascript:void(0)" onclick="loadFolder(${folder.id})" class="guide-link">${folder.name}</a>/</c:forEach>
+      </c:if></span> 当前路径: <a href="javascript:void(0)" onclick="loadFolder(0)" class="guide-link">全部文件</a> <span id="full-foldername">
+      <c:forEach items="${requestScope.parentList}" var="folder">
+        <a href="javascript:void(0)" onclick="loadFolder(${folder.id})" class="guide-link">${folder.name}</a>/</c:forEach>
+    </span>
   </h4>
-</c:if>
 
 
 <table class="table table-hover file-list-table" tid="${requestScope.parent.id}">
@@ -25,6 +25,7 @@
     </tr>
   </thead>
   <tbody>
+</c:if>
 
     <c:if test="${fn:length(requestScope.folderList)+fn:length(requestScope.fileList) eq 0 && requestScope.begin}">
       <tr>
@@ -39,7 +40,7 @@
         <td><input type="checkbox" class="file-checkbox">
           <div class="file-label">
             <i class="glyphicon glyphicon-folder-close icon"></i><a href="javascript:void(0)" class="folder-a"
-              onclick="loadFolder(${folder.id});">${folder.name}</a>
+              onclick="loadFolder(${folder.id});event.stopPropagation();">${folder.name}</a>
           </div></td>
         <td>-</td>
         <td><fmt:formatDate value="${folder.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
@@ -126,7 +127,9 @@ canList = true;
 $(".data-tr").unbind("mouseenter");
 $(".data-tr").unbind("mouseleave");
 
-
+$(".data-tr").mouseenter(function(){
+    $(this).addClass("mouse-on-tr");
+});
 $(".data-tr").mouseleave(function(){
     $(this).removeClass("mouse-on-tr");
 });

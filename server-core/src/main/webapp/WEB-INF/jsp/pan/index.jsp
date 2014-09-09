@@ -18,6 +18,6 @@
 <body>
   <jsp:include page="head.jsp"></jsp:include>
   <jsp:include page="main.jsp"></jsp:include>
-
+  <jsp:include page="uploader.jsp"></jsp:include>
 </body>
 </html>
