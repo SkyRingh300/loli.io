@@ -36,8 +36,7 @@ sc-server
   cd sc-server
   mvn clean package -Dmaven.test.skip
   ```
-
-到```sc-server/server-core/target```中找到 ```server-core-x.y.z-XXXX.war```
+  到```sc-server/server-core/target```中找到 ```server-core-x.y.z-XXXX.war```
 
 #### 部署运行
   * 将上面的war丢到```TOMCAT_HOME/webapps/```中
