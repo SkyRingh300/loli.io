@@ -20,14 +20,10 @@ sc-server
   ```
   git clone https://github.com/chocotan/sc-server
   ```
-
 * 你需要先创建一个名为sc的数据库
 数据库在```server-core/src/main/resources/db.properties```中设置
-
 * 用户注册时会发送验证邮件，smtp在```server-core/src/main/resources/mail.properties```中设置
-
 * 创建一个阿里云oss的bucket，并记录下相关信息: AccessKeyID, AccessKeyID, UploadUrl(上传地址, 可以绑定域名，也可以使用oss的外网域名，无效但必须写)，InternalUrl(上传地址)，EndPoint(同UploadUrl)，BucketName
-
 * 在```server-core/src/main/resources/message.properties```中将redirectPath修改为UploadUrl，末尾要有"/"，比如我的UploadUrl是```http://test.com/```，那么应该修改为```redirectPath=http://test.com/```
 
 
@@ -45,11 +41,9 @@ sc-server
   ```sql
   INSERT INTO `storage_bucket` VALUES 
   (1,'AccessKeyID','AccessKeyID','BucketName','ali','EndPoint','UploadUrl','1','image','InternalUrl'),;
-  
   ```
   * 启动tomcat
-
   * 如果你的smtp配置不起作用，又想创建一个用户，可以使用如下SQL
   ```sql
-  INSERT INTO `user` VALUES (1,'your@email.com','md5 of your passowrd','2014-04-29 04:20:56');
+  INSERT INTO `user` VALUES (1,'your@email.com','md5 of your password','2014-04-29 04:20:56');
   ```
