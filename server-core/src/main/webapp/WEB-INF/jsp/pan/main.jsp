@@ -250,6 +250,11 @@
 .uploader-min {
     height: auto !important;
 }
+
+.file-buttons a {
+    background-color: rgb(221, 221, 221);
+    margin-right: 5px;
+}
 </style>
 <script>
     var pageCount = 0;

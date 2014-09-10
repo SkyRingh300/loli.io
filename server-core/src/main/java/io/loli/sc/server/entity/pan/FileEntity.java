@@ -4,6 +4,7 @@ import io.loli.sc.server.entity.User;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -47,6 +49,28 @@ public class FileEntity implements Serializable {
 
     @Column(name = "length")
     private Long length;
+
+    @Column(name = "del_flag")
+    private Boolean delFlag = false;
+
+    @OneToMany(mappedBy = "file")
+    private List<LinkEntity> links;
+
+    public List<LinkEntity> getLinks() {
+        return links;
+    }
+
+    public void setLinks(List<LinkEntity> links) {
+        this.links = links;
+    }
+
+    public Boolean getDelFlag() {
+        return delFlag;
+    }
+
+    public void setDelFlag(Boolean delFlag) {
+        this.delFlag = delFlag;
+    }
 
     public Long getLength() {
         return length;

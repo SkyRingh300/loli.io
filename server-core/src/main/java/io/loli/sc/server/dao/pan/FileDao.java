@@ -29,4 +29,14 @@ public class FileDao {
             .setParameter("id", id).executeUpdate();
     }
 
+    public FileEntity findById(Integer fileId) {
+        return em.find(FileEntity.class, fileId);
+    }
+
+    public FileEntity findByMd5(String md5) {
+        return em.createQuery("from FileEntity where md5=:md5 and delFlag=:delFlag", FileEntity.class)
+            .setParameter("md5", md5).setParameter("delFlag", false).getSingleResult();
+
+    }
+
 }

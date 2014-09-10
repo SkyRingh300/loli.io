@@ -29,4 +29,12 @@ public class FileService {
         return fd.updateMd5(id, md5);
     }
 
+    public FileEntity findById(Integer fileId) {
+        return fd.findById(fileId);
+    }
+
+    public FileEntity findByMd5(String md5) {
+        return fd.findByMd5(md5);
+    }
+
 }

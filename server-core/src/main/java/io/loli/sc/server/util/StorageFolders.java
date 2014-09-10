@@ -7,7 +7,9 @@ import io.loli.sc.server.entity.StorageBucket;
 import io.loli.sc.server.service.BucketService;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 
@@ -62,6 +64,18 @@ public class StorageFolders {
             return this.getDayFolder().createSubFile(file.toPath());
         } catch (StorageException | IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @SuppressWarnings("finally")
+    public InputStream getFile(String key) throws FileNotFoundException {
+        InputStream is = null;
+        try {
+            is = this.getRootFolder().getSubFile(key).getStream();
+        } catch (StorageException e) {
+            throw new FileNotFoundException("File not found at root folder with key: " + key);
+        } finally {
+            return is;
         }
     }
 }

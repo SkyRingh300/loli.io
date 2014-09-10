@@ -12,72 +12,72 @@
   </h4>
 
 
-<table class="table table-hover file-list-table" tid="${requestScope.parent.id}">
-  <thead>
-    <tr>
-      <th><input type="checkbox" class="file-checkbox-all">
-        <div class="list-title">
-          <span class="non-selected">文件名</span><span class="selected">选择了<span class="selected-count">0</span>个文件/文件夹
-          </span>
-        </div></th>
-      <th>大小</th>
-      <th>修改时间</th>
-    </tr>
-  </thead>
-  <tbody>
-</c:if>
-
-    <c:if test="${fn:length(requestScope.folderList)+fn:length(requestScope.fileList) eq 0 && requestScope.begin}">
+  <table class="table table-hover file-list-table" tid="${requestScope.parent.id}">
+    <thead>
       <tr>
-        <td>该文件夹木有任何内容</td>
-        <td>-</td>
-        <td>-</td>
+        <th><input type="checkbox" class="file-checkbox-all">
+          <div class="list-title">
+            <span class="non-selected">文件名</span><span class="selected">选择了<span class="selected-count">0</span>个文件/文件夹
+            </span>
+          </div></th>
+        <th>大小</th>
+        <th>修改时间</th>
       </tr>
-    </c:if>
+    </thead>
+    <tbody>
+      </c:if>
 
-    <c:forEach items="${requestScope.folderList}" var="folder">
-      <tr class="folder-tr data-tr">
-        <td><input type="checkbox" class="file-checkbox">
-          <div class="file-label">
-            <i class="glyphicon glyphicon-folder-close icon"></i><a href="javascript:void(0)" class="folder-a"
-              onclick="loadFolder(${folder.id});event.stopPropagation();">${folder.name}</a>
-          </div></td>
-        <td>-</td>
-        <td><fmt:formatDate value="${folder.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
-      </tr>
-    </c:forEach>
-    <c:forEach items="${requestScope.fileList}" var="file">
-      <tr class="file-tr data-tr"">
-        <td><input type="checkbox" class="file-checkbox">
-          <div class="file-label">
-            <i class="glyphicon glyphicon-cloud icon"></i><a href="javascript:void(0)">${file.originName}</a>
-          </div>
-          <div class="file-buttons">
-            <button type="button" class="btn btn-xs">下载</button>
-            <button type="button" class="btn btn-xs">分享</button>
-          </div></td>
-        <td>${file.size}</td>
-        <td><fmt:formatDate value="${file.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
-      </tr>
+      <c:if test="${fn:length(requestScope.folderList)+fn:length(requestScope.fileList) eq 0 && requestScope.begin}">
+        <tr>
+          <td>该文件夹木有任何内容</td>
+          <td>-</td>
+          <td>-</td>
+        </tr>
+      </c:if>
 
-    </c:forEach>
+      <c:forEach items="${requestScope.folderList}" var="folder">
+        <tr class="folder-tr data-tr">
+          <td><input type="checkbox" class="file-checkbox">
+            <div class="file-label">
+              <i class="glyphicon glyphicon-folder-close icon"></i><a href="javascript:void(0)" class="folder-a"
+                onclick="loadFolder(${folder.id});event.stopPropagation();">${folder.name}</a>
+            </div></td>
+          <td>-</td>
+          <td><fmt:formatDate value="${folder.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
+        </tr>
+      </c:forEach>
+      <c:forEach items="${requestScope.fileList}" var="file">
+        <tr class="file-tr data-tr"">
+          <td><input type="checkbox" class="file-checkbox">
+            <div class="file-label">
+              <i class="glyphicon glyphicon-cloud icon"></i><a href="javascript:void(0)">${file.originName}</a>
+            </div>
+            <div class="file-buttons">
+              <a target="_blank" href="#" data="${file.id}" class="btn btn-xs btn-dl">下载</a>
+              <button type="button" class="btn btn-xs btn-sh">分享</button>
+            </div></td>
+          <td>${file.size}</td>
+          <td><fmt:formatDate value="${file.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
+        </tr>
 
-
-    <c:if test="${requestScope.begin}">
-  </tbody>
-</table>
-
-
-<form enctype="multipart/form-data" method="post" action="${pageContext.request.contextPath}/pan/file/upload"
-  class="upload-form">
-  <div id="drop-area">
-    <input type="file" name="file" multiple />
-  </div>
-  <input type="hidden" id="folderId" name="folderId" value="${requestScope.parent.id}">
-</form>
+      </c:forEach>
 
 
-<script>
+      <c:if test="${requestScope.begin}">
+    </tbody>
+  </table>
+
+
+  <form enctype="multipart/form-data" method="post" action="${pageContext.request.contextPath}/pan/file/upload"
+    class="upload-form">
+    <div id="drop-area">
+      <input type="file" name="file" multiple />
+    </div>
+    <input type="hidden" id="folderId" name="folderId" value="${requestScope.parent.id}">
+  </form>
+
+
+  <script>
 //只执行一次的script
 $(".file-checkbox-all").click(function(){
     if(this.checked){
@@ -154,5 +154,21 @@ $(".data-tr").click(function(){
     $(this).find("td").eq(0).find("input[type=checkbox]").click();
 });
 
+$(".btn-dl").unbind("click");
+$(".btn-dl").click(function(event){
+    var a = this;
+    if($(a).attr("href")=="#"){
+        $.ajax({ 
+            url: "${pageContext.request.contextPath}/pan/file/getPermentLinkByFileId", 
+            async: false,
+            data:{fileId:$(a).attr("data")},
+            dataType:'text',
+            success:function(result){
+                $(a).attr("href","${pageContext.request.contextPath}/"+result);
+            }
+        });
+    }
+    event.stopPropagation();
+});
 
 </script>

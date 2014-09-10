@@ -49,4 +49,8 @@ public class LinkService {
         return linkDao.findPermLinkByFileId(file.getId());
 
     }
+
+    public FileEntity findFileByPath(String path) {
+        return linkDao.findfileByPath(path);
+    }
 }
