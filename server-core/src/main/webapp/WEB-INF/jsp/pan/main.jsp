@@ -177,6 +177,16 @@
     top: auto;
 }
 
+#uploader thead {
+    display: block;
+}
+
+#uploader tbody {
+    display: block;
+    overflow: auto;
+    height: 300px;
+}
+
 #uploader-header {
     display: inline;
     height: auto;
@@ -225,6 +235,7 @@
 .upload-filelist-name div {
     width: 240px;
     overflow: hidden;
+    white-space: nowrap;
 }
 
 .upload-filelist-size div {
@@ -318,7 +329,6 @@
     }
 
     function bindUploaderClick() {
-        $("#uploader-header-max").hide();
         $(".uploader-header-min").click(function() {
             //$("#uploader-content").hide();
             $("#uploader").addClass("uploader-min");
@@ -336,6 +346,7 @@
         $(".uploader-header-close").click(function() {
             $("#uploader").hide();
         });
+        $(".uploader-header-max").show();
     }
 
     function bindUploadFile() {
@@ -360,7 +371,6 @@
                     data.context.find("td").eq(4).find("a").eq(0).click(function() {
                         jqXHR.abort();
                         var progress = "已取消";
-                        data.context.find("td").eq(3).text(progress);
                         data.context.find("td").eq(4).find("a").eq(0).hide();
                     });
                     var jqXHR = data.submit();
@@ -370,19 +380,19 @@
                 progress : function(e, data) {
                     var progress = parseInt(data.loaded / data.total * 100, 10);
                     if (progress == 100) {
-                        data.context.find("td").eq(4).html("请等待");
+                        data.context.find("td").eq(4).html("<div>请等待</div>");
                     }
                     progress += "%";
-                    data.context.find("td").eq(3).text(progress);
+                    data.context.find("td").eq(3).html("<div>" + progress + "</div>");
                 },
 
                 fail : function(e, data) {
-                    data.context.find("td").eq(4).html("上传失败");
+                    data.context.find("td").eq(4).html("<div>上传失败</div>");
                 },
                 done : function(e, data) {
                     var folderId = $("#folderId").val();
                     var progress = "完成";
-                    data.context.find("td").eq(4).html(progress);
+                    data.context.find("td").eq(4).html("<div>" + progress + "</div>");
                     loadFolder(folderId);
                 }
 
