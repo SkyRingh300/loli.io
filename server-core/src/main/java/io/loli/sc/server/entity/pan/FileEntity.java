@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Table(name = "storage_file")
 @Entity
-@NamedQueries(value = { @NamedQuery(name = "FileEntity.listByUserIdAndFolderId", query = "SELECT f FROM FileEntity f WHERE f.user.id=:userId and f.folder.id=:folderId") })
+@NamedQueries(value = { @NamedQuery(name = "FileEntity.listByUserIdAndFolderId", query = "SELECT f FROM FileEntity f WHERE f.user.id=:userId and f.folder.id=:folderId and f.delFlag=:delFlag") })
 public class FileEntity implements Serializable {
 
     private static final long serialVersionUID = -2369576302405913467L;

@@ -266,6 +266,12 @@
     background-color: rgb(221, 221, 221);
     margin-right: 5px;
 }
+
+.list-control {
+    float: left;
+    margin-left: 20px;
+    display: none;
+}
 </style>
 <script>
     var pageCount = 0;
@@ -435,11 +441,12 @@
         if (selectedCount == 0) {
             $(".list-title .non-selected").show();
             $(".list-title .selected").hide();
-
+            $(".list-control").hide();
         } else {
             $(".list-title .non-selected").hide();
             $(".list-title .selected .selected-count").text(selectedCount);
             $(".list-title .selected").show();
+            $(".list-control").show();
         }
 
     }

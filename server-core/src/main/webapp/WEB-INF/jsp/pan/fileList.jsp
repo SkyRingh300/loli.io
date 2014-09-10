@@ -19,6 +19,11 @@
           <div class="list-title">
             <span class="non-selected">文件名</span><span class="selected">选择了<span class="selected-count">0</span>个文件/文件夹
             </span>
+          </div>
+          <div class="list-control">
+            <button type="button" class="btn btn-xs list-control-delete">删除</button>
+            <button type="button" class="btn btn-xs">下载</button>
+            <button type="button" class="btn btn-xs">分享</button>
           </div></th>
         <th>大小</th>
         <th>修改时间</th>
@@ -47,7 +52,7 @@
         </tr>
       </c:forEach>
       <c:forEach items="${requestScope.fileList}" var="file">
-        <tr class="file-tr data-tr"">
+        <tr class="file-tr data-tr" data="${file.id}">
           <td><input type="checkbox" class="file-checkbox">
             <div class="file-label">
               <i class="glyphicon glyphicon-cloud icon"></i><a href="javascript:void(0)">${file.originName}</a>
@@ -169,6 +174,27 @@ $(".btn-dl").click(function(event){
         });
     }
     event.stopPropagation();
+});
+
+
+$(".list-control-delete").click(function(){
+    if(!confirm("删除后无法恢复, 确认删除吗？")){
+        return;
+    }
+    var datas = new Array();
+    $(".file-tr.data-tr.tr-selected").each(function(i,e){
+        datas[i]=$(this).attr("data");
+    });
+    var ids=datas.join(",");
+    $.post("${pageContext.request.contextPath}/pan/file/delete",{ids:ids},function(result){
+        if(result=="success"){
+            alert("删除成功");
+        }
+
+        var folderId = $("#folderId").val();
+        loadFolder(folderId);
+    });
+    
 });
 
 </script>

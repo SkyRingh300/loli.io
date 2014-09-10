@@ -20,8 +20,8 @@ public class FileDao {
 
     public List<FileEntity> listByUserIdAndFolderId(int userId, int folderId, int startIndex, int maxCount) {
         return em.createNamedQuery("FileEntity.listByUserIdAndFolderId", FileEntity.class)
-            .setParameter("userId", userId).setParameter("folderId", folderId).setFirstResult(startIndex)
-            .setMaxResults(maxCount).getResultList();
+            .setParameter("userId", userId).setParameter("folderId", folderId).setParameter("delFlag", false)
+            .setFirstResult(startIndex).setMaxResults(maxCount).getResultList();
     }
 
     public int updateMd5(int id, String md5) {
@@ -37,6 +37,11 @@ public class FileDao {
         return em.createQuery("from FileEntity where md5=:md5 and delFlag=:delFlag", FileEntity.class)
             .setParameter("md5", md5).setParameter("delFlag", false).getSingleResult();
 
+    }
+
+    public int deleteIn(List<Integer> toDelete) {
+        return em.createQuery("update FileEntity set delFlag=:delFlag where id in:ids").setParameter("delFlag", true)
+            .setParameter("ids", toDelete).executeUpdate();
     }
 
 }

@@ -37,4 +37,9 @@ public class FileService {
         return fd.findByMd5(md5);
     }
 
+    @Transactional
+    public int batchDelete(List<Integer> toDelete) {
+        return fd.deleteIn(toDelete);
+    }
+
 }

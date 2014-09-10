@@ -24,6 +24,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -120,8 +121,18 @@ public class FileAction {
 
     @RequestMapping(value = "dl/{md5}")
     public void download(@PathVariable(value = "md5") String md5, HttpServletRequest request,
-        HttpServletResponse response) {
+        HttpServletResponse response, HttpSession session) {
         FileEntity file = ls.findFileByPath(md5);
+        Object obj = session.getAttribute("user");
+        if (obj != null && ((User) obj).getId() == file.getUser().getId()) {
+        } else {
+            response.setContentType("text/html");
+            try {
+                response.getWriter().println("尚未登录或者该文件不属于您");
+            } catch (IOException e) {
+            }
+            return;
+        }
         try (InputStream is = new BufferedInputStream(storageFolders.getFile(file.getKey()));
             OutputStream os = new BufferedOutputStream(response.getOutputStream());) {
             response.setContentLength(file.getLength().intValue());
@@ -137,6 +148,19 @@ public class FileAction {
 
         } finally {
         }
+    }
+
+    @RequestMapping(value = "delete")
+    @ResponseBody
+    public String deleteByIds(@RequestParam("ids") String ids) {
+        List<Integer> toDelete = new ArrayList<Integer>();
+        for (String s : ids.split(",")) {
+            int i = Integer.parseInt(s);
+            toDelete.add(i);
+        }
+
+        fis.batchDelete(toDelete);
+        return "success";
 
     }
 }
