@@ -38,12 +38,14 @@ sc-server
   * 将上面的war丢到```TOMCAT_HOME/webapps/```中
   * 启动tomcat，会自动创建表
   * 关闭tomcat，将你的阿里云bucket信息插入storage_bucket中
+
   ```sql
   INSERT INTO `storage_bucket` VALUES 
   (1,'AccessKeyID','AccessKeyID','BucketName','ali','EndPoint','UploadUrl','1','image','InternalUrl'),;
   ```
   * 启动tomcat
   * 如果你的smtp配置不起作用，又想创建一个用户，可以使用如下SQL
+
   ```sql
   INSERT INTO `user` VALUES (1,'your@email.com','md5 of your password','2014-04-29 04:20:56');
   ```
