@@ -41,7 +41,7 @@ sc-server
 
   ```sql
   INSERT INTO `storage_bucket` VALUES 
-  (1,'AccessKeyID','AccessKeyID','BucketName','ali','EndPoint','UploadUrl','1','image','InternalUrl'),;
+  (1,'AccessKeyID','AccessKeyID','BucketName','ali','EndPoint','UploadUrl','1','image','InternalUrl');
   ```
   * 启动tomcat
   * 如果你的smtp配置不起作用，又想创建一个用户，可以使用如下SQL
