@@ -50,6 +50,17 @@ public class User implements Serializable {
     @JsonIgnore
     private List<Tag> tagList;
 
+    @Column
+    private Boolean vip = true;
+
+    public Boolean getVip() {
+        return vip;
+    }
+
+    public void setVip(Boolean vip) {
+        this.vip = vip;
+    }
+
     public int getId() {
         return id;
     }

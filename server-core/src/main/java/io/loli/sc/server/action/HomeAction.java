@@ -56,6 +56,16 @@ public class HomeAction {
         return "image/fileUpload";
     }
 
+    @RequestMapping(value = { "about" })
+    public String about(HttpServletRequest request) {
+        return "about";
+    }
+
+    @RequestMapping(value = { "terms" })
+    public String term(HttpServletRequest request) {
+        return "terms";
+    }
+
     private String getOs(String userAgent) {
         if (userAgent.contains("Windows")) {
             return "Windows";

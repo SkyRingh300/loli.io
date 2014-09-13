@@ -17,7 +17,9 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.FutureTask;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -26,6 +28,7 @@ import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -186,63 +189,75 @@ public class ImageClientUpload {
         return str;
     }
 
+    private ExecutorService service = Executors.newFixedThreadPool(50);
+
     @ResponseBody
     @RequestMapping(value = { "/fetch" }, method = { RequestMethod.POST })
-    public UploadedImage fetch(String path, HttpServletRequest request) {
+    public String fetch(@RequestParam(value = "path") String path, HttpServletRequest request) {
+        if (StringUtils.isBlank(path)) {
+            return "{\"origin\":\"" + path + "\",\"error\":\"" + "图片url不能为空" + "\",\"redirect\":\"" + "\"}";
+        }
         File file = null;
-        FutureTask<File> task = new FutureTask<>(() -> ffs.fetch(path));
-        new Thread(task).run();
+        Future<File> future = service.submit(() -> {
+            return ffs.fetch(path);
+        });
         try {
-            file = task.get(20, TimeUnit.SECONDS);
+            file = future.get(20, TimeUnit.SECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             e.printStackTrace();
             logger.error("Fetch image timeout:" + e);
+            return "{\"origin\":\"" + path + "\",\"error\":\"" + e.getMessage() + "\",\"redirect\":\"" + "\"}";
         }
 
         if (file == null) {
-            return new UploadedImage();
+            return "";
         }
-        User user = null;
-        UploadedImage imageObj = new UploadedImage();
-        if ((user = (User) request.getSession().getAttribute("user")) != null) {
-            imageObj.setUser(user);
-        }
-        String ip = request.getRemoteAddr();
-        if (ip != null && ip.equals("127.0.0.1")) {
-            ip = request.getHeader("X-Real-IP");
-        }
-        imageObj.setIp(ip);
-        imageObj.setUa(request.getHeader("user-agent"));
-        String ref = null;
-        if ((ref = request.getHeader("REFERER")) != null) {
-            if (ref.contains("file")) {
-                imageObj.setStorageBucket(bucketService.randomFileBucket());
+        try {
+            User user = null;
+            UploadedImage imageObj = new UploadedImage();
+            if ((user = (User) request.getSession().getAttribute("user")) != null) {
+                imageObj.setUser(user);
+            }
+            String ip = request.getRemoteAddr();
+            if (ip != null && ip.equals("127.0.0.1")) {
+                ip = request.getHeader("X-Real-IP");
+            }
+            imageObj.setIp(ip);
+            imageObj.setUa(request.getHeader("user-agent"));
+            String ref = null;
+            if ((ref = request.getHeader("REFERER")) != null) {
+                if (ref.contains("file")) {
+                    imageObj.setStorageBucket(bucketService.randomFileBucket());
+                } else {
+                    imageObj.setStorageBucket(bucketService.randomImageBucket());
+                }
             } else {
                 imageObj.setStorageBucket(bucketService.randomImageBucket());
             }
-        } else {
-            imageObj.setStorageBucket(bucketService.randomImageBucket());
+
+            StorageUploader uploader = StorageUploader.newInstance(imageObj.getStorageBucket());
+            imageObj.setPath(uploader.upload(file));
+            imageObj.setOriginName(file.getName());
+
+            imageObj.setGeneratedName(file.getName());
+            imageObj.setRedirectCode(file.getName());
+            imageObj.setGeneratedCode(file.getName().contains(".") ? file.getName().substring(0,
+                file.getName().indexOf(".")) : file.getName());
+
+            imageObj.setInternalPath(imageObj.getStorageBucket().getInternalUrl() + "/" + file.getName());
+
+            uic.save(imageObj);
+            if (imageObj.getUser() == null) {
+                logger.info("匿名上传文件:" + imageObj.getOriginName() + ", 链接为" + imageObj.getPath());
+            } else {
+                logger.info(imageObj.getUser().getEmail() + "上传文件:" + imageObj.getOriginName() + ", 链接为"
+                    + imageObj.getPath());
+            }
+            return "{\"origin\":\"" + path + "\",\"error\":\"" + "\",\"redirect\":\"" + imageObj.getRedirectCode()
+                + "\"}";
+        } catch (Exception e) {
+            return "{\"origin\":\"" + path + "\",\"error\":\"" + e.getMessage() + "\",\"redirect\":\"" + "\"}";
         }
-
-        StorageUploader uploader = StorageUploader.newInstance(imageObj.getStorageBucket());
-        imageObj.setPath(uploader.upload(file));
-        imageObj.setOriginName(file.getName());
-
-        imageObj.setGeneratedName(file.getName());
-        imageObj.setRedirectCode(file.getName());
-        imageObj.setGeneratedCode(file.getName().contains(".") ? file.getName().substring(0,
-            file.getName().indexOf(".")) : file.getName());
-
-        imageObj.setInternalPath(imageObj.getStorageBucket().getInternalUrl() + "/" + file.getName());
-
-        uic.save(imageObj);
-        if (imageObj.getUser() == null) {
-            logger.info("匿名上传文件:" + imageObj.getOriginName() + ", 链接为" + imageObj.getPath());
-        } else {
-            logger.info(imageObj.getUser().getEmail() + "上传文件:" + imageObj.getOriginName() + ", 链接为"
-                + imageObj.getPath());
-        }
-        return imageObj;
     }
 
     /**
