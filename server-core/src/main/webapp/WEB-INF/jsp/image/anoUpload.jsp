@@ -153,7 +153,7 @@
             var result = getPaths();
             var html = getCode("", "\n", result);
             $("#result-area").html(html);
-            $('.modal .btn-group label').eq(0).addClass('active');
+            $('.modal .btn-group label').eq(0).click();
         });
 
         var lock = true;
@@ -175,7 +175,7 @@
                             while (!lock) {
                             }
                             var newValue = $("#upload-area").val();
-                            newValue = newValue.replace(result.origin, "\b");
+                            newValue = newValue.replace(result.origin, "");
                             $("#upload-area").val(newValue);
                             lock = true;
                             $("#fetch-result-area").append($("#redirectPath").val() + result.redirect + "\n");
