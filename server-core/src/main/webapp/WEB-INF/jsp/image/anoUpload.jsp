@@ -87,7 +87,7 @@
         <button type="button" class="close" data-dismiss="modal">
           <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
         </button>
-        <h4 class="modal-title">请输入图片url(一行一个)</h4>
+        <h4 class="modal-title">请输入图片url(一行一个), 如果没反应，请耐心等待20秒</h4>
       </div>
       <div class="modal-body">
 
@@ -159,7 +159,7 @@
         var lock = true;
         $("#fetch-confirm").click(function() {
             var urls = new Array();
-            var urlStr = document.getElementById("upload-area").value.replace(/^\s*[\r\n]/gm,"");
+            var urlStr = document.getElementById("upload-area").value.replace(/^\s*[\r\n]/gm, "");
             var urlArray = urlStr.split("\n");
             for (i = 0; i < urlArray.length; i++) {
                 if (urlArray[i].length < 3) {
