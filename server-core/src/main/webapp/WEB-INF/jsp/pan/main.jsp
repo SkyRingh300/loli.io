@@ -267,6 +267,10 @@
     margin-right: 5px;
 }
 
+.file-buttons button {
+    background-color: rgb(221, 221, 221);
+}
+
 .list-control {
     float: left;
     margin-left: 20px;
