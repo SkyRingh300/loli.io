@@ -3,6 +3,7 @@ package io.loli.sc.server.service;
 import io.loli.sc.server.dao.BucketDao;
 import io.loli.sc.server.entity.StorageBucket;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +19,7 @@ public class BucketService {
 
     private static StorageBucket[] imageArray;
     private static StorageBucket[] fileArray;
+    public static List<StorageBucket> weiboList;
 
     @Inject
     public BucketService(BucketDao bucketDao) {
@@ -27,17 +29,24 @@ public class BucketService {
         if (bucketArray == null) {
             bucketArray = bucketList.toArray(new StorageBucket[bucketList.size()]);
         }
+        if (weiboList == null) {
+            weiboList = new ArrayList<>();
+        }
         if (imageArray == null) {
             List<StorageBucket> list = bucketList.stream()
-                    .filter(item -> item.getFileType().equals(StorageBucket.IMG_TYPE))
-                    .collect(Collectors.toList());
+                .filter(item -> item.getFileType().equals(StorageBucket.IMG_TYPE)).collect(Collectors.toList());
             imageArray = list.toArray(new StorageBucket[list.size()]);
         }
         if (fileArray == null) {
             List<StorageBucket> list = bucketList.stream()
-                    .filter(item -> item.getFileType().equals(StorageBucket.FILE_TYPE))
-                    .collect(Collectors.toList());
+                .filter(item -> item.getFileType().equals(StorageBucket.FILE_TYPE)).collect(Collectors.toList());
             fileArray = list.toArray(new StorageBucket[list.size()]);
+        }
+
+        if (weiboList.isEmpty()) {
+            bucketList.stream().filter(item -> item.getFileType().equals(StorageBucket.WEIBO_TYPE)).forEach((obj) -> {
+                weiboList.add(obj);
+            });
         }
 
     }
@@ -70,6 +79,13 @@ public class BucketService {
         double d = Math.random();
         int i = (int) (d * bucketArray.length);
         return bucketArray[i];
+    }
+
+    public synchronized StorageBucket weiboBucket() {
+        StorageBucket result = weiboList.get(0);
+        weiboList.remove(0);
+        weiboList.add(result);
+        return result;
     }
 
 }

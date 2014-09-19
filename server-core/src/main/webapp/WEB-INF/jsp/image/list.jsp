@@ -183,13 +183,21 @@
             </span></td>
 
             <td><c:if test="${img.redirectCode ne null}">
-                <a href="<spring:message code="redirectPath"></spring:message>${img.redirectCode}" target="_blank"><spring:message
-                    code="redirectPath"></spring:message>${img.redirectCode}</a>
+                <c:if test="${img.storageBucket.type eq 'weibo'}">
+                  <a href="${img.path}" target="_blank">${img.path}</a>
+                </c:if>
+                <c:if test="${img.storageBucket.type ne 'weibo'}">
+                  <a href="<spring:message code="redirectPath"></spring:message>${img.redirectCode}" target="_blank"><spring:message
+                      code="redirectPath"></spring:message>${img.redirectCode}</a>
+                </c:if>
+
               </c:if> <c:if test="${img.redirectCode eq null}">
                 <a href="${img.path}" target="_blank">${img.path}</a>
               </c:if></td>
-            <td><a type="button" class="btn-danger delete btn btn-xs"
-              href="${pageContext.request.contextPath}/img/delete?id=${img.id}">删除</a></td>
+            <td><c:if test="${img.storageBucket.type ne 'weibo'}">
+                <a type="button" class="btn-danger delete btn btn-xs"
+                  href="${pageContext.request.contextPath}/img/delete?id=${img.id}">删除</a>
+              </c:if></td>
           </tr>
         </c:forEach>
 
@@ -211,7 +219,7 @@
 
             </c:when>
             <c:otherwise>
-              
+
             </c:otherwise>
           </c:choose>
 

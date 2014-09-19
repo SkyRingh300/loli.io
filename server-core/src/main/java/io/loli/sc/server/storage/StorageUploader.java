@@ -13,15 +13,17 @@ public abstract class StorageUploader {
         StorageUploader uploader = null;
         switch (bucket.getType()) {
         case StorageBucket.ALI_TYPE:
-            uploader = new AliStorageUploader(bucket.getAccessKeyId(),
-                    bucket.getAccessKeySecret(), bucket.getEndPoint(),
-                    bucket.getUploadUrl(), bucket.getName());
+            uploader = new AliStorageUploader(bucket.getAccessKeyId(), bucket.getAccessKeySecret(),
+                bucket.getEndPoint(), bucket.getUploadUrl(), bucket.getName());
             break;
 
         case StorageBucket.QN_TYPE:
-            uploader = new QnStorageUploader(bucket.getAccessKeyId(),
-                    bucket.getAccessKeySecret(), bucket.getEndPoint(),
-                    bucket.getName());
+            uploader = new QnStorageUploader(bucket.getAccessKeyId(), bucket.getAccessKeySecret(),
+                bucket.getEndPoint(), bucket.getName());
+            break;
+
+        case StorageBucket.WEIBO_TYPE:
+            uploader = new WeiboStorageUploader(bucket.getAccessKeyId());
             break;
         }
         return uploader;

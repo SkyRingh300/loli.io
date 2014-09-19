@@ -22,6 +22,12 @@
     margin-top: 5px;
     margin-bottom: 10px;
 }
+
+.path {
+    max-width: 60%;
+    overflow: hidden;
+    white-space: nowrap;
+}
 </style>
 
 
@@ -33,6 +39,7 @@
       ${info}
     </div>
   </c:if>
+
   <form id="upload" method="post" action="${pageContext.request.contextPath}/api/upload" enctype="multipart/form-data">
     <div id="drop">
       <h3>拖动图片到这里或者</h3>
@@ -41,14 +48,37 @@
     <button id="clear" type="button" class="btn btn-sm btn-primary">清空上传列表</button>
     &nbsp;
     <c:if test="${sessionScope.user ne null}">
-      <button id="html" type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#htmlSelect">获取代码</button>
+      <button id="html" type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#htmlSelect">获取链接</button>
       <button id="url" type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#urlFetch">url下载</button>
-    </c:if>
 
+      <c:if test="${not empty param.weibo}">
+        <button type="button" id="weibo1" onclick="window.location.href='${pageContext.request.contextPath}/'"
+          class="btn btn-sm btn-primary">原图床</button>
+      </c:if>
+      <c:if test="${empty param.weibo}">
+        <button type="button" id="weibo2"
+          onclick="window.location.href='${pageContext.request.contextPath}/?weibo=weibo'"
+          class="btn btn-sm btn-primary">微博图床</button>
+      </c:if>
+    </c:if>
+    <c:if test="${not empty param.weibo}">
+      <input type="hidden" id="weibo" name="type" value="weibo">
+    </c:if>
     <ul id="fileList">
     </ul>
   </form>
-  <div id="message"></div>
+  <div id="message">
+    <c:if test="${not empty param.weibo}">
+      <ul>
+        <li>微博图床文件最大为5M</li>
+        <li>微博接口有上传频率限制：1小时内还可以上传<span class="label label-danger">${requestScope.limit.key}</span>张图片，24小时内还可以上传<span
+          class="label  label-danger">${requestScope.limit.value}</span>张图片。当次数为0时，请使用原图床上传。
+        </li>
+        <li>如果微博图床总是上传失败，请使用原图床</li>
+      </ul>
+    </c:if>
+
+  </div>
 </div>
 
 <div class="modal fade" id="htmlSelect">
@@ -194,4 +224,6 @@
 <script src="<spring:message code="staticPath"></spring:message>/jquery.iframe-transport.js"></script>
 <script src="<spring:message code="staticPath"></spring:message>/jquery.fileupload.js"></script>
 <script src="${pageContext.request.contextPath}/static/ext/uploader/script.js"></script>
-<input type="hidden" id="redirectPath" value="<spring:message code="redirectPath"></spring:message>">
+<c:if test="${empty param.weibo}">
+  <input type="hidden" id="redirectPath" value="<spring:message code="redirectPath"></spring:message>">
+</c:if>

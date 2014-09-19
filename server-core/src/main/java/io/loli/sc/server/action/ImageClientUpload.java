@@ -110,7 +110,11 @@ public class ImageClientUpload {
     public @ResponseBody UploadedImage upload(@RequestParam(value = "token", required = false) String token,
         @RequestParam(value = "email", required = false) String email,
         @RequestParam(value = "desc", required = false) String desc,
-        @RequestParam(value = "image", required = true) MultipartFile imageFile, HttpServletRequest request) {
+        @RequestParam(value = "image", required = true) MultipartFile imageFile, HttpServletRequest request,
+        @RequestParam(value = "type", required = false) String type
+
+    ) {
+
         UploadedImage imageObj = new UploadedImage();
         imageObj.setDate(new Date());
 
@@ -140,7 +144,9 @@ public class ImageClientUpload {
 
         File file = saveImage(imageFile, fileName);
         String ref = null;
-        if ((ref = request.getHeader("REFERER")) != null) {
+        if (StringUtils.isNotBlank(type) && "weibo".equals(type)) {
+            imageObj.setStorageBucket(bucketService.weiboBucket());
+        } else if ((ref = request.getHeader("REFERER")) != null) {
             if (ref.contains("file")) {
                 imageObj.setStorageBucket(bucketService.randomFileBucket());
             } else {
@@ -158,8 +164,10 @@ public class ImageClientUpload {
         imageObj.setRedirectCode(file.getName());
         imageObj.setGeneratedCode(file.getName().contains(".") ? file.getName().substring(0,
             file.getName().indexOf(".")) : file.getName());
-
-        imageObj.setInternalPath(imageObj.getStorageBucket().getInternalUrl() + "/" + file.getName());
+        if (StringUtils.isNotBlank(type) && "weibo".equals(type)) {
+            imageObj.setInternalPath(imageObj.getPath());
+        } else
+            imageObj.setInternalPath(imageObj.getStorageBucket().getInternalUrl() + "/" + file.getName());
 
         uic.save(imageObj);
         if (imageObj.getUser() == null) {

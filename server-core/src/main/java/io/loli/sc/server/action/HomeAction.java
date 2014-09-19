@@ -1,13 +1,21 @@
 package io.loli.sc.server.action;
 
+import io.loli.sc.server.service.BucketService;
+import io.loli.sc.server.storage.WeiboStorageUploader;
+import io.loli.util.bean.Pair;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Named
 @RequestMapping(value = { "" })
@@ -15,7 +23,23 @@ public class HomeAction {
     private static final Logger logger = Logger.getLogger(HomeAction.class);
 
     @RequestMapping(value = { "" })
-    public String index() {
+    public String index(HttpServletRequest request, @RequestParam(value = "weibo", required = false) String weibo) {
+        if (StringUtils.isNotBlank(weibo)) {
+            Pair<Integer, Integer> res = new Pair<>(0, 0);
+            try {
+                BucketService.weiboList.stream().forEach(
+                    obj -> {
+                        Pair<Integer, Integer> result = ((WeiboStorageUploader) WeiboStorageUploader.newInstance(obj))
+                            .getLimit();
+                        res.setKey(res.getKey() + result.getKey());
+                        res.setValue(res.getValue() + result.getValue());
+                    });
+            } catch (Exception e) {
+                logger.error(e);
+            }
+            request.setAttribute("limit", res);
+        }
+
         return "index";
     }
 
