@@ -24,7 +24,7 @@ public class StorageBucket implements Serializable {
     private String name;
     @Column(name = "endpoint")
     private String endPoint;
-    @Column(name = "access_key_id")
+    @Column(name = "access_key_id", length = 2048)
     private String accessKeyId;
     @Column(name = "access_key_secret")
     private String accessKeySecret;
