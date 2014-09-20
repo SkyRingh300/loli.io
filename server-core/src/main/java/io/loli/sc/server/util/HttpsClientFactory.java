@@ -12,6 +12,7 @@ import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.HttpClientConnectionManager;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 
@@ -47,5 +48,10 @@ public class HttpsClientFactory {
             ex.printStackTrace();
             return null;
         }
+    }
+
+    public static org.apache.http.client.HttpClient getSimpleInstance() {
+        CloseableHttpClient client = HttpClients.createDefault();
+        return client;
     }
 }

@@ -2,7 +2,6 @@ package io.loli.sc.server.service;
 
 import io.loli.sc.server.dao.UploadedImageDao;
 import io.loli.sc.server.entity.StorageBucket;
-import io.loli.sc.server.entity.Tag;
 import io.loli.sc.server.entity.UploadedImage;
 import io.loli.sc.server.storage.StorageUploader;
 

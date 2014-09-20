@@ -48,6 +48,7 @@ public class StorageBucket implements Serializable {
     public static final String WEIBO_TYPE = "weibo";
     public static final String IMG_TYPE = "image";
     public static final String FILE_TYPE = "file";
+    public static final String WEIBO_MOBILE_TYPE = "weibo_mobile";
 
     public int getId() {
         return id;

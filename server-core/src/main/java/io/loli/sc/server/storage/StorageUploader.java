@@ -25,6 +25,9 @@ public abstract class StorageUploader {
         case StorageBucket.WEIBO_TYPE:
             uploader = new WeiboStorageUploader(bucket.getAccessKeyId());
             break;
+        case StorageBucket.WEIBO_MOBILE_TYPE:
+            uploader = WeiboMobileStorageUploader.getInstance(bucket.getAccessKeyId());
+            break;
         }
         return uploader;
     }

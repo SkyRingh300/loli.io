@@ -20,6 +20,7 @@ public class BucketService {
     private static StorageBucket[] imageArray;
     private static StorageBucket[] fileArray;
     public static List<StorageBucket> weiboList;
+    public static List<StorageBucket> weiboMobileList;
 
     @Inject
     public BucketService(BucketDao bucketDao) {
@@ -31,6 +32,9 @@ public class BucketService {
         }
         if (weiboList == null) {
             weiboList = new ArrayList<>();
+        }
+        if (weiboMobileList == null) {
+            weiboMobileList = new ArrayList<>();
         }
         if (imageArray == null) {
             List<StorageBucket> list = bucketList.stream()
@@ -48,7 +52,17 @@ public class BucketService {
                 weiboList.add(obj);
             });
         }
+        if (weiboMobileList.isEmpty()) {
+            bucketList.stream().filter(item -> item.getFileType().equals(StorageBucket.WEIBO_MOBILE_TYPE))
+                .forEach((obj) -> {
+                    weiboMobileList.add(obj);
+                });
+        }
 
+    }
+    
+    public void refresh(){
+        
     }
 
     public List<StorageBucket> list() {
@@ -85,6 +99,13 @@ public class BucketService {
         StorageBucket result = weiboList.get(0);
         weiboList.remove(0);
         weiboList.add(result);
+        return result;
+    }
+    
+    public synchronized StorageBucket weiboMobileBucket() {
+        StorageBucket result = weiboMobileList.get(0);
+        weiboMobileList.remove(0);
+        weiboMobileList.add(result);
         return result;
     }
 

@@ -1,6 +1,5 @@
 package io.loli.sc.server.service.pan;
 
-import io.loli.sc.server.config.FileListConfig;
 import io.loli.sc.server.dao.pan.FolderDao;
 import io.loli.sc.server.entity.User;
 import io.loli.sc.server.entity.pan.FolderEntity;
@@ -12,8 +11,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
-
-import org.apache.commons.collections4.ListUtils;
 
 import com.google.common.collect.Lists;
 

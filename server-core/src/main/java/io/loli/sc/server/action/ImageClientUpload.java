@@ -1,6 +1,7 @@
 package io.loli.sc.server.action;
 
 import io.loli.sc.server.entity.ClientToken;
+import io.loli.sc.server.entity.StorageBucket;
 import io.loli.sc.server.entity.UploadedImage;
 import io.loli.sc.server.entity.User;
 import io.loli.sc.server.service.BucketService;
@@ -144,8 +145,12 @@ public class ImageClientUpload {
 
         File file = saveImage(imageFile, fileName);
         String ref = null;
-        if (StringUtils.isNotBlank(type) && "weibo".equals(type)) {
-            imageObj.setStorageBucket(bucketService.weiboBucket());
+        if (StringUtils.isNotBlank(type)) {
+            if (StorageBucket.WEIBO_TYPE.equals(type)) {
+                imageObj.setStorageBucket(bucketService.weiboBucket());
+            } else if (StorageBucket.WEIBO_MOBILE_TYPE.equals(type)) {
+                imageObj.setStorageBucket(bucketService.weiboMobileBucket());
+            }
         } else if ((ref = request.getHeader("REFERER")) != null) {
             if (ref.contains("file")) {
                 imageObj.setStorageBucket(bucketService.randomFileBucket());
@@ -164,7 +169,8 @@ public class ImageClientUpload {
         imageObj.setRedirectCode(file.getName());
         imageObj.setGeneratedCode(file.getName().contains(".") ? file.getName().substring(0,
             file.getName().indexOf(".")) : file.getName());
-        if (StringUtils.isNotBlank(type) && "weibo".equals(type)) {
+        if (StringUtils.isNotBlank(type)
+            && (StorageBucket.WEIBO_TYPE.equals(type) || StorageBucket.WEIBO_MOBILE_TYPE.equals(type))) {
             imageObj.setInternalPath(imageObj.getPath());
         } else
             imageObj.setInternalPath(imageObj.getStorageBucket().getInternalUrl() + "/" + file.getName());
