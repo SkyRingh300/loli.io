@@ -3,64 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.loli.server</groupId>
-        <artifactId>server-parent</artifactId>
+        <artifactId>server-social</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>client-screen-fx</artifactId>
+    <groupId>io.loli.server.social</groupId>
+    <artifactId>social-parent</artifactId>
 
-    <dependencies>
-        <dependency>
-            <groupId>io.loli-server</groupId>
-            <artifactId>client-screen</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.googlecode.soundlibs</groupId>
-                    <artifactId>mp3spi</artifactId>
-                </exclusion>
-
-                <exclusion>
-                    <groupId>com.dropbox.core</groupId>
-                    <artifactId>dropbox-core-sdk</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.google.apis</groupId>
-                    <artifactId>google-api-services-drive</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.google.apis</groupId>
-                    <artifactId>google-api-services-oauth2</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.google.http-client</groupId>
-                    <artifactId>google-http-client-jackson</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.google.api-client</groupId>
-                    <artifactId>google-api-client-extensions</artifactId>
-                </exclusion>
-
-                <exclusion>
-                    <groupId>com.google.api-client</groupId>
-                    <artifactId>google-api-client-jackson2</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.google.api-client</groupId>
-                    <artifactId>google-api-client-extensions</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.google.api-client</groupId>
-                    <artifactId>google-api-client-extensions</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.google.api-client</groupId>
-                    <artifactId>google-api-client-extensions</artifactId>
-                </exclusion>
-
-
-            </exclusions>
-        </dependency>
-    </dependencies>
     <build>
         <plugins>
             <plugin>
@@ -114,5 +62,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

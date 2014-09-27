@@ -7,4 +7,8 @@
   </parent>
   <artifactId>server-social</artifactId>
   <packaging>pom</packaging>
+  <modules>
+      <module>social-weibo</module>
+      <module>social-parent</module>
+  </modules>
 </project>
