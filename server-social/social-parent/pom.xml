@@ -8,7 +8,19 @@
     </parent>
     <groupId>io.loli.server.social</groupId>
     <artifactId>social-parent</artifactId>
-
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.3.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.loli</groupId>
+            <artifactId>util</artifactId>
+            <version>0.0.13-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
     <build>
         <plugins>
             <plugin>
