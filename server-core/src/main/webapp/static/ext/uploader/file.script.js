@@ -29,95 +29,91 @@ $(function() {
 
     // Initialize the jQuery File Upload plugin
     $('#upload')
-            .fileupload(
-                    {
+        .fileupload(
+            {
 
-                        // This element will accept file drag/drop uploading
-                        dropZone : $('#drop'),
+                // This element will accept file drag/drop uploading
+                dropZone : $('#drop'),
 
-                        // This function is called when a file is added to the
-                        // queue;
-                        // either via the browse button, or via drag/drop:
-                        add : function(e, data) {
-                            if (data.files[0].type.indexOf("image") > -1) {
-                                alert("您选择的是图片文件，请到首页上传");
-                                return;
-                            }
-                            
-                            
-                            
-                            var tpl = $('<li class="working"><!--<input type="text" value="0" data-width="48" data-height="48"'
-                                    + ' data-fgColor="#0788a5" data-readOnly="1" data-bgColor="#3e4043" />--><p class="name"></p><!--<span></span>--><label class="path">文件上传中...</label>');
+                // This function is called when a file is added to the
+                // queue;
+                // either via the browse button, or via drag/drop:
+                add : function(e, data) {
+                    if (data.files[0].type.indexOf("image") > -1) {
+                        alert("您选择的是图片文件，请到首页上传");
+                        return;
+                    }
+                    var tpl = $('<li class="working"><!--<input type="text" value="0" data-width="48" data-height="48"'
+                        + ' data-fgColor="#0788a5" data-readOnly="1" data-bgColor="#3e4043" />--><p class="name"></p><!--<span></span>--><label class="path">文件上传中...</label>');
 
-                            // Append the file name and file size
-                            tpl.find('p').text(data.files[0].name).append('<i>' + formatFileSize(data.files[0].size) + '</i>');
+                    // Append the file name and file size
+                    tpl.find('p').text(data.files[0].name).append('<i>' + formatFileSize(data.files[0].size) + '</i>');
 
-                            // Add the HTML to the UL element
-                            data.context = tpl.appendTo(ul);
+                    // Add the HTML to the UL element
+                    data.context = tpl.appendTo(ul);
 
-                            // Initialize the knob plugin
-                            tpl.find('input').knob();
-                            // Listen for clicks on the cancel icon
-                            tpl.find('span').click(function() {
+                    // Initialize the knob plugin
+                    tpl.find('input').knob();
+                    // Listen for clicks on the cancel icon
+                    tpl.find('span').click(function() {
 
-                                if (tpl.hasClass('working')) {
-                                    jqXHR.abort();
-                                }
-
-                                tpl.fadeOut(function() {
-                                    tpl.remove();
-                                });
-
-                            });
-
-                            // Automatically upload the file once it is added to
-                            // the queue
-                            var jqXHR = data.submit();
-                        },
-
-                        progress : function(e, data) {
-
-                            // Calculate the completion percentage of the upload
-                            var progress = parseInt(data.loaded / data.total * 100, 10);
-
-                            // Update the hidden input field and trigger a
-                            // change
-                            // so that the jQuery knob plugin knows to update
-                            // the dial
-
-                            data.context.find('label').eq(0).html("文件上传中:" + progress + "%");
-                            if (progress == 100) {
-                                data.context.removeClass('working');
-                                data.context.find('label').eq(0).html("上传成功, 正在生成链接...");
-                            }
-                        },
-
-                        fail : function(e, data) {
-                            // Something has gone wrong!
-                            data.context.addClass('error');
-                            data.context.find('label').eq(0).html("文件上传失败");
-
-                        },
-                        done : function(e, data) {
-                            var filename = data.result.redirectCode;
-                            var prefix = $("#redirectPath").val();
-                            if (prefix) {
-                                filename = prefix + filename;
-                            } else {
-                                filename = data.result.path;
-                            }
-                            if (filename) {
-                                data.context.find('label').eq(0).html("文件上传失败");
-                            }
-                            content = "<a target='_blank' href='";
-                            content += filename;
-                            content += "'>";
-                            content += filename;
-                            content += "</a>";
-                            data.context.find('label').eq(0).html(content);
+                        if (tpl.hasClass('working')) {
+                            jqXHR.abort();
                         }
 
+                        tpl.fadeOut(function() {
+                            tpl.remove();
+                        });
+
                     });
+
+                    // Automatically upload the file once it is added to
+                    // the queue
+                    var jqXHR = data.submit();
+                },
+
+                progress : function(e, data) {
+                    // Calculate the completion percentage of the upload
+                    var progress = parseInt(data.loaded / data.total * 100, 10);
+
+                    // Update the hidden input field and trigger a
+                    // change
+                    // so that the jQuery knob plugin knows to update
+                    // the dial
+
+                    data.context.find('label').eq(0).html("文件上传中:" + progress + "%");
+                    if (progress == 100) {
+                        data.context.removeClass('working');
+                        data.context.find('label').eq(0).html("上传成功, 正在生成链接...");
+                    }
+                },
+
+                fail : function(e, data) {
+                    // Something has gone wrong!
+                    data.context.addClass('error');
+                    data.context.find('label').eq(0).html("文件上传失败");
+
+                },
+                done : function(e, data) {
+                    var filename = data.result.redirectCode;
+                    var prefix = $("#redirectPath").val();
+                    if (prefix) {
+                        filename = prefix + filename;
+                    } else {
+                        filename = data.result.path;
+                    }
+                    if (filename) {
+                        data.context.find('label').eq(0).html("文件上传失败");
+                    }
+                    content = "<a target='_blank' href='";
+                    content += filename;
+                    content += "'>";
+                    content += filename;
+                    content += "</a>";
+                    data.context.find('label').eq(0).html(content);
+                }
+
+            });
 
     // Prevent the default action when a file is dropped on the window
     $(document).on('drop dragover', function(e) {

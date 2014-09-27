@@ -112,9 +112,7 @@ public class ImageClientUpload {
         @RequestParam(value = "email", required = false) String email,
         @RequestParam(value = "desc", required = false) String desc,
         @RequestParam(value = "image", required = true) MultipartFile imageFile, HttpServletRequest request,
-        @RequestParam(value = "type", required = false) String type
-
-    ) {
+        @RequestParam(value = "type", required = false) String type) {
 
         UploadedImage imageObj = new UploadedImage();
         imageObj.setDate(new Date());
@@ -140,6 +138,11 @@ public class ImageClientUpload {
         }
         imageObj.setIp(ip);
         imageObj.setUa(request.getHeader("user-agent"));
+
+        String contentType = imageFile.getContentType();
+        if (StringUtils.isNotBlank(contentType)) {
+            imageObj.setContentType(contentType);
+        }
         String fileName = "";
         fileName = getFileName(imageFile);
 

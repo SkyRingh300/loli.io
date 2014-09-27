@@ -2,6 +2,7 @@ package io.loli.sc.server.storage;
 
 import java.io.File;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 
 import com.qiniu.api.auth.AuthException;
@@ -18,8 +19,7 @@ public class QnStorageUploader extends StorageUploader {
     private String endpoint;
     private String bucketName;
 
-    public QnStorageUploader(String accessKeyId, String accessKeySecret,
-            String endpoint, String bucketName) {
+    public QnStorageUploader(String accessKeyId, String accessKeySecret, String endpoint, String bucketName) {
         super();
         this.accessKeyId = accessKeyId;
         this.accessKeySecret = accessKeySecret;
@@ -29,6 +29,11 @@ public class QnStorageUploader extends StorageUploader {
 
     @Override
     public String upload(File file) {
+        return this.upload(file, null);
+    }
+
+    @Override
+    public String upload(File file, String contentType) {
         Mac mac = new Mac(accessKeyId, accessKeySecret);
         // 请确保该bucket已经存在
         PutPolicy putPolicy = new PutPolicy(bucketName);
@@ -42,6 +47,10 @@ public class QnStorageUploader extends StorageUploader {
             e.printStackTrace();
         }
         PutExtra extra = new PutExtra();
+        if (StringUtils.isNotBlank(contentType)) {
+            extra.mimeType = contentType;
+        }
+
         String key = file.getName();
         PutRet ret = IoApi.putFile(uptoken, key, file.getPath(), extra);
         return endpoint + "/" + ret.getKey();

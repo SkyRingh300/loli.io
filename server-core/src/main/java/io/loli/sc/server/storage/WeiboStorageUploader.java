@@ -36,6 +36,11 @@ public class WeiboStorageUploader extends StorageUploader {
 
     @Override
     public String upload(File file) {
+        return this.upload(file, null);
+    }
+
+    @Override
+    public String upload(File file, String contentType) {
         try {
             return httpsPost(UPDATE_URL, file);
         } catch (ParseException | IOException | JSONException e) {

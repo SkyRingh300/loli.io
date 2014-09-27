@@ -44,6 +44,9 @@ public class UploadedImage implements Serializable {
     private String ip;
     private String ua;
 
+    @Column(name = "content_type")
+    private String contentType;
+
     @Column(name = "generated_code")
     private String generatedCode;
 
@@ -213,5 +216,13 @@ public class UploadedImage implements Serializable {
 
     public void setTag(Tag tag) {
         this.tag = tag;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
 }

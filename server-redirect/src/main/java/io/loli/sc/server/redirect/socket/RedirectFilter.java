@@ -14,17 +14,13 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Date;
-import java.util.concurrent.ExecutorService;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.glassfish.grizzly.http.server.Request;
 import org.glassfish.grizzly.http.server.Response;
-import org.glassfish.grizzly.http.util.ContentType;
 import org.glassfish.grizzly.http.util.Header;
 import org.glassfish.grizzly.http.util.HttpStatus;
-import org.glassfish.grizzly.threadpool.GrizzlyExecutorService;
-import org.glassfish.grizzly.threadpool.ThreadPoolConfig;
 
 public class RedirectFilter implements RequestAuthFilter {
     private static ImageDao imageDao = new ImageDao();
@@ -43,7 +39,8 @@ public class RedirectFilter implements RequestAuthFilter {
             if (code.startsWith("/")) {
                 code = code.substring(1);
             }
-            String url = imageDao.findUrlByCode(code);
+            Pair<String, String> result = imageDao.findUrlByCode(code);
+            String url = result.getKey();
             if (null == url || "".equals(url.trim())) {
                 logger.warn("url为空");
                 response.setStatus(HttpStatus.NOT_FOUND_404);
@@ -71,16 +68,10 @@ public class RedirectFilter implements RequestAuthFilter {
                         total = pair.getKey();
                     }
 
-                    if (url.endsWith("png"))
-                        response.setContentType(ContentType.newContentType("image/png"));
-                    if (url.endsWith("jpg"))
-                        response.setContentType(ContentType.newContentType("image/jpeg"));
-                    if (url.endsWith("jpeg"))
-                        response.setContentType(ContentType.newContentType("image/jpeg"));
-                    if (url.endsWith("bmp"))
-                        response.setContentType(ContentType.newContentType("image/bmp"));
-                    if (url.endsWith("gif"))
-                        response.setContentType(ContentType.newContentType("image/gif"));
+                    if ((!"".equals(result.getValue())) && null != result.getValue()) {
+                        response.setContentType(result.getValue());
+                    }
+
                     response.setHeader("Cache-Control", "max-age=15552000");
                     if (total != 0) {
                         response.setContentLengthLong(total);

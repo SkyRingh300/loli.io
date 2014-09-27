@@ -59,6 +59,11 @@ public class WeiboMobileStorageUploader extends StorageUploader {
 
     @Override
     public String upload(File file) {
+        return this.upload(file, null);
+    }
+
+    @Override
+    public String upload(File file, String contentType) {
         String result = "";
         try {
             HttpPost post = this.buildPost(UPLOAD_URL, cookie);
