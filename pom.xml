@@ -40,6 +40,7 @@
         <module>server-script</module>
         <module>server-social</module>
         <module>client-screen</module>
+        <module>client-screen-fx</module>
     </modules>
 
     <repositories>
