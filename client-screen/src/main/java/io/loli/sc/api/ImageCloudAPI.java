@@ -63,17 +63,17 @@ public class ImageCloudAPI extends APITools implements API {
             multiPartEntityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
             // 可以直接addBinary
             multiPartEntityBuilder.addPart(
-                    "image",
-                    new FileBody(fileToUpload, ContentType.create("application/octet-stream",
-                            Consts.UTF_8), fileToUpload.getName()));
+                "image",
+                new FileBody(fileToUpload, ContentType.create("application/octet-stream", Consts.UTF_8), fileToUpload
+                    .getName()));
             multiPartEntityBuilder.setCharset(Consts.UTF_8);
             // 可以直接addText
             multiPartEntityBuilder.addPart("token",
-                    new StringBody(token, ContentType.create("text/plain", Consts.UTF_8)));
+                new StringBody(token, ContentType.create("text/plain", Consts.UTF_8)));
             multiPartEntityBuilder.addPart("email",
-                    new StringBody(email, ContentType.create("text/plain", Consts.UTF_8)));
-            multiPartEntityBuilder.addPart("desc", new StringBody(fileToUpload.getName(),
-                    ContentType.create("text/plain", Consts.UTF_8)));
+                new StringBody(email, ContentType.create("text/plain", Consts.UTF_8)));
+            multiPartEntityBuilder.addPart("desc",
+                new StringBody(fileToUpload.getName(), ContentType.create("text/plain", Consts.UTF_8)));
 
             hp.setEntity(multiPartEntityBuilder.build());
             response = httpclient.execute(hp);
@@ -131,6 +131,15 @@ public class ImageCloudAPI extends APITools implements API {
         private int id;
         private String email;
         private Date regDate;
+        private String vip;
+
+        public String getVip() {
+            return vip;
+        }
+
+        public void setVip(String vip) {
+            this.vip = vip;
+        }
 
         public int getId() {
             return id;
@@ -169,12 +178,51 @@ public class ImageCloudAPI extends APITools implements API {
          */
         private String description;
         private String path;
+
         /**
          * 原始名字显示在title标签中
          */
         private String originName;
 
         private String redirectCode;
+
+        private String generatedCode;
+        private String generatedName;
+        private String internalPath;
+
+        public String getInternalPath() {
+            return internalPath;
+        }
+
+        public void setInternalPath(String internamPath) {
+            this.internalPath = internamPath;
+        }
+
+        public String getGeneratedName() {
+            return generatedName;
+        }
+
+        public void setGeneratedName(String generatedName) {
+            this.generatedName = generatedName;
+        }
+
+        private Integer tag;
+
+        public Integer getTag() {
+            return tag;
+        }
+
+        public void setTag(Integer tag) {
+            this.tag = tag;
+        }
+
+        public String getGeneratedCode() {
+            return generatedCode;
+        }
+
+        public void setGeneratedCode(String generatedCode) {
+            this.generatedCode = generatedCode;
+        }
 
         public int getId() {
             return id;
@@ -247,7 +295,7 @@ public class ImageCloudAPI extends APITools implements API {
         return token;
     }
 
-    private static final String BASE_URL = "https://loli.io/";
+    private static final String BASE_URL = "http://loli.io/";
     private static final String TOKEN_URL = BASE_URL + "api/token";
     private static final String UPLOAD_URL = BASE_URL + "api/upload";
 
@@ -261,7 +309,7 @@ public class ImageCloudAPI extends APITools implements API {
         }
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.addAll(Arrays.asList(new NameValuePair[] { new BasicNameValuePair("email", email),
-                new BasicNameValuePair("password", MD5Util.hash(passwd)) }));
+            new BasicNameValuePair("password", MD5Util.hash(passwd)) }));
         String result = post(TOKEN_URL, params);
 
         ObjectMapper mapper = new ObjectMapper();

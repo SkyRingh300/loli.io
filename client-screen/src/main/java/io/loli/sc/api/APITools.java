@@ -28,20 +28,8 @@ public class APITools {
      * 发出post请求
      */
     public String post(String postUrl, List<NameValuePair> params) {
-        SSLContext sslContext = null;
-        try {
-            sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustStrategy() {
-                // 信任所有
-                public boolean isTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-                    return true;
-                }
-            }).build();
-        } catch (KeyManagementException | NoSuchAlgorithmException | KeyStoreException e1) {
-            e1.printStackTrace();
-        }
-        SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext);
 
-        CloseableHttpClient httpclient = HttpClients.custom().setSSLSocketFactory(sslsf).build();
+        CloseableHttpClient httpclient = HttpClients.createDefault();
         HttpPost hp = new HttpPost(postUrl);
         CloseableHttpResponse response = null;
         String result = null;
@@ -58,20 +46,8 @@ public class APITools {
     }
 
     public String get(String getUrl) {
-        SSLContext sslContext = null;
-        try {
-            sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustStrategy() {
-                // 信任所有
-                public boolean isTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-                    return true;
-                }
-            }).build();
-        } catch (KeyManagementException | NoSuchAlgorithmException | KeyStoreException e1) {
-            e1.printStackTrace();
-        }
-        SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext);
 
-        CloseableHttpClient httpclient = HttpClients.custom().setSSLSocketFactory(sslsf).build();
+        CloseableHttpClient httpclient = HttpClients.createDefault();
         HttpGet hp = new HttpGet(getUrl);
         CloseableHttpResponse response = null;
         String result = null;
