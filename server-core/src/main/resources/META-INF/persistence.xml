@@ -13,6 +13,7 @@
         <class>io.loli.sc.server.entity.pan.FolderEntity</class>
         <class>io.loli.sc.server.entity.pan.FileEntity</class>
         <class>io.loli.sc.server.entity.Tag</class>
+        <class>io.loli.sc.server.entity.Social</class>
     </persistence-unit>
 
 </persistence>

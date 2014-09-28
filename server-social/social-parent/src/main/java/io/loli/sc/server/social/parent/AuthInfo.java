@@ -29,7 +29,7 @@ public class AuthInfo {
         return id;
     }
 
-    public void setKId(String id) {
+    public void setId(String id) {
         this.id = id;
     }
 

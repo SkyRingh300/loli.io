@@ -139,8 +139,9 @@ a#regist-weibo:visited, a#regist-qq:visited {
           <div class="form-group">
             <label for="password_re" class="col-sm-4 control-label">社交账号</label>
             <div class="col-sm-offset-4 col-sm-6">
-              <a id="regist-weibo" class="btn btn-primary" href="<spring:message code="weiboAuthPath"></spring:message>">微博登陆</a>
-              <a id="regist-qq" class="btn btn-primary" href="<spring:message code="qqAuthPath"></spring:message>">QQ登陆</a>
+              <a id="regist-weibo" class="btn btn-primary"
+                href="${pageContext.request.contextPath}/social/weibo/redirect">微博登陆</a> <a id="regist-qq"
+                class="btn btn-primary" href="">QQ登陆</a>
             </div>
           </div>
           <input type="hidden" id="password_md5" name="password"> <input type="hidden" id="password_re_md5"
