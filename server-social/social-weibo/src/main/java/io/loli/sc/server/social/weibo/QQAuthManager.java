@@ -6,21 +6,20 @@ import io.loli.sc.server.social.parent.UserInfo;
 import io.loli.util.bean.Pair;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class WeiboAuthManager extends AuthManager {
+public class QQAuthManager extends AuthManager {
     private String authUrl = null;
     private String tokenUrl = null;
 
-    public WeiboAuthManager(AuthInfo info) {
+    public QQAuthManager(AuthInfo info) {
         this.info = info;
-        this.authUrl = "https://api.weibo.com/oauth2/authorize?client_id=" + info.getId()
-            + "&response_type=code&redirect_uri=" + info.getUrl();
-        this.tokenUrl = "https://api.weibo.com/oauth2/access_token?client_id=" + info.getId() + "&client_secret="
+        this.authUrl = "https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=" + info.getId()
+            + "&redirect_uri=" + info.getUrl();
+        this.tokenUrl = "https://graph.qq.com/oauth2.0/token?client_id=" + info.getId() + "&client_secret="
             + info.getSecret() + "&grant_type=authorization_code&redirect_uri=" + info.getUrl();
     }
 
@@ -31,26 +30,20 @@ public class WeiboAuthManager extends AuthManager {
 
     @Override
     public Pair<String, Long> getAccessToken(String code) {
-        tokenUrl = tokenUrl + "&code=" + code;
+        this.tokenUrl = tokenUrl + "&code=" + code;
         String result = "";
         String accessToken = "";
         long timeout = 0l;
         try {
-            result = this.post(tokenUrl, new ArrayList<>());
+            result = this.get(tokenUrl);
             if (StringUtils.isNotBlank(result)) {
-                JSONObject obj = new JSONObject(result);
-                try {
-                    // 如果获取accession_token成功了，下面这句一定会抛出异常
-                    String error = obj.getString("error");
-                    logger.info("Result is not valid: result=[" + result + "], error is" + error);
-                    throw new NullPointerException("Error occurred: " + error);
-                } catch (JSONException e) {
-                    accessToken = obj.getString("access_token");
-                    timeout = obj.getLong("expires_in");
+                if (result.contains("access_token") && result.contains("expires_in")) {
+                    accessToken = result.substring(result.indexOf("access_token") + 13, result.indexOf("&expires_in"));
+                    timeout = Long.valueOf(result.substring(result.indexOf("expires_in") + 11,
+                        result.indexOf("&refresh_token")));
                 }
-            } else {
-                throw new NullPointerException("Result is null while getting token");
             }
+
         } catch (IOException e) {
             logger.warning("Failed to get accesstoken, url=[" + tokenUrl + "], code=[" + code + "], error is: \n" + e);
         }
@@ -71,7 +64,7 @@ public class WeiboAuthManager extends AuthManager {
     }
 
     private String getUid(String accessToken) {
-        String userinfoUrl = "https://api.weibo.com/2/account/get_uid.json";
+        String userinfoUrl = "https://graph.qq.com/oauth2.0/me";
         userinfoUrl += "?access_token=" + accessToken;
         String result = "";
         try {
@@ -81,6 +74,7 @@ public class WeiboAuthManager extends AuthManager {
         }
         String id = "";
         if (StringUtils.isNotBlank(result)) {
+            result = result.substring(result.indexOf("{"), result.lastIndexOf("}") + 1);
             JSONObject obj = null;
             try {
                 obj = new JSONObject(result);
@@ -89,7 +83,7 @@ public class WeiboAuthManager extends AuthManager {
                 logger.info("Result is not valid: result=[" + result + "], error is" + error);
                 throw new NullPointerException("Error occurred: " + error);
             } catch (JSONException e) {
-                id = String.valueOf(obj.getLong("uid"));
+                id = String.valueOf(obj.getString("openid"));
             }
         } else {
             throw new NullPointerException("id is null");
@@ -98,8 +92,8 @@ public class WeiboAuthManager extends AuthManager {
     }
 
     private UserInfo getUserInfoByUid(String accessToken, String uid) {
-        String userinfoUrl = "https://api.weibo.com/2/users/show.json";
-        userinfoUrl += "?access_token=" + accessToken + "&uid=" + uid;
+        String userinfoUrl = "https://graph.qq.com/user/get_user_info";
+        userinfoUrl += "?access_token=" + accessToken + "&openid=" + uid + "&oauth_consumer_key=" + info.getId();
         String result = "";
         try {
             result = this.get(userinfoUrl);
@@ -118,11 +112,12 @@ public class WeiboAuthManager extends AuthManager {
                 throw new NullPointerException("Error occurred: " + error);
             } catch (JSONException e) {
                 info.setId(uid);
-                info.setUsername(obj.getString("screen_name"));
+                info.setUsername(obj.getString("nickname"));
             }
         } else {
             throw new NullPointerException("id is null");
         }
         return info;
     }
+
 }

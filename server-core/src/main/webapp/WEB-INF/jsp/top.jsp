@@ -40,10 +40,16 @@
           <li><a href="${pageContext.request.contextPath}/user/login" class="title">登陆</a></li>
         </c:if>
         <c:if test="${sessionScope.user!=null}">
-          <li><a href="#" class="title dropdown-toggle" data-toggle="dropdown">${sessionScope.user.email} <b
-              class="caret"></b></a>
+          <li><a href="#" class="title dropdown-toggle" data-toggle="dropdown"> <c:if
+                test="${user.type eq 'weibo'}">
+                 ${sessionScope.user.name}
+              </c:if> <c:if test="${user.type eq null}">
+                ${sessionScope.user.email}
+              </c:if> <b class="caret"></b></a>
             <ul class="dropdown-menu">
-              <li><a href="${pageContext.request.contextPath}/user/edit">修改密码</a></li>
+              <c:if test="${user.type eq null}">
+                <li><a href="${pageContext.request.contextPath}/user/edit">修改密码</a></li>
+              </c:if>
               <li><a href="${pageContext.request.contextPath}/img/list">已上传图片</a></li>
 
               <c:if test="${sessionScope.user.vip}">

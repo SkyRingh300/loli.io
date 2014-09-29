@@ -54,7 +54,11 @@ public class WeiboSocialAction extends SocialAction {
             Pair<String, Long> token = manager.getAccessToken(code);
             UserInfo info = manager.getUserInfo(token.getKey());
             ss.save(info.getId(), token.getKey(), info.getUsername(), Social.TYPE_WEIBO, token.getValue());
-            // TODO auto login
+            Social social = ss.findByUserIdAndType(info.getId(), Social.TYPE_WEIBO);
+            if (social != null) {
+                session.setAttribute("user", social.getUser());
+            }
+            return "index";
 
         } else {
             // TODO 绑定已有账号

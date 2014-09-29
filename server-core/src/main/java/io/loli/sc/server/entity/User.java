@@ -38,6 +38,20 @@ public class User implements Serializable {
     @JsonIgnore
     private String password;
 
+    @Column
+    private String name;
+
+    @Column
+    private String type;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @OneToOne(mappedBy = "user")
     @JsonIgnore
     private LoginStatus loginStatus;
@@ -115,5 +129,13 @@ public class User implements Serializable {
 
     public void setTagList(List<Tag> tagList) {
         this.tagList = tagList;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

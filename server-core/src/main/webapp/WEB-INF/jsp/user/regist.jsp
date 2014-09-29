@@ -137,11 +137,11 @@ a#regist-weibo:visited, a#regist-qq:visited {
           </div>
 
           <div class="form-group">
-            <label for="password_re" class="col-sm-4 control-label">社交账号</label>
+            <label class="col-sm-4 control-label">社交账号</label>
             <div class="col-sm-offset-4 col-sm-6">
               <a id="regist-weibo" class="btn btn-primary"
-                href="${pageContext.request.contextPath}/social/weibo/redirect">微博登陆</a> <a id="regist-qq"
-                class="btn btn-primary" href="">QQ登陆</a>
+                href="${pageContext.request.contextPath}/social/weibo/redirect">微博登录</a> <a id="regist-qq"
+                class="btn btn-primary" href="${pageContext.request.contextPath}/social/qq/redirect">QQ登陆</a>
             </div>
           </div>
           <input type="hidden" id="password_md5" name="password"> <input type="hidden" id="password_re_md5"

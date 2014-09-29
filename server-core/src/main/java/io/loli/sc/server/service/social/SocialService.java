@@ -1,5 +1,6 @@
 package io.loli.sc.server.service.social;
 
+import io.loli.sc.server.dao.UserDao;
 import io.loli.sc.server.dao.social.SocialDao;
 import io.loli.sc.server.entity.Social;
 import io.loli.sc.server.entity.User;
@@ -21,6 +22,9 @@ public class SocialService {
     @Inject
     private SocialDao sd;
 
+    @Inject
+    private UserDao ud;
+
     @Transactional
     public void save(Social s) {
         s.setCreateDate(new Date());
@@ -28,12 +32,20 @@ public class SocialService {
     }
 
     @Transactional
-    public void save(String userId, String token, String name, String type, long expried) {
+    public Social save(String userId, String token, String name, String type, long expried) {
         Social s = null;
         try {
             s = sd.findByUserIdAndType(userId, type);
+            s.getUser().setType("weibo");
             this.updateToken(userId, token, type, expried);
         } catch (NoResultException e) {
+            User user = new User();
+            user.setName(name);
+            user.setRegDate(new Date());
+            user.setVip(false);
+            user.setType("weibo");
+            ud.save(user);
+
             s = new Social();
             s.setAccessToken(token);
             s.setUid(userId);
@@ -42,7 +54,11 @@ public class SocialService {
             s.setName(name);
             s.setType(type);
             this.save(s);
+
+            s.setUser(user);
+
         }
+        return s;
 
     }
 
