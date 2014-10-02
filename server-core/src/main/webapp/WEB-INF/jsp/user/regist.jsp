@@ -13,82 +13,10 @@
 <script src="${pageContext.request.contextPath}/static/js/md5.js"></script>
 
 <style type="text/css">
-.register-form {
-    width: 70%;
-    margin: auto;
-    margin-top: 60px;
-    padding: 3px 60px 60px 20px;
-    border-width: 1px;
-    border-color: rgb(221, 221, 221);
-    border-radius: 4 4 4 4;
-    box-shadow: none;
-    border-style: solid;
-}
 
-a#regist-weibo, a#regist-qq {
-    color: white;
-}
-
-a#regist-weibo:visited, a#regist-qq:visited {
-    color: white;
-}
 </style>
 <script type="text/javascript">
-    $(document).ready(function() {
-        $("#user-token").attr("disabled", "disabled");
-        $("#sendEmail").click(function(e) {
-            if (validateEmail()) {
-                $("#sendEmail").val("邮件发送中");
-                $("#sendEmail").attr("disabled", "disabled");
-                $.post("${rootPath}/mail/send", {
-                    email : $("#user-email").val()
-                }, function(e) {
-                    if (e == "true") {
-                        $("#user-token").removeAttr("disabled");
-                        refreshTime(60000);
-                    } else {
-                        alert("邮件发送错误");
-                    }
-                }, "text");
-            }
-        });
-
-        $("#regist-form").submit(function(e) {
-            var var1 = md5password();
-            var var2 = $("#token-status").val() == "true";
-            if (!(var1 && var2)) {
-                e.preventDefault();
-            }
-        });
-
-        $("#user-token").on("input", function(e) {
-            if (e.target.value.length == 32) {
-                validateTokenTrue();
-            }
-        });
-
-    });
-
-    function validateTokenTrue() {
-        $.post("${rootPath}/mail/validate", {
-            token : $("#user-token").val()
-        }, function(e) {
-            if (e == "true") {
-                $("#token-status").val("true");
-            }
-        }, "text");
-    }
-
-    function refreshTime(time) {
-        if (time > 0) {
-            $("#sendEmail").val("等待" + time / 1000 + "秒");
-            time = time - 1000;
-            var t = setTimeout("refreshTime(" + time + ")", 1000);
-        } else {
-            $("#sendEmail").removeAttr("disabled");
-            $("#sendEmail").val("发送验证码");
-        }
-    }
+    
 </script>
 </head>
 <body>

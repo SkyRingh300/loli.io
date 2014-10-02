@@ -12,34 +12,7 @@
 <script src="${pageContext.request.contextPath}/static/js/md5.js"></script>
 
 <style type="text/css">
-.login-form {
-    width: 70%;
-    margin: auto;
-    margin-top: 60px;
-    padding: 3px 60px 60px 20px;
-    border-width: 1px;
-    border-color: rgb(221, 221, 221);
-    border-radius: 4 4 4 4;
-    box-shadow: none;
-    border-style: solid;
-}
 
-.info {
-    width: 70%;
-    margin: auto;
-}
-
-.footer {
-    margin-top: 160px;
-}
-
-a#regist-weibo, a#regist-qq {
-    color: white;
-}
-
-a#regist-weibo:visited, a#regist-qq:visited {
-    color: white;
-}
 </style>
 </head>
 <body>
