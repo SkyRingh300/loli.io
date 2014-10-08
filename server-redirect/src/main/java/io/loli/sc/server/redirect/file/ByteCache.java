@@ -1,7 +1,5 @@
 package io.loli.sc.server.redirect.file;
 
-import io.loli.storage.redirect.RedirectHandler;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
@@ -26,7 +24,7 @@ import org.apache.logging.log4j.Logger;
  * @author choco (loli@linux.com)
  */
 public class ByteCache implements Cache {
-    private static final Logger logger = LogManager.getLogger(RedirectHandler.class);
+    private static final Logger logger = LogManager.getLogger(ByteCache.class);
 
     private Map<String, byte[]> dataMap = new TreeMap<>();
     /**
