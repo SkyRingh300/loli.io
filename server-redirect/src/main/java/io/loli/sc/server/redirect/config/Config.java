@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 public class Config {
     private static Logger logger = LogManager.getLogger(Config.class);
     // 是否使用缓存
-    public static boolean useCache = false;
+    public static boolean useCache = true;
     // 服务器端口
     public static int port = 8888;
     // 最大缓存文件数

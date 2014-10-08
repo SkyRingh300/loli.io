@@ -79,9 +79,7 @@ public class FileCache implements Cache {
     public Path getFile(String path) {
         // 生成文件名
         String fileName = path.substring(path.lastIndexOf("/") + 1);
-        if (fileName.contains(".")) {
-            fileName = fileName.substring(0, fileName.indexOf("."));
-        }
+
         Path p = root.resolve(fileName);
 
         // 当该文件不存在时，就调用saveFile方法下载
@@ -98,9 +96,7 @@ public class FileCache implements Cache {
     public byte[] getBytes(String path) {
         // 生成文件名
         String fileName = path.substring(path.lastIndexOf("/") + 1);
-        if (fileName.contains(".")) {
-            fileName = fileName.substring(0, fileName.indexOf("."));
-        }
+       
         Path p = root.resolve(fileName);
 
         byte[] bytes = null;

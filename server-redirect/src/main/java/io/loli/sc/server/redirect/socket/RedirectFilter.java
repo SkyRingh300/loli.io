@@ -3,8 +3,8 @@ package io.loli.sc.server.redirect.socket;
 import io.loli.sc.server.redirect.config.Config;
 import io.loli.sc.server.redirect.dao.ImageDao;
 import io.loli.sc.server.redirect.dao.LogDao;
-import io.loli.sc.server.redirect.file.ByteCache;
 import io.loli.sc.server.redirect.file.Cache;
+import io.loli.sc.server.redirect.file.FileCache;
 import io.loli.sc.server.server.redirect.bean.Pair;
 import io.loli.storage.redirect.RedirectHandler;
 import io.loli.storage.redirect.RequestAuthFilter;
@@ -25,7 +25,7 @@ import org.glassfish.grizzly.http.util.HttpStatus;
 public class RedirectFilter implements RequestAuthFilter {
     private static ImageDao imageDao = new ImageDao();
     private static LogDao logDao = new LogDao();
-    private static final Cache cache = new ByteCache(Config.maxCount);
+    private static final Cache cache = new FileCache();
 
     private static final Logger logger = LogManager.getLogger(RedirectHandler.class);
 
