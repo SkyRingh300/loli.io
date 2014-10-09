@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -49,7 +50,13 @@ public class WeiboSocialAction extends SocialAction {
 
     @Override
     @RequestMapping(value = "acceptCode")
-    public String acceptCode(@RequestParam(value = "code", required = true) String code, HttpSession session) {
+    public String acceptCode(@RequestParam(value = "code", required = false) String code, HttpSession session,
+        Model model) {
+        if (code == null) {
+            model.addAttribute("info", "登录失败");
+            return "/user/login";
+        }
+
         if (session.getAttribute("user") == null) {
             Pair<String, Long> token = manager.getAccessToken(code);
             UserInfo info = manager.getUserInfo(token.getKey());
