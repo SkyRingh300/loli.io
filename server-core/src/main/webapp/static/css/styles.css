@@ -22,7 +22,6 @@ body {
     margin: 0px auto 20px;
 }
 
-
 html {
     background-image: radial-gradient(center, rgb(245, 245, 245), rgb(245, 245, 245)) !important;
     background-image: radial-gradient(at center center, rgb(245, 245, 245), rgb(245, 245, 245)) !important;
@@ -76,4 +75,17 @@ a#regist-weibo, a#regist-qq {
 
 a#regist-weibo:visited, a#regist-qq:visited {
     color: white;
+}
+
+ul#fileList li {
+    padding: 7px !important;
+    height: 36px !important;
+}
+
+ul#fileList li .thumb {
+    display: none;
+}
+ul#fileList li .name {
+    left:0px !important;
+    
 }

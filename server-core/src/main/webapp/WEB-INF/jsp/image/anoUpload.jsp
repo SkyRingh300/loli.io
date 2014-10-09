@@ -56,10 +56,7 @@
           class="btn btn-sm btn-primary">原图床</button>
       </c:if>
       <button type="button" id="weibo2" onclick="window.location.href='${pageContext.request.contextPath}/?weibo=weibo'"
-        class="btn btn-sm btn-primary">微博图床1</button>
-      <button type="button" id="weibo3"
-        onclick="window.location.href='${pageContext.request.contextPath}/?weibo=weibo_mobile'"
-        class="btn btn-sm btn-primary">微博图床2</button>
+        class="btn btn-sm btn-primary">微博图床</button>
     </c:if>
     <c:if test="${not empty param.weibo}">
       <input type="hidden" id="weibo" name="type" value="${param.weibo}">
@@ -71,10 +68,9 @@
     <c:if test="${not empty param.weibo}">
       <ul>
         <li>微博图床文件最大为5M</li>
-        <li>微博图床1：通过微博API接口上传，有上传频率限制：1小时内还可以上传<span class="label label-danger">${requestScope.limit.key}</span>张图片，24小时内还可以上传<span
+        <li>微博图床：通过微博API接口上传，有上传频率限制：1小时内还可以上传<span class="label label-danger">${requestScope.limit.key}</span>张图片，24小时内还可以上传<span
           class="label  label-danger">${requestScope.limit.value}</span>张图片。当次数为0时，请使用原图床上传。
         </li>
-        <li>微博图床2：模拟浏览器上传，没有频率限制</li>
         <li>如果微博图床总是上传失败，请使用原图床</li>
       </ul>
     </c:if>

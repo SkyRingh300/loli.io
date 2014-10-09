@@ -13,6 +13,7 @@
 <script src="<spring:message code="staticPath"></spring:message>/jquery.ui.widget.js"></script>
 <script src="<spring:message code="staticPath"></spring:message>/jquery.iframe-transport.js"></script>
 <script src="<spring:message code="staticPath"></spring:message>/jquery.fileupload.js"></script>
+<link href="${pageContext.request.contextPath}/static/css/pan.css" rel="stylesheet" />
 
 </head>
 <body>

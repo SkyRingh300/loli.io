@@ -47,7 +47,7 @@ $(function() {
                         + ' data-fgColor="#0788a5" data-readOnly="1" data-bgColor="#3e4043" />--><p class="name"></p><!--<span></span>--><label class="path">文件上传中...</label>');
 
                     // Append the file name and file size
-                    tpl.find('p').text(data.files[0].name).append('<i>' + formatFileSize(data.files[0].size) + '</i>');
+                    tpl.find('p').text(data.files[0].name).append('  （' + formatFileSize(data.files[0].size) + ')');
 
                     // Add the HTML to the UL element
                     data.context = tpl.appendTo(ul);
