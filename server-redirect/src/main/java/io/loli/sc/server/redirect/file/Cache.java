@@ -1,6 +1,6 @@
 package io.loli.sc.server.redirect.file;
 
-import io.loli.sc.server.server.redirect.bean.Pair;
+import io.loli.sc.server.redirect.bean.Pair;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

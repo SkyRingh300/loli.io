@@ -1,6 +1,6 @@
 package io.loli.sc.server.redirect.dao;
 
-import io.loli.sc.server.server.redirect.bean.Pair;
+import io.loli.sc.server.redirect.bean.Pair;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

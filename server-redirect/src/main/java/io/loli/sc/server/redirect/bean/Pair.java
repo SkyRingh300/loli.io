@@ -1,4 +1,4 @@
-package io.loli.sc.server.server.redirect.bean;
+package io.loli.sc.server.redirect.bean;
 
 public class Pair<K, V> {
     private K key;

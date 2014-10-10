@@ -1,11 +1,11 @@
 package io.loli.sc.server.redirect.socket;
 
+import io.loli.sc.server.redirect.bean.Pair;
 import io.loli.sc.server.redirect.config.Config;
 import io.loli.sc.server.redirect.dao.ImageDao;
 import io.loli.sc.server.redirect.dao.LogDao;
 import io.loli.sc.server.redirect.file.Cache;
 import io.loli.sc.server.redirect.file.FileCache;
-import io.loli.sc.server.server.redirect.bean.Pair;
 import io.loli.storage.redirect.RedirectHandler;
 import io.loli.storage.redirect.RequestAuthFilter;
 

@@ -12,10 +12,10 @@ if(args.size() < 1){
     args = args as List;
     args = args.unique();
     service = Executors.newCachedThreadPool();
-    args.each({port->
+    args.each({ port->
         service.submit({
             port = port as int;
-            server = new RedirectServer().filter(new RedirectFilter()).port(port);
+            server = new RedirectServer().filter(new RedirectFilter()).address("0.0.0.0").port(port);
             server.start();
         } as Runnable);
     })
