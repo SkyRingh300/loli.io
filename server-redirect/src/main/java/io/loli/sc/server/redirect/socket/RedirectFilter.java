@@ -8,6 +8,7 @@ import io.loli.sc.server.redirect.file.Cache;
 import io.loli.sc.server.redirect.file.FileCache;
 import io.loli.storage.redirect.RedirectHandler;
 import io.loli.storage.redirect.RequestAuthFilter;
+import io.loli.util.concurrent.TaskExecutor;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -28,6 +29,8 @@ public class RedirectFilter implements RequestAuthFilter {
     private static final Cache cache = new FileCache();
 
     private static final Logger logger = LogManager.getLogger(RedirectHandler.class);
+
+    private static final TaskExecutor executor = new TaskExecutor(30);
 
     /*
      * 当配置为使用缓存且(未配置exclude或者url不包含exclude字符串)时，使用缓存
@@ -52,8 +55,9 @@ public class RedirectFilter implements RequestAuthFilter {
                 if (ip != null && ip.equals("127.0.0.1")) {
                     ip = request.getHeader("X-Real-IP");
                 }
+                final String fip = ip;
                 String ua = request.getHeader(Header.UserAgent);
-                logDao.save(url, ua, referer, ip, new Date());
+                executor.execute(() -> logDao.save(url, ua, referer, fip, new Date()));
                 InputStream input = null;
 
                 try (OutputStream output = response.getOutputStream();) {
