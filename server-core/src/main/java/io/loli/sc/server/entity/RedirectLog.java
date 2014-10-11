@@ -19,6 +19,7 @@ public class RedirectLog {
     private int id;
 
     private String url;
+    @Column(length = 512)
     private String ua;
     private String referer;
     private String ip;
