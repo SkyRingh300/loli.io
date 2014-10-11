@@ -1,4 +1,4 @@
-sc-server
+萝莉图床
 =========
 
 [![Build Status](https://drone.io/github.com/chocotan/sc-server/status.png)](https://drone.io/github.com/chocotan/sc-server/latest)
