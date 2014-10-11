@@ -5,7 +5,7 @@
 <jsp:directive.include file="../taglib.jsp" />
 
 <head>
-<title>SCREENSHOT.PICS-修改密码</title>
+<title>修改密码-萝莉图床</title>
 <link
 	href="<spring:message code="staticPath"></spring:message>/style.css"
 	rel="stylesheet" />

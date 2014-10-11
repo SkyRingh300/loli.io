@@ -26,7 +26,7 @@
         <span class="sr-only">点击下拉</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span
           class="icon-bar"></span>
       </button>
-      <a class="navbar-brand title" href="${pageContext.request.contextPath}/">SCREENSHOT.PICS(BETA)</a>
+      <a class="navbar-brand title" href="${pageContext.request.contextPath}/">萝莉图床</a>
     </div>
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">

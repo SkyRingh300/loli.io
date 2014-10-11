@@ -2,7 +2,7 @@
 <jsp:directive.include file="../taglib.jsp" />
 <!DOCTYPE html>
 <head>
-<title>SCREENSHOT.PICS-查看已上传文件</title>
+<title>查看已上传文件-萝莉图床</title>
 <link href="<spring:message code="staticPath"></spring:message>/style.css" rel="stylesheet" />
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">

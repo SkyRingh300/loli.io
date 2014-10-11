@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <jsp:directive.include file="taglib.jsp" />
 <head>
-<title>SCREENSHOT.PICS-下载客户端</title>
+<title>下载客户端-萝莉图床</title>
 <link href="static/ext/uploader/style.css" rel="stylesheet" />
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">

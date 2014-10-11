@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>SCREENSHOT.PICS-网盘(BETA)</title>
+<title>文件上传-萝莉图床</title>
 <link
 	href="<spring:message code="staticPath"></spring:message>/style.css"
 	rel="stylesheet" />
@@ -47,9 +47,7 @@
 		</form>
 		<div id="message">
 			<ul>
-				<li>网盘还不稳定，上传成功后会生成URL，如果文件很大，请耐心等待数秒</li>
-				<li>文件大小最大为200M，超过不会上传成功，请注意</li>
-				<li>使用迅雷下载这里的文件可能会对服务器造成巨大压力</li>
+				<li>此为测试功能，随时都有可能去除，最大文件30M</li>
 			</ul>
 		</div>
 	</div>

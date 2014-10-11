@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>网盘(内测中)-SCREENSHOT.PICS</title>
+<title>网盘(内测中)-萝莉图床</title>
 
 
 <jsp:include page="../static.jsp"></jsp:include>
