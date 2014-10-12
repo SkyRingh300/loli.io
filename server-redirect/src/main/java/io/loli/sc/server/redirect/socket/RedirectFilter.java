@@ -12,6 +12,7 @@ import io.loli.util.concurrent.TaskExecutor;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Date;
@@ -32,6 +33,23 @@ public class RedirectFilter implements RequestAuthFilter {
 
     private static final TaskExecutor executor = new TaskExecutor(30);
 
+    private void send404(Response response) {
+        response.setStatus(HttpStatus.NOT_FOUND_404);
+
+        response.setContentType("image/png");
+
+        try (InputStream is = this.getClass().getResourceAsStream("/404.png");
+            OutputStream os = response.getOutputStream();) {
+            byte[] b = new byte[1024];
+            while (is.read(b) >= 0) {
+                os.write(b);
+            }
+
+        } catch (IOException e) {
+            logger.error(e);
+        }
+    }
+
     /*
      * 当配置为使用缓存且(未配置exclude或者url不包含exclude字符串)时，使用缓存
      */
@@ -46,7 +64,7 @@ public class RedirectFilter implements RequestAuthFilter {
             String url = result.getKey();
             if (null == url || "".equals(url.trim())) {
                 logger.warn("url为空");
-                response.setStatus(HttpStatus.NOT_FOUND_404);
+                send404(response);
             } else {
 
                 logger.info("找到url为:" + url);
@@ -85,9 +103,7 @@ public class RedirectFilter implements RequestAuthFilter {
                         output.write(buffer, 0, length);
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    logger.error(e);
-                    response.sendRedirect(url);
+                    send404(response);
                 } finally {
                     if (input != null) {
                         input.close();
@@ -96,8 +112,8 @@ public class RedirectFilter implements RequestAuthFilter {
             }
 
         } catch (Exception e) {
-            response.setStatus(HttpStatus.NOT_FOUND_404);
-            logger.error("系统内部错误500:" + e);
+            e.printStackTrace();
+            send404(response);
         }
 
     }
