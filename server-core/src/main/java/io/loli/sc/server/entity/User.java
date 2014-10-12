@@ -46,6 +46,7 @@ public class User implements Serializable {
     private String type;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @JsonIgnore
     private List<Social> socials;
 
     @OneToOne(mappedBy = "user")
