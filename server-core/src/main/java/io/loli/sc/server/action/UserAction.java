@@ -1,11 +1,14 @@
 package io.loli.sc.server.action;
 
+import io.loli.sc.server.entity.Social;
 import io.loli.sc.server.entity.User;
 import io.loli.sc.server.exception.DBException;
 import io.loli.sc.server.service.UserService;
+import io.loli.sc.server.service.social.SocialService;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -28,6 +31,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class UserAction {
     @Inject
     private UserService userService;
+    
+    @Inject
+    private SocialService socialService;
 
     /**
      * 注册的INPUT地址
@@ -67,17 +73,13 @@ public class UserAction {
      * @param password_md5 客户端js自动生成的密码md5值, 用以验证非法提交
      */
     @RequestMapping(value = { "/regist" }, method = RequestMethod.POST)
-    public String submitReg(
-            @ModelAttribute User user,
-            @RequestParam(TOKEN_NAME) String token,
-            Model model,
-            @RequestParam(required = true, value = "password_re") String passwordRe,
-            HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public String submitReg(@ModelAttribute User user, @RequestParam(TOKEN_NAME) String token, Model model,
+        @RequestParam(required = true, value = "password_re") String passwordRe, HttpServletRequest request,
+        RedirectAttributes redirectAttributes) {
         Map<String, String> msgMap = new HashMap<String, String>();
         request.setAttribute(MSG_NAME, msgMap);
         Object tokenInSession = request.getSession().getAttribute(TOKEN_NAME);
-        if (null != tokenInSession && null != token
-                && !token.equals(tokenInSession)) {
+        if (null != tokenInSession && null != token && !token.equals(tokenInSession)) {
             msgMap.put(TOKEN_NAME, "验证码不正确");
             return REG_INPUT;
         } else {
@@ -85,8 +87,7 @@ public class UserAction {
         }
 
         // 没有md5加密
-        if (user.getPassword().length() != 32
-                || !user.getPassword().equals(passwordRe)) {
+        if (user.getPassword().length() != 32 || !user.getPassword().equals(passwordRe)) {
             msgMap.put(EMAIL_NAME, "非法请求");
             return REG_INPUT;
         }
@@ -120,9 +121,8 @@ public class UserAction {
      * @param session 自动注入的Session对象
      */
     @RequestMapping(value = { "/login" }, method = RequestMethod.POST)
-    public String submitLogin(@ModelAttribute("user") User user, Model model,
-            HttpSession session, HttpServletRequest request,
-            RedirectAttributes redirectAttributes, HttpServletResponse response) {
+    public String submitLogin(@ModelAttribute("user") User user, Model model, HttpSession session,
+        HttpServletRequest request, RedirectAttributes redirectAttributes, HttpServletResponse response) {
         // 保存页面显示信息的map
         Map<String, String> msgMap = new HashMap<String, String>();
         request.setAttribute(MSG_NAME, msgMap);
@@ -132,9 +132,7 @@ public class UserAction {
         if (user.getEmail() == null || user.getEmail().trim().length() == 0) {
             flag = false;
         }
-        if (user.getPassword() == null
-                || user.getPassword().trim().length() == 0
-                || user.getPassword().length() != 32) {
+        if (user.getPassword() == null || user.getPassword().trim().length() == 0 || user.getPassword().length() != 32) {
             flag = false;
         }
         // 当验证失败时，跳转回登录界面
@@ -147,8 +145,7 @@ public class UserAction {
         // 根据此email查询出用户
         User trueUser = userService.findByEmail(user.getEmail());
         // 当查询出来的user不为空时
-        if (trueUser != null
-                && user.getPassword().equals(trueUser.getPassword())) {
+        if (trueUser != null && user.getPassword().equals(trueUser.getPassword())) {
             session.setAttribute("user", trueUser);
             redirectAttributes.addFlashAttribute("info", "登录成功");
             return "redirect:/";
@@ -161,8 +158,7 @@ public class UserAction {
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
-    public String logOut(HttpServletRequest request,
-            HttpServletResponse response, RedirectAttributes redirectAttributes) {
+    public String logOut(HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
         User user = (User) request.getSession().getAttribute("user");
         if (user != null) {
             request.getSession().removeAttribute("user");
@@ -184,24 +180,29 @@ public class UserAction {
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
-    public String changePwdForm(HttpServletRequest request, Model model,
-            RedirectAttributes redirectAttributes) {
+    public String changePwdForm(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
         Object user = request.getSession().getAttribute("user");
         if (user == null) {
             redirectAttributes.addFlashAttribute("info", "非法请求");
             return "redirect:" + LOGIN_INPUT;
         }
         model.addAttribute("user", user);
+        User u = (User) user;
+        List<Social> socials = socialService.listByUserId(u.getId());
+        socials.forEach(social -> {
+            for (String type : Social.TYPES) {
+                if (social.getType().equals(type)) {
+                    model.addAttribute(type, social);
+                }
+            }
+        });
         return "user/edit";
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public String changePwdSubmit(
-            HttpServletRequest request,
-            Model model,
-            RedirectAttributes redirectAttributes,
-            @RequestParam(required = true, value = "password_re") String passwordRe,
-            @RequestParam(required = true, value = "password_old") String passwordOld) {
+    public String changePwdSubmit(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes,
+        @RequestParam(required = true, value = "password_re") String passwordRe,
+        @RequestParam(required = true, value = "password_old") String passwordOld) {
         Object user = request.getSession().getAttribute("user");
         if (user == null) {
             redirectAttributes.addFlashAttribute("info", "非法请求");

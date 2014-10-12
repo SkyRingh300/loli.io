@@ -2,6 +2,8 @@ package io.loli.sc.server.dao.social;
 
 import io.loli.sc.server.entity.Social;
 
+import java.util.List;
+
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -18,6 +20,10 @@ public class SocialDao {
     public Social findByUserIdAndType(String userId, String type) {
         return em.createQuery("from Social where uid=:userId and type=:type", Social.class)
             .setParameter("userId", userId).setParameter("type", type).getSingleResult();
+    }
+
+    public List<Social> listByUserId(int id) {
+        return em.createQuery("from Social where user_id=:id", Social.class).setParameter("id", id).getResultList();
     }
 
 }

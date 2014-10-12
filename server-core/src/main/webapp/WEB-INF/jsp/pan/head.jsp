@@ -26,7 +26,7 @@
         <li><a href="#" class="title dropdown-toggle" data-toggle="dropdown">${sessionScope.user.email} <b
             class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li><a href="${pageContext.request.contextPath}/user/edit">修改密码</a></li>
+            <li><a href="${pageContext.request.contextPath}/user/edit">个人资料</a></li>
             <li><a href="${pageContext.request.contextPath}/img/list">查看已上传图片</a></li>
           </ul></li>
 

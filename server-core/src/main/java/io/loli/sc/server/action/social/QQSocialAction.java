@@ -1,5 +1,6 @@
 package io.loli.sc.server.action.social;
 
+import io.loli.sc.server.entity.Social;
 import io.loli.sc.server.social.parent.AuthInfo;
 import io.loli.sc.server.social.weibo.QQAuthManager;
 
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Named
 @RequestMapping(value = "social/qq")
 public class QQSocialAction extends WeiboSocialAction {
+
+    protected String type = Social.TYPE_QQ;
 
     @Override
     public void init() {

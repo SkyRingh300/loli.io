@@ -1,6 +1,7 @@
 package io.loli.sc.server.action.social;
 
 import io.loli.sc.server.entity.Social;
+import io.loli.sc.server.entity.User;
 import io.loli.sc.server.service.social.SocialService;
 import io.loli.sc.server.social.parent.AuthInfo;
 import io.loli.sc.server.social.parent.UserInfo;
@@ -9,6 +10,7 @@ import io.loli.util.bean.Pair;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLEncoder;
 import java.util.Properties;
 
 import javax.inject.Inject;
@@ -16,16 +18,22 @@ import javax.inject.Named;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.codec.net.URLCodec;
+import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Named
 @RequestMapping(value = "social/weibo")
 public class WeiboSocialAction extends SocialAction {
     @Inject
     private SocialService ss;
+
+    protected String type = Social.TYPE_WEIBO;
 
     public WeiboSocialAction() {
         // init
@@ -51,7 +59,7 @@ public class WeiboSocialAction extends SocialAction {
     @Override
     @RequestMapping(value = "acceptCode")
     public String acceptCode(@RequestParam(value = "code", required = false) String code, HttpSession session,
-        Model model) {
+        Model model, RedirectAttributes redirectAttributes) {
         if (code == null) {
             model.addAttribute("info", "登录失败");
             return "/user/login";
@@ -60,17 +68,27 @@ public class WeiboSocialAction extends SocialAction {
         if (session.getAttribute("user") == null) {
             Pair<String, Long> token = manager.getAccessToken(code);
             UserInfo info = manager.getUserInfo(token.getKey());
-            ss.save(info.getId(), token.getKey(), info.getUsername(), Social.TYPE_WEIBO, token.getValue());
-            Social social = ss.findByUserIdAndType(info.getId(), Social.TYPE_WEIBO);
+
+            ss.save(null, info.getId(), token.getKey(), info.getUsername(), type, token.getValue());
+            Social social = ss.findByUserIdAndType(info.getId(), type);
             if (social != null) {
                 session.setAttribute("user", social.getUser());
             }
             return "index";
 
         } else {
-            // TODO 绑定已有账号
+            Pair<String, Long> token = manager.getAccessToken(code);
+            UserInfo info = manager.getUserInfo(token.getKey());
+
+            ss.save((User) session.getAttribute("user"), info.getId(), token.getKey(), info.getUsername(), type,
+                token.getValue());
+            Social social = ss.findByUserIdAndType(info.getId(), type);
+            if (social != null) {
+                session.setAttribute("user", social.getUser());
+            }
+            redirectAttributes.addFlashAttribute("message", "绑定成功");
+            return "redirect:/user/edit";
         }
-        return "";
 
     }
 

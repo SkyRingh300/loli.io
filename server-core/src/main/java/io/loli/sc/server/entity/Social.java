@@ -19,6 +19,10 @@ public class Social {
 
     public static final String TYPE_WEIBO = "weibo";
 
+    public static final String TYPE_QQ = "qq";
+
+    public static final String[] TYPES = { TYPE_WEIBO, TYPE_QQ };
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;

@@ -48,7 +48,7 @@
               </c:if> <b class="caret"></b></a>
             <ul class="dropdown-menu">
               <c:if test="${user.type eq null}">
-                <li><a href="${pageContext.request.contextPath}/user/edit">修改密码</a></li>
+                <li><a href="${pageContext.request.contextPath}/user/edit">个人资料</a></li>
               </c:if>
               <li><a href="${pageContext.request.contextPath}/img/list">已上传图片</a></li>
 

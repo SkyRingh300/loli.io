@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 public abstract class SocialAction {
     protected AuthManager manager;
@@ -16,5 +17,6 @@ public abstract class SocialAction {
 
     public abstract void redirect(HttpServletResponse resp);
 
-    public abstract String acceptCode(String code, HttpSession session, Model model);
+    public abstract String acceptCode(String code, HttpSession session, Model model,
+        RedirectAttributes redirectAttributes);
 }

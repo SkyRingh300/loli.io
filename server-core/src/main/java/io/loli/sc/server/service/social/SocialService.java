@@ -6,6 +6,7 @@ import io.loli.sc.server.entity.Social;
 import io.loli.sc.server.entity.User;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -32,20 +33,20 @@ public class SocialService {
     }
 
     @Transactional
-    public Social save(String userId, String token, String name, String type, long expried) {
+    public Social save(User user, String userId, String token, String name, String type, long expried) {
         Social s = null;
         try {
             s = sd.findByUserIdAndType(userId, type);
-            s.getUser().setType("weibo");
             this.updateToken(userId, token, type, expried);
         } catch (NoResultException e) {
-            User user = new User();
-            user.setName(name);
-            user.setRegDate(new Date());
-            user.setVip(false);
-            user.setType("weibo");
-            ud.save(user);
-
+            if (user == null) {
+                user = new User();
+                user.setName(name);
+                user.setRegDate(new Date());
+                user.setVip(false);
+                user.setType(type);
+                ud.save(user);
+            }
             s = new Social();
             s.setAccessToken(token);
             s.setUid(userId);
@@ -73,4 +74,9 @@ public class SocialService {
         s.setAccessToken(token);
         return s;
     }
+
+    public List<Social> listByUserId(int id) {
+        return sd.listByUserId(id);
+    }
+
 }

@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -44,13 +45,8 @@ public class User implements Serializable {
     @Column
     private String type;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private List<Social> socials;
 
     @OneToOne(mappedBy = "user")
     @JsonIgnore
@@ -138,4 +134,21 @@ public class User implements Serializable {
     public void setType(String type) {
         this.type = type;
     }
+
+    public List<Social> getSocials() {
+        return socials;
+    }
+
+    public void setSocials(List<Social> socials) {
+        this.socials = socials;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 }
