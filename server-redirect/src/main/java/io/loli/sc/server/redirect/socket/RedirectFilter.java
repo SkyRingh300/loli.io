@@ -78,10 +78,12 @@ public class RedirectFilter implements RequestAuthFilter {
                 executor.execute(() -> logDao.save(url, ua, referer, fip, new Date()));
                 InputStream input = null;
 
-                try (OutputStream output = response.getOutputStream();) {
+                try {
+                    OutputStream output = response.getOutputStream();
                     long total = 0;
                     if (Config.useCache) {
                         byte[] bytes = cache.getBytes(url);
+
                         total = bytes.length;
                         input = new BufferedInputStream(new ByteArrayInputStream(bytes));
                     } else {
