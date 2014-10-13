@@ -10,7 +10,6 @@ import io.loli.util.bean.Pair;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URLEncoder;
 import java.util.Properties;
 
 import javax.inject.Inject;
@@ -18,10 +17,7 @@ import javax.inject.Named;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.codec.net.URLCodec;
-import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -64,6 +60,7 @@ public class WeiboSocialAction extends SocialAction {
             model.addAttribute("info", "登录失败");
             return "/user/login";
         }
+        String type = getType();
 
         if (session.getAttribute("user") == null) {
             Pair<String, Long> token = manager.getAccessToken(code);
@@ -90,6 +87,10 @@ public class WeiboSocialAction extends SocialAction {
             return "redirect:/user/edit";
         }
 
+    }
+
+    protected String getType() {
+        return Social.TYPE_WEIBO;
     }
 
     @Override

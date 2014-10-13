@@ -135,11 +135,7 @@
           </div>
 
         </fieldset>
-        <c:if test="${not(empty param.message) }">
-          <div class="info-e">
-            <div class="bg-info">${param.message }</div>
-          </div>
-        </c:if>
+
       </form>
     </div>
 

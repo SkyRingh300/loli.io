@@ -37,4 +37,8 @@ public class QQSocialAction extends WeiboSocialAction {
             logger.error("Init failed: properties not complete");
         }
     }
+
+    protected String getType() {
+        return Social.TYPE_QQ;
+    }
 }

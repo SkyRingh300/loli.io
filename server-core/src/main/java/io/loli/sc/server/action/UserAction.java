@@ -8,6 +8,7 @@ import io.loli.sc.server.service.social.SocialService;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +32,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class UserAction {
     @Inject
     private UserService userService;
-    
+
     @Inject
     private SocialService socialService;
 
