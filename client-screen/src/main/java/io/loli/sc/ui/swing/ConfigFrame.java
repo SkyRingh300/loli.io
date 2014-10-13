@@ -66,15 +66,15 @@ public class ConfigFrame extends JFrame {
 
         public KeyListenPanel(JFrame parentComponent, String option) {
             super(parentComponent, true);
-            this.setComponentOrientation(((parentComponent == null) ? getRootPane()
-                    : parentComponent).getComponentOrientation());
+            this.setComponentOrientation(((parentComponent == null) ? getRootPane() : parentComponent)
+                .getComponentOrientation());
             this.setLayout(null);
             this.add(infoLabel);
             this.add(okButton);
             this.add(cancelButton);
             infoLabel.setBounds(40, 5, 160, 30);
             okButton.setBounds(40, 40, 50, 30);
-            cancelButton.setBounds(100 , 40,50,30);
+            cancelButton.setBounds(100, 40, 50, 30);
             this.option = option;
             this.setSize(200, 110);
 
@@ -82,8 +82,7 @@ public class ConfigFrame extends JFrame {
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
             final int WIDTH = screenSize.width;
             final int HEIGHT = screenSize.height;
-            this.setLocation(WIDTH / 2 - getWidth() / 2, HEIGHT / 2
-                    - getHeight() / 2);
+            this.setLocation(WIDTH / 2 - getWidth() / 2, HEIGHT / 2 - getHeight() / 2);
 
             okButton.setEnabled(false);
             this.setVisible(true);
@@ -97,10 +96,8 @@ public class ConfigFrame extends JFrame {
                 sb.append("请按两个或两个以上的键");
                 result = false;
             }
-            if (!keyIntSet.contains(KeyEvent.VK_CONTROL)
-                    && !keyIntSet.contains(KeyEvent.VK_META)
-                    && !keyIntSet.contains(KeyEvent.VK_ALT)
-                    && !keyIntSet.contains(KeyEvent.SHIFT_MASK)) {
+            if (!keyIntSet.contains(KeyEvent.VK_CONTROL) && !keyIntSet.contains(KeyEvent.VK_META)
+                && !keyIntSet.contains(KeyEvent.VK_ALT) && !keyIntSet.contains(KeyEvent.SHIFT_MASK)) {
                 sb.append("请包含ctrl(meta),alt,shift中的至少一个");
                 result = false;
             }
@@ -112,8 +109,7 @@ public class ConfigFrame extends JFrame {
             int count = 0;
             while (itr.hasNext()) {
                 int i = itr.next();
-                if (i != KeyEvent.VK_CONTROL && i != KeyEvent.VK_ALT
-                        && i != KeyEvent.VK_SHIFT && i != KeyEvent.VK_META) {
+                if (i != KeyEvent.VK_CONTROL && i != KeyEvent.VK_ALT && i != KeyEvent.VK_SHIFT && i != KeyEvent.VK_META) {
                     count++;
                 }
             }
@@ -202,15 +198,12 @@ public class ConfigFrame extends JFrame {
     private void useSystemUI() {
         try {
             if (System.getProperty("os.name").toLowerCase().indexOf("linux") == -1)
-                UIManager.setLookAndFeel(UIManager
-                        .getSystemLookAndFeelClassName());
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             else {
                 try {
-                    UIManager
-                            .setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+                    UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
                 } catch (ClassNotFoundException e) {
-                    UIManager.setLookAndFeel(UIManager
-                            .getSystemLookAndFeelClassName());
+                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                 }
             }
             // System.setProperty("awt.useSystemAAFontSettings", "on");
@@ -232,8 +225,7 @@ public class ConfigFrame extends JFrame {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         final int WIDTH = screenSize.width;
         final int HEIGHT = screenSize.height;
-        this.setLocation(WIDTH / 2 - this.getWidth() / 2,
-                HEIGHT / 2 - this.getHeight() / 2);
+        this.setLocation(WIDTH / 2 - this.getWidth() / 2, HEIGHT / 2 - this.getHeight() / 2);
         this.setResizable(false);
         setVisible(true);
     }
@@ -293,16 +285,14 @@ public class ConfigFrame extends JFrame {
         startWithSystemCheck.setSelected(config.isStartWithSystem());
 
         showNotifyAfterUploadCheck = new JCheckBox("上传后显示通知");
-        showNotifyAfterUploadCheck.setSelected(config
-                .getShowNotifyAfterUpload());
+        showNotifyAfterUploadCheck.setSelected(config.getShowNotifyAfterUpload());
 
         playMusicAfterUploadCheck = new JCheckBox("上传后播放音乐");
         playMusicAfterUploadCheck.setSelected(config.getPlayMusicAfterUpload());
 
         saveAsTitleLabel = new JLabel("<html><strong>截图保存在</strong></html>");
 
-        fileNameFormatLabel = new JLabel(
-                "<html><strong>截图文件名格式</strong></html>");
+        fileNameFormatLabel = new JLabel("<html><strong>截图文件名格式</strong></html>");
         fileNameFormatField = new JTextField();
         fileNameFormatField.setText(config.getFileNameFormat());
 
@@ -310,31 +300,27 @@ public class ConfigFrame extends JFrame {
         jpanel3.setLayout(null);
         fullShotKeyLabel = new JLabel("全屏截图: ");
         fullShotKeyButton = new JButton("点击设置");
-        fullShotKeyShowLabel = new JLabel(StringUtils.join(
-                new ArrayList<String>() {
-                    private static final long serialVersionUID = 4083852950428261739L;
+        fullShotKeyShowLabel = new JLabel(StringUtils.join(new ArrayList<String>() {
+            private static final long serialVersionUID = 4083852950428261739L;
 
-                    {
-                        for (String s : Arrays.asList(config.getFullHotKey()
-                                .split(","))) {
-                            add(KeyEvent.getKeyText(Integer.parseInt(s)));
-                        }
-                    }
-                }, "+"));
+            {
+                for (String s : Arrays.asList(config.getFullHotKey().split(","))) {
+                    add(KeyEvent.getKeyText(Integer.parseInt(s)));
+                }
+            }
+        }, "+"));
 
         selectShotKeyLabel = new JLabel("选择截图: ");
         selectShotKeyButton = new JButton("点击设置");
-        selectShotKeyShowLabel = new JLabel(StringUtils.join(
-                new ArrayList<String>() {
-                    private static final long serialVersionUID = 4083852950428261739L;
+        selectShotKeyShowLabel = new JLabel(StringUtils.join(new ArrayList<String>() {
+            private static final long serialVersionUID = 4083852950428261739L;
 
-                    {
-                        for (String s : Arrays.asList(config.getSelectHotKey()
-                                .split(","))) {
-                            add(KeyEvent.getKeyText(Integer.parseInt(s)));
-                        }
-                    }
-                }, "+"));
+            {
+                for (String s : Arrays.asList(config.getSelectHotKey().split(","))) {
+                    add(KeyEvent.getKeyText(Integer.parseInt(s)));
+                }
+            }
+        }, "+"));
         // serviceListTable = new JTable();
     }
 
@@ -575,10 +561,8 @@ public class ConfigFrame extends JFrame {
                 config.setSavePath(savePathField.getText());
                 config.setFileNameFormat(fileNameFormatField.getText());
                 config.setStartWithSystem(startWithSystemCheck.isSelected());
-                config.setPlayMusicAfterUpload(playMusicAfterUploadCheck
-                        .isSelected());
-                config.setShowNotifyAfterUpload(showNotifyAfterUploadCheck
-                        .isSelected());
+                config.setPlayMusicAfterUpload(playMusicAfterUploadCheck.isSelected());
+                config.setShowNotifyAfterUpload(showNotifyAfterUploadCheck.isSelected());
                 Object obj = uploadChoice.getSelectedItem();
                 if (obj != null)
                     config.setDefaultUpload((String) obj);
@@ -601,13 +585,10 @@ public class ConfigFrame extends JFrame {
                         return;
                     }
                     ImgurAPI.AccessToken token = api.pinToToken(pin);
-                    config.getImgurConfig().setAccessToken(
-                            token.getAccess_token());
-                    config.getImgurConfig().setRefreshToken(
-                            token.getRefresh_token());
+                    config.getImgurConfig().setAccessToken(token.getAccess_token());
+                    config.getImgurConfig().setRefreshToken(token.getRefresh_token());
                     config.getImgurConfig().setDate(new Date());
-                    config.getImgurConfig().updateProperties(
-                            config.getProperties());
+                    config.getImgurConfig().updateProperties(config.getProperties());
                     config.save();
                     imgurAuthButton.setEnabled(false);
                     imgurRemoveAuthButton.setEnabled(true);
@@ -615,8 +596,7 @@ public class ConfigFrame extends JFrame {
                     uploadChoice.addItem("imgur");
                 } catch (UploadException e1) {
                     logger.error("认证错误:" + e1.getMessage());
-                    MessageSender.getInstance().showDialog(
-                            "认证错误:" + e1.getMessage());
+                    MessageSender.getInstance().showDialog("认证错误:" + e1.getMessage());
                 }
             }
 
@@ -626,8 +606,7 @@ public class ConfigFrame extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                config.getImgurConfig().removeFromProperties(
-                        config.getProperties());
+                config.getImgurConfig().removeFromProperties(config.getProperties());
                 config.save();
                 imgurAuthButton.setEnabled(true);
                 imgurRemoveAuthButton.setEnabled(false);
@@ -649,12 +628,10 @@ public class ConfigFrame extends JFrame {
                         return;
                     }
                     DropboxAPI.AccessToken token = api.pinToToken(pin);
-                    config.getDropboxConfig().setAccessToken(
-                            token.getAccess_token());
+                    config.getDropboxConfig().setAccessToken(token.getAccess_token());
 
                     config.getDropboxConfig().setUid(token.getUid());
-                    config.getDropboxConfig().updateProperties(
-                            config.getProperties());
+                    config.getDropboxConfig().updateProperties(config.getProperties());
                     config.save();
                     dropboxAuthButton.setEnabled(false);
                     dropboxRemoveAuthButton.setEnabled(true);
@@ -662,8 +639,7 @@ public class ConfigFrame extends JFrame {
                     uploadChoice.addItem("dropbox");
                 } catch (UploadException e1) {
                     logger.error("认证错误:" + e1.getMessage());
-                    MessageSender.getInstance().showDialog(
-                            "认证错误:" + e1.getMessage());
+                    MessageSender.getInstance().showDialog("认证错误:" + e1.getMessage());
                 }
             }
 
@@ -673,8 +649,7 @@ public class ConfigFrame extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                config.getDropboxConfig().removeFromProperties(
-                        config.getProperties());
+                config.getDropboxConfig().removeFromProperties(config.getProperties());
                 config.save();
                 dropboxAuthButton.setEnabled(true);
                 dropboxRemoveAuthButton.setEnabled(false);
@@ -694,12 +669,9 @@ public class ConfigFrame extends JFrame {
                         return;
                     }
                     GDriveAPI.AccessToken token = api.pinToToken(pin);
-                    config.getGdriveConfig().setAccessToken(
-                            token.getAccess_token());
-                    config.getGdriveConfig().setRefreshToken(
-                            token.getRefresh_token());
-                    config.getGdriveConfig().updateProperties(
-                            config.getProperties());
+                    config.getGdriveConfig().setAccessToken(token.getAccess_token());
+                    config.getGdriveConfig().setRefreshToken(token.getRefresh_token());
+                    config.getGdriveConfig().updateProperties(config.getProperties());
                     config.save();
                     gDriveAuthLabel.setText("已连接");
                     uploadChoice.addItem("gdrive");
@@ -707,8 +679,7 @@ public class ConfigFrame extends JFrame {
                     gDriveRemoveAuthButton.setEnabled(true);
                 } catch (UploadException e1) {
                     logger.error("认证错误:" + e1.getMessage());
-                    MessageSender.getInstance().showDialog(
-                            "认证错误:" + e1.getMessage());
+                    MessageSender.getInstance().showDialog("认证错误:" + e1.getMessage());
                 }
             }
         });
@@ -716,8 +687,7 @@ public class ConfigFrame extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                config.getGdriveConfig().removeFromProperties(
-                        config.getProperties());
+                config.getGdriveConfig().removeFromProperties(config.getProperties());
                 config.save();
                 gDriveAuthButton.setEnabled(true);
                 gDriveRemoveAuthButton.setEnabled(false);
@@ -733,13 +703,10 @@ public class ConfigFrame extends JFrame {
                     ImageCloudAPI api = new ImageCloudAPI();
                     api.auth();
 
-                    ImageCloudAPI.ClientToken token = api.getToken();
-                    if (token != null && token.getId() != 0) {
-                        config.getImageCloudConfig().setToken(token.getToken());
-                        config.getImageCloudConfig().setEmail(
-                                token.getUser().getEmail());
-                        config.getImageCloudConfig().updateProperties(
-                                config.getProperties());
+                    if (api.getId() != null) {
+                        config.getImageCloudConfig().setToken(api.getTokenStr());
+                        config.getImageCloudConfig().setEmail(api.getEmail());
+                        config.getImageCloudConfig().updateProperties(config.getProperties());
                         config.save();
                         imageCloudAuthLabel.setText("已连接");
                         uploadChoice.addItem("screenshot.pics");
@@ -748,8 +715,7 @@ public class ConfigFrame extends JFrame {
                     }
                 } catch (UploadException e1) {
                     logger.error("认证错误:" + e1.getMessage());
-                    MessageSender.getInstance().showDialog(
-                            "认证错误:" + e1.getMessage());
+                    MessageSender.getInstance().showDialog("认证错误:" + e1.getMessage());
                 }
             }
         });
@@ -757,8 +723,7 @@ public class ConfigFrame extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                config.getImageCloudConfig().removeFromProperties(
-                        config.getProperties());
+                config.getImageCloudConfig().removeFromProperties(config.getProperties());
                 config.save();
                 imageCloudAuthButton.setEnabled(true);
                 imageCloudRemoveAuthButton.setEnabled(false);

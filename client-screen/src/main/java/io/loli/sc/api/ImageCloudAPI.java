@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -35,11 +34,15 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class ImageCloudAPI extends APITools implements API {
 
     private Config config;
+    private String email;
+    private String tokenStr;
+    private Integer id;
 
     public ImageCloudAPI() {
     }
@@ -62,10 +65,8 @@ public class ImageCloudAPI extends APITools implements API {
             MultipartEntityBuilder multiPartEntityBuilder = MultipartEntityBuilder.create();
             multiPartEntityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
             // 可以直接addBinary
-            multiPartEntityBuilder.addPart(
-                "image",
-                new FileBody(fileToUpload, ContentType.create("application/octet-stream", Consts.UTF_8), fileToUpload
-                    .getName()));
+            multiPartEntityBuilder.addPart("image",
+                new FileBody(fileToUpload, ContentType.create("image/png", Consts.UTF_8), fileToUpload.getName()));
             multiPartEntityBuilder.setCharset(Consts.UTF_8);
             // 可以直接addText
             multiPartEntityBuilder.addPart("token",
@@ -81,218 +82,9 @@ public class ImageCloudAPI extends APITools implements API {
         } catch (IOException e) {
             throw new UploadException(e);
         }
-        ObjectMapper mapper = new ObjectMapper();
-        UploadedImage img = null;
-        try {
-            img = mapper.readValue(result, UploadedImage.class);
-        } catch (IOException e) {
-            throw new UploadException(e);
-        }
-        return img.getPath();
-    }
-
-    public static class ClientToken {
-        public ClientToken() {
-        }
-
-        private int id;
-        private User user;
-        private String token;
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public User getUser() {
-            return user;
-        }
-
-        public void setUser(User user) {
-            this.user = user;
-        }
-
-        public String getToken() {
-            return token;
-        }
-
-        public void setToken(String token) {
-            this.token = token;
-        }
-    }
-
-    public static class User {
-        public User() {
-        }
-
-        private int id;
-        private String email;
-        private Date regDate;
-        private String vip;
-
-        public String getVip() {
-            return vip;
-        }
-
-        public void setVip(String vip) {
-            this.vip = vip;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public void setEmail(String email) {
-            this.email = email;
-        }
-
-        public Date getRegDate() {
-            return regDate;
-        }
-
-        public void setRegDate(Date regDate) {
-            this.regDate = regDate;
-        }
-
-    }
-
-    public static class UploadedImage {
-        private int id;
-
-        private User user;
-
-        private Date date;
-        /**
-         * 图片描述显示在alt标签中
-         */
-        private String description;
-        private String path;
-
-        /**
-         * 原始名字显示在title标签中
-         */
-        private String originName;
-
-        private String redirectCode;
-
-        private String generatedCode;
-        private String generatedName;
-        private String internalPath;
-
-        public String getInternalPath() {
-            return internalPath;
-        }
-
-        public void setInternalPath(String internamPath) {
-            this.internalPath = internamPath;
-        }
-
-        public String getGeneratedName() {
-            return generatedName;
-        }
-
-        public void setGeneratedName(String generatedName) {
-            this.generatedName = generatedName;
-        }
-
-        private Integer tag;
-
-        public Integer getTag() {
-            return tag;
-        }
-
-        public void setTag(Integer tag) {
-            this.tag = tag;
-        }
-
-        public String getGeneratedCode() {
-            return generatedCode;
-        }
-
-        public void setGeneratedCode(String generatedCode) {
-            this.generatedCode = generatedCode;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public Date getDate() {
-            return date;
-        }
-
-        public void setDate(Date date) {
-            this.date = date;
-        }
-
-        public String getDesc() {
-            return description;
-        }
-
-        public void setDesc(String desc) {
-            this.description = desc;
-        }
-
-        public String getPath() {
-            return path;
-        }
-
-        public void setPath(String path) {
-            this.path = path;
-        }
-
-        public String getOriginName() {
-            return originName;
-        }
-
-        public void setOriginName(String originName) {
-            this.originName = originName;
-        }
-
-        public User getUser() {
-            return user;
-        }
-
-        public void setUser(User user) {
-            this.user = user;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
-        }
-
-        public String getRedirectCode() {
-            return redirectCode;
-        }
-
-        public void setRedirectCode(String redirectCode) {
-            this.redirectCode = redirectCode;
-        }
-    }
-
-    private ClientToken token;
-
-    public ClientToken getToken() {
-        return token;
+        System.out.println(result);
+        JSONObject obj = new JSONObject(result);
+        return "http://r.loli.io/" + obj.getString("redirectCode");
     }
 
     private static final String BASE_URL = "http://loli.io/";
@@ -312,15 +104,15 @@ public class ImageCloudAPI extends APITools implements API {
             new BasicNameValuePair("password", MD5Util.hash(passwd)) }));
         String result = post(TOKEN_URL, params);
 
-        ObjectMapper mapper = new ObjectMapper();
-        token = null;
+        JSONObject obj = new JSONObject(result);
         try {
-            token = mapper.readValue(result, ClientToken.class);
-            if (token.getUser() == null) {
-                JOptionPane.showMessageDialog(null, "用户名密码错误");
-            }
-        } catch (Exception e) {
-            throw new UploadException(e);
+            JSONObject user = obj.getJSONObject("user");
+            this.id = obj.getInt("id");
+            this.email = user.getString("email");
+            this.tokenStr = obj.getString("token");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "用户名密码错误");
         }
     }
 
@@ -346,6 +138,30 @@ public class ImageCloudAPI extends APITools implements API {
         logininformation.put("user", username.getText());
         logininformation.put("pass", new String(password.getPassword()));
         return logininformation;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getTokenStr() {
+        return tokenStr;
+    }
+
+    public void setTokenStr(String tokenStr) {
+        this.tokenStr = tokenStr;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
 }
