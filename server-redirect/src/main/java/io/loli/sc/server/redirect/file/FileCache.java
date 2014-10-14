@@ -85,7 +85,12 @@ public class FileCache implements Cache {
         // 当该文件不存在时，就调用saveFile方法下载
         if (!Files.exists(p)) {
             logger.info(path + "没有在缓存中找到");
-            this.saveFile(path);
+            synchronized (this) {
+                if (!Files.exists(p)) {
+                    this.saveFile(path);
+                }
+            }
+
         } else {
             logger.info("从缓存中找到" + path);
         }
@@ -96,7 +101,7 @@ public class FileCache implements Cache {
     public byte[] getBytes(String path) {
         // 生成文件名
         String fileName = path.substring(path.lastIndexOf("/") + 1);
-       
+
         Path p = root.resolve(fileName);
 
         byte[] bytes = null;
