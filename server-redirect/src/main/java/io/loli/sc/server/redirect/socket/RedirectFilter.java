@@ -24,6 +24,8 @@ import org.glassfish.grizzly.http.server.Response;
 import org.glassfish.grizzly.http.util.Header;
 import org.glassfish.grizzly.http.util.HttpStatus;
 
+import com.mysql.jdbc.StringUtils;
+
 public class RedirectFilter implements RequestAuthFilter {
     private static ImageDao imageDao = new ImageDao();
     private static LogDao logDao = new LogDao();
@@ -61,6 +63,9 @@ public class RedirectFilter implements RequestAuthFilter {
                 code = code.substring(1);
             }
             Pair<String, String> result = imageDao.findUrlByCode(code);
+            if (StringUtils.isNullOrEmpty(result.getKey()) && code.length() == 6) {
+                result = imageDao.findUrlLikeCode(code);
+            }
             String url = result.getKey();
             if (null == url || "".equals(url.trim())) {
                 logger.warn("url为空");
@@ -105,6 +110,7 @@ public class RedirectFilter implements RequestAuthFilter {
                         output.write(buffer, 0, length);
                     }
                 } catch (Exception e) {
+                    e.printStackTrace();
                     send404(response);
                 } finally {
                     if (input != null) {
