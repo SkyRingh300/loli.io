@@ -10,7 +10,6 @@
 
 <META content="图床,免费图床,屏幕截图,萝莉图床" name="keywords" />
 <meta name="description" content="一个好用的免费图床" />
-<script src="${pageContext.request.contextPath}/static/js/https.js"></script>
 
 <jsp:include page="static.jsp"></jsp:include>
 </head>

@@ -2,32 +2,6 @@
 <jsp:directive.include file="../taglib.jsp" />
 <!DOCTYPE html>
 <style>
-#upload ul li span {
-    background: url('${pageContext.request.contextPath}/static/ext/uploader/icons.png') no-repeat !important;
-}
-
-#drop {
-    border-image: url('${pageContext.request.contextPath}/static/ext/uploader/border-image.png') 25 repeat !important;
-}
-
-#result-area {
-    margin-top: 10px;
-}
-
-.modal-body {
-    height: 240px;
-}
-
-#fetch-confirm {
-    margin-top: 5px;
-    margin-bottom: 10px;
-}
-
-.path {
-    max-width: 60%;
-    overflow: hidden;
-    white-space: nowrap;
-}
 </style>
 
 
@@ -65,6 +39,10 @@
     </ul>
   </form>
   <div id="message">
+    <ul>
+      <li>所有外链均已启用CDN</li>
+      <li>使用条款有更新，见页面底部链接</li>
+    </ul>
     <c:if test="${not empty param.weibo}">
       <ul>
         <li>微博图床文件最大为5M</li>
