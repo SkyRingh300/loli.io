@@ -3,11 +3,11 @@
 <!DOCTYPE html>
 <style>
 #upload ul li span {
-    background: url('<spring:message code="staticPath"></spring:message>/icons.png') no-repeat !important;
+    background: url('${pageContext.request.contextPath}/static/ext/uploader/icons.png') no-repeat !important;
 }
 
 #drop {
-    border-image: url('<spring:message code="staticPath"></spring:message>/border-image.png') 25 repeat !important;
+    border-image: url('${pageContext.request.contextPath}/static/ext/uploader/border-image.png') 25 repeat !important;
 }
 
 #result-area {

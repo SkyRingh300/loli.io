@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -21,7 +22,13 @@ public class HomeAction {
     private static final Logger logger = Logger.getLogger(HomeAction.class);
 
     @RequestMapping(value = { "" })
-    public String index(HttpServletRequest request, @RequestParam(value = "weibo", required = false) String weibo) {
+    public String index(HttpServletRequest request, @RequestParam(value = "weibo", required = false) String weibo,
+        HttpServletResponse response) {
+        // HTTPS enabled
+        // if ("http".equals(request.getScheme())) {
+        // return "redirect:https://" + request.getServerName();
+        // }
+
         if (StringUtils.isNotBlank(weibo)) {
             Pair<Integer, Integer> res = new Pair<>(0, 0);
             try {

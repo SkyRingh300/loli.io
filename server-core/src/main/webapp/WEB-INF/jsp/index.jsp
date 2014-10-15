@@ -4,13 +4,13 @@
 <jsp:directive.include file="taglib.jsp" />
 <head>
 <title>萝莉图床</title>
-<link href="static/ext/uploader/style.css" rel="stylesheet" />
+<link href="${pageContext.request.contextPath}/static/ext/uploader/style.css" rel="stylesheet" />
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
 <META content="图床,免费图床,屏幕截图,萝莉图床" name="keywords" />
 <meta name="description" content="一个好用的免费图床" />
-
+<script src="${pageContext.request.contextPath}/static/js/https.js"></script>
 
 <jsp:include page="static.jsp"></jsp:include>
 </head>
