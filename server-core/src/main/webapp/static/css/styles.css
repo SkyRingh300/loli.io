@@ -13,7 +13,7 @@
 }
 
 body {
-    font-family: Verdana, Geneva, "Microsoft YaHei", sans-serif;
+    font-family: 'Microsoft Yahei', 'Hiragino Sans GB', 'Microsoft Sans Serif', 'WenQuanYi Micro Hei', sans-serif;
 }
 
 #message {
@@ -91,8 +91,6 @@ ul#fileList li .name {
 }
 
 /* anoUpload.jsp */
-
-
 #result-area {
     margin-top: 10px;
 }
