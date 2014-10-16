@@ -79,4 +79,14 @@ public class SocialService {
         return sd.listByUserId(id);
     }
 
+    // 和该方法的另一个重载方法不同，另一个方法的userId是指该social帐号所返回的id，比如你的qq号，而这里是User实体类的id
+    public Social findByUserIdAndType(int userId, String type) {
+        return sd.findByUserId(userId, type);
+    }
+
+    @Transactional
+    public void delete(Social social) {
+        sd.delete(social);
+    }
+
 }

@@ -125,4 +125,18 @@ public class WeiboAuthManager extends AuthManager {
         }
         return info;
     }
+
+    @Override
+    public boolean cancel(String accessToken) {
+        String cancelUrl = "https://api.weibo.com/oauth2/revokeoauth2" + "?access_token=" + accessToken;
+        String result = "";
+        try {
+            result = this.get(cancelUrl);
+        } catch (IOException e) {
+            e.printStackTrace();
+            logger.warning(e.getMessage());
+        }
+        JSONObject obj = new JSONObject(result);
+        return "true".equals(obj.getString("result"));
+    }
 }

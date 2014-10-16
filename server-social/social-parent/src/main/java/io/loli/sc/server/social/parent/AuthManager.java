@@ -35,6 +35,13 @@ public abstract class AuthManager {
     public abstract String getAuthUrl();
 
     /**
+     * 取消授权
+     * 
+     * @return 是否取消成功
+     */
+    public abstract boolean cancel(String accessToken);
+
+    /**
      * 用户授权后会返回一个code，通过此code能获取到该用户的accessToken
      * 
      * @param code 用户授权后的code

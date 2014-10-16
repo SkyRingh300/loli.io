@@ -19,4 +19,6 @@ public abstract class SocialAction {
 
     public abstract String acceptCode(String code, HttpSession session, Model model,
         RedirectAttributes redirectAttributes);
+
+    public abstract String cancel(HttpSession session, RedirectAttributes redirectAttributes);
 }

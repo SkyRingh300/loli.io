@@ -120,4 +120,10 @@ public class QQAuthManager extends AuthManager {
         return info;
     }
 
+    @Override
+    public boolean cancel(String accessToken) {
+        // Not supported
+        return true;
+    }
+
 }

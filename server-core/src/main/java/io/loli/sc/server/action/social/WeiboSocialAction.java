@@ -52,6 +52,28 @@ public class WeiboSocialAction extends SocialAction {
         }
     }
 
+    @RequestMapping(value = "cancel")
+    public String cancel(HttpSession session, RedirectAttributes redirectAttributes) {
+        Object obj = session.getAttribute("user");
+        String accessToken = "";
+        if (obj != null) {
+            User user = (User) obj;
+            Social social = ss.findByUserIdAndType(user.getId(), this.getType());
+            accessToken = social.getAccessToken();
+            if (StringUtils.isNotBlank(accessToken) && manager.cancel(accessToken)) {
+                ss.delete(social);
+                redirectAttributes.addFlashAttribute("message", "解除绑定成功");
+            } else {
+                redirectAttributes.addFlashAttribute("message", "操作失败");
+            }
+        } else {
+            redirectAttributes.addFlashAttribute("message", "操作失败");
+        }
+
+        return "redirect:/user/edit";
+
+    }
+
     @Override
     @RequestMapping(value = "acceptCode")
     public String acceptCode(@RequestParam(value = "code", required = false) String code, HttpSession session,

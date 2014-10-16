@@ -115,8 +115,8 @@
                   src="${pageContext.request.contextPath}/static/img/weibo_btn.png"></a>
               </c:if>
               <c:if test="${not empty weibo}">
-                    ${weibo.name}
-          </c:if>
+                    ${weibo.name}&nbsp;<a href="${pageContext.request.contextPath}/social/weibo/cancel">解除绑定</a>
+              </c:if>
 
             </div>
 
@@ -129,8 +129,8 @@
                   src="${pageContext.request.contextPath}/static/img/qq_btn.png"></a>
               </c:if>
               <c:if test="${not empty qq}">
-                    ${qq.name}
-          </c:if>
+                    ${qq.name}<!-- &nbsp;<a href="${pageContext.request.contextPath}/social/qq/cancel"></a> -->
+              </c:if>
             </div>
           </div>
 

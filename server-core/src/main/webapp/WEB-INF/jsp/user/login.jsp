@@ -8,7 +8,7 @@
 
 
 <jsp:include page="../static.jsp"></jsp:include>
-<script src="${pageContext.request.contextPath}/static/js/https.js"></script>
+<!-- <script src="${pageContext.request.contextPath}/static/js/https.js"></script> -->
 
 <script src="${pageContext.request.contextPath}/static/js/login.js"></script>
 <script src="${pageContext.request.contextPath}/static/js/md5.js"></script>
