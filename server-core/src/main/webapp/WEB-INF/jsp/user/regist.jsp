@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>用户注册</title>
+<title>用户注册-萝莉图床</title>
 
 
 <jsp:include page="../static.jsp"></jsp:include>
@@ -13,7 +13,6 @@
 <script src="${pageContext.request.contextPath}/static/js/md5.js"></script>
 
 <style type="text/css">
-
 </style>
 <script type="text/javascript">
     
@@ -57,6 +56,14 @@
               <input type="password" class="form-control" name="password_re_ori" id="password_re" placeholder="重复输入密码">
             </div>
             <span class="label label-danger" id="password_re_error"></span>
+          </div>
+          <div class="form-group">
+            <label for="password_re" class="col-sm-4 control-label">使用条款</label>
+            <div class="checkbox col-sm-4">
+              <label><input type="checkbox" id="terms-checkbox">同意<a
+                href="${pageContext.request.contextPath}/terms" target="_blank">使用条款</a></label>
+            </div>
+            <span class="label label-danger" id="terms-error"></span>
           </div>
           <div class="form-group">
             <div class="col-sm-offset-4 col-sm-6">

@@ -15,6 +15,9 @@
       <a href="http://www.miitbeian.gov.cn/" target="_blank">苏ICP备14003163号</a>
     </div>
     <!-- cnzz -->
-    <script src="https://s19.cnzz.com/z_stat.php?id=1252930997&web_id=1252930997"></script>
+    <div style="display: none" align=center>
+      <span style="display: none"><script src="https://s19.cnzz.com/z_stat.php?id=1252930997&web_id=1252930997"></script>
+      </span>
+    </div>
   </div>
 </div>

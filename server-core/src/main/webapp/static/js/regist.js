@@ -40,6 +40,17 @@ function validatePassword() {
 
 }
 
+function validateTerms() {
+    if (document.getElementById("terms-checkbox").checked) {
+        $("#terms-error").html("");
+        return true;
+    } else {
+        $("#terms-error").html("必须同意使用条款");
+        return false;
+    }
+
+}
+
 function md5password() {
     var password1 = document.getElementById("user-password").value;
     if (validateEmail() & validatePassword() & validateToken()) {
@@ -51,7 +62,6 @@ function md5password() {
         return false;
     }
 }
-
 
 $(document).ready(function() {
     $("#user-token").attr("disabled", "disabled");
@@ -75,7 +85,8 @@ $(document).ready(function() {
     $("#regist-form").submit(function(e) {
         var var1 = md5password();
         var var2 = $("#token-status").val() == "true";
-        if (!(var1 && var2)) {
+        var var3 = validateTerms();
+        if (!(var1 && var2 && var3)) {
             e.preventDefault();
         }
     });
