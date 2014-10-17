@@ -89,4 +89,12 @@ public class SocialService {
         sd.delete(social);
     }
 
+    public boolean checkExists(String id, String type) {
+        try {
+            findByUserIdAndType(id, type);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

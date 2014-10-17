@@ -98,14 +98,19 @@ public class WeiboSocialAction extends SocialAction {
         } else {
             Pair<String, Long> token = manager.getAccessToken(code);
             UserInfo info = manager.getUserInfo(token.getKey());
-
-            ss.save((User) session.getAttribute("user"), info.getId(), token.getKey(), info.getUsername(), type,
-                token.getValue());
-            Social social = ss.findByUserIdAndType(info.getId(), type);
-            if (social != null) {
-                session.setAttribute("user", social.getUser());
+            // 检查该Social是否已经存在
+            if (ss.checkExists(info.getId(), type)) {
+                redirectAttributes.addFlashAttribute("message", "该社交帐号已经被使用了");
+            } else {
+                ss.save((User) session.getAttribute("user"), info.getId(), token.getKey(), info.getUsername(), type,
+                    token.getValue());
+                Social social = ss.findByUserIdAndType(info.getId(), type);
+                if (social != null) {
+                    session.setAttribute("user", social.getUser());
+                }
+                redirectAttributes.addFlashAttribute("message", "绑定成功");
             }
-            redirectAttributes.addFlashAttribute("message", "绑定成功");
+
             return "redirect:/user/edit";
         }
 
