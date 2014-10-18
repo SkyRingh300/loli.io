@@ -201,10 +201,10 @@
     });
 </script>
 
-<script src="<spring:message code="staticPath"></spring:message>/jquery.knob.js"></script>
-<script src="<spring:message code="staticPath"></spring:message>/jquery.ui.widget.js"></script>
-<script src="<spring:message code="staticPath"></spring:message>/jquery.iframe-transport.js"></script>
-<script src="<spring:message code="staticPath"></spring:message>/jquery.fileupload.js"></script>
+<script src="${pageContext.request.contextPath}/static/ext/uploader/jquery.knob.min.js"></script>
+<script src="${pageContext.request.contextPath}/static/ext/uploader/jquery.ui.widget.min.js"></script>
+<script src="${pageContext.request.contextPath}/static/ext/uploader/jquery.iframe-transport.min.js"></script>
+<script src="${pageContext.request.contextPath}/static/ext/uploader/jquery.fileupload.min.js"></script>
 <script src="${pageContext.request.contextPath}/static/ext/uploader/script.js"></script>
 <c:if test="${empty param.weibo}">
   <input type="hidden" id="redirectPath" value="<spring:message code="redirectPath"></spring:message>">

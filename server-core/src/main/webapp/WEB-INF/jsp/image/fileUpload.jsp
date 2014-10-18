@@ -16,6 +16,9 @@
 #upload ul li p {
     left: 0px !important;
 }
+#drop {
+    border-image: url('${pageContext.request.contextPath}/static/ext/uploader/border-image.png') 25 repeat !important;
+}
 </style>
 </head>
 <body>
