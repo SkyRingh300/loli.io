@@ -11,6 +11,26 @@
 <jsp:include page="../static.jsp"></jsp:include>
 <script src="${pageContext.request.contextPath}/static/js/regist.js"></script>
 <script src="${pageContext.request.contextPath}/static/js/md5.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(e) {
+        $("#sendEmail").click(function(e) {
+            if (validateEmail()) {
+                $("#sendEmail").val("邮件发送中");
+                $("#sendEmail").attr("disabled", "disabled");
+                $.post("${pageContext.request.contextPath}/mail/send", {
+                    email : $("#user-email").val()
+                }, function(e) {
+                    if (e == "true") {
+                        $("#user-token").removeAttr("disabled");
+                        refreshTime(60000);
+                    } else {
+                        alert("邮件发送错误");
+                    }
+                }, "text");
+            }
+        });
+    });
+</script>
 
 <style type="text/css">
 </style>

@@ -65,23 +65,6 @@ function md5password() {
 
 $(document).ready(function() {
     $("#user-token").attr("disabled", "disabled");
-    $("#sendEmail").click(function(e) {
-        if (validateEmail()) {
-            $("#sendEmail").val("邮件发送中");
-            $("#sendEmail").attr("disabled", "disabled");
-            $.post("${rootPath}/mail/send", {
-                email : $("#user-email").val()
-            }, function(e) {
-                if (e == "true") {
-                    $("#user-token").removeAttr("disabled");
-                    refreshTime(60000);
-                } else {
-                    alert("邮件发送错误");
-                }
-            }, "text");
-        }
-    });
-
     $("#regist-form").submit(function(e) {
         var var1 = md5password();
         var var2 = $("#token-status").val() == "true";
