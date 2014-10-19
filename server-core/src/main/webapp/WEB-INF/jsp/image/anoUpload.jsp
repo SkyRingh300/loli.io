@@ -47,8 +47,7 @@
   </form>
   <div id="message">
     <ul>
-      <li>所有外链均已启用CDN</li>
-      <li>使用条款有更新，见页面底部链接</li>
+      <li>请不要在赌博、色情等敏感信息或者可能会对互联网造成危害的网站中使用本图床，发现立即屏蔽此类网站！</li>
     </ul>
     <c:if test="${not empty param.weibo}">
       <ul>
