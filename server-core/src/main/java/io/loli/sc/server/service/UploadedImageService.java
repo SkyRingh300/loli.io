@@ -120,4 +120,13 @@ public class UploadedImageService {
         }
     }
 
+    public UploadedImage findByCode(String redirectCode) {
+        List<UploadedImage> images = ud.findByCode(redirectCode);
+        if (images.isEmpty() || images.size() > 1) {
+            throw new IllegalArgumentException("Invalid code:" + redirectCode);
+        } else {
+            return images.get(0);
+        }
+    }
+
 }

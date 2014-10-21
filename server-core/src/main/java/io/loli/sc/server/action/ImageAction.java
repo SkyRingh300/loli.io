@@ -36,14 +36,20 @@ public class ImageAction {
     @Inject
     private UserService userService;
 
+    @RequestMapping(value = "/m/{redirectCode}", method = RequestMethod.GET)
+    public String show(@PathVariable(value = "redirectCode") String redirectCode, Model model) {
+        UploadedImage image = imageService.findByCode(redirectCode);
+        model.addAttribute("image", image);
+        return "image/show";
+    }
+
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String listByUId(Model model, HttpServletRequest request) {
         return "redirect:/img/list/1";
     }
 
     @RequestMapping(value = "/list/{page}", method = RequestMethod.GET)
-    public String listByUId(@PathVariable(value = "page") int page, Model model,
-            HttpServletRequest request) {
+    public String listByUId(@PathVariable(value = "page") int page, Model model, HttpServletRequest request) {
         if (page == 0) {
             page = 1;
         }
@@ -76,8 +82,8 @@ public class ImageAction {
 
     @RequestMapping(value = "/search")
     public String search(@RequestParam(value = "fileName") String fileName,
-            @RequestParam(value = "page", required = false) Integer page,
-            HttpServletRequest request, Model model, @RequestParam(required = false) Integer tag) {
+        @RequestParam(value = "page", required = false) Integer page, HttpServletRequest request, Model model,
+        @RequestParam(required = false) Integer tag) {
         if (page == null || page == 0) {
             page = 1;
         }
@@ -88,8 +94,7 @@ public class ImageAction {
         }
         int u_id = ((User) request.getSession().getAttribute("user")).getId();
 
-        List<UploadedImage> list = imageService.listByUIdAndFileName(u_id, fileName, firstPosition,
-                tag);
+        List<UploadedImage> list = imageService.listByUIdAndFileName(u_id, fileName, firstPosition, tag);
         int totalCount = imageService.countByUIdAndFileName(u_id, fileName, tag);
         int count = imageService.countByUId(u_id);
         int pageCount = (int) Math.ceil((float) totalCount / (float) imageService.getMaxResults());
@@ -113,7 +118,7 @@ public class ImageAction {
 
     @RequestMapping(value = "/delete")
     public String delete(@RequestParam(value = "id") int id, RedirectAttributes redirectAttributes,
-            HttpServletRequest request) {
+        HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute("user");
         UploadedImage image = imageService.findById(id);
         if (user == null || image == null || image.getUser().getId() != user.getId()) {
@@ -134,7 +139,7 @@ public class ImageAction {
 
     @RequestMapping(value = "/{filename:[a-zA-Z0-9]{1,}\\.png}")
     public void showImg(@PathVariable("filename") String filename, HttpServletRequest request,
-            HttpServletResponse response) {
+        HttpServletResponse response) {
         String imagePath = request.getServletContext().getRealPath("img");
 
         File file = new File(imagePath + File.separator + filename);

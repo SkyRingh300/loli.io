@@ -42,6 +42,7 @@ public class UploadedImage implements Serializable {
     private Date date;
 
     private String ip;
+
     private String ua;
 
     @Column(name = "content_type")
@@ -94,6 +95,9 @@ public class UploadedImage implements Serializable {
 
     @Column(name = "del_flag")
     private Boolean delFlag = false;
+
+    @Column
+    private Boolean share = false;
 
     public int getId() {
         return id;
@@ -224,5 +228,13 @@ public class UploadedImage implements Serializable {
 
     public void setContentType(String contentType) {
         this.contentType = contentType;
+    }
+
+    public Boolean getShare() {
+        return share;
+    }
+
+    public void setShare(Boolean share) {
+        this.share = share;
     }
 }

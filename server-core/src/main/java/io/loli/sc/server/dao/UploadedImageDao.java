@@ -76,7 +76,12 @@ public class UploadedImageDao {
     }
 
     public List<UploadedImage> checkExists(String code) {
-        return em.createQuery("from UploadedImage where generated_code=:code", UploadedImage.class)
+        return em.createQuery("from UploadedImage where generatedCode=:code", UploadedImage.class)
             .setParameter("code", code).getResultList();
+    }
+
+    public List<UploadedImage> findByCode(String generatedCode) {
+        return em.createQuery("from UploadedImage where generatedCode=:code and delFlag=false", UploadedImage.class)
+            .setParameter("code", generatedCode).getResultList();
     }
 }
