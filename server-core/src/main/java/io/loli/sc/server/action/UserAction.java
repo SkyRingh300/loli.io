@@ -8,7 +8,6 @@ import io.loli.sc.server.service.social.SocialService;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +24,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Named
@@ -219,5 +219,14 @@ public class UserAction {
             redirectAttributes.addFlashAttribute(MSG_NAME, "原密码错误");
             return "redirect:edit";
         }
+    }
+
+    @RequestMapping(value = "/updateNickname", method = RequestMethod.POST)
+    @ResponseBody
+    public String updateNickname(HttpSession session, @RequestParam(value = "nickName") String nickName) {
+        User user = (User) session.getAttribute("user");
+        userService.updateNickname(user, nickName);
+
+        return "success";
     }
 }

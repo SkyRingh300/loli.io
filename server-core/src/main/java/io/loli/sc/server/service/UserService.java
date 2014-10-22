@@ -66,4 +66,11 @@ public class UserService {
         return result;
     }
 
+    @Transactional
+    public void updateNickname(User user, String nickName) {
+        user.setName(nickName);
+        user = this.findById(user.getId());
+        user.setName(nickName);
+    }
+
 }

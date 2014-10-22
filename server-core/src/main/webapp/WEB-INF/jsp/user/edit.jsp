@@ -24,6 +24,30 @@
             }
         });
 
+        $("#edit-nickname-btn").click(function() {
+            var obj = this;
+            var t = $(this).text();
+            if (t == "修改") {
+                $(this).text("保存");
+                var origin = $(this).prev("label").text();
+
+                $(this).prev("label").remove();
+                $(this).before("<input size='12' type='text' value='" + origin.trim() + "'>");
+                $(this).prev("input").focus().select();
+            } else {
+                var nickName = $(this).prev().val();
+                $.post("${pageContext.request.contextPath}/user/updateNickname", {
+                    nickName : nickName
+                }, function(result) {
+                    if (result == "success") {
+                        $(obj).text("修改");
+                        $(obj).prev().remove();
+                        $(obj).before("<label>" + nickName + "</label>");
+                    }
+
+                });
+            }
+        });
     });
 </script>
 
@@ -40,13 +64,34 @@
 .edit-form {
     height: 380px;
 }
+
+#edit-nickname-div {
+    padding-top: 7px;
+}
 </style>
 </head>
 <body>
   <jsp:include page="../top.jsp"></jsp:include>
   <div class="container">
     <div class="edit-form">
+      <form class="form-horizontal" onsubmit="return false;" id="info-form" action="edit" method="POST">
+        <fieldset>
+          <legend>修改个人信息</legend>
+          <div class="form-group">
+            <label for="user-email" class="col-sm-4 control-label">昵称</label>
+            <div class="col-sm-4" id="edit-nickname-div">
+              <label> <c:if test="${empty user.name}">
+              昵称未设置
+              </c:if> <c:if test="${not empty user.name}">
+              ${user.name}
+              </c:if>
+              </label>
+              <button type="button" id="edit-nickname-btn" class="btn btn-xs">修改</button>
 
+            </div>
+          </div>
+        </fieldset>
+      </form>
       <form class="form-horizontal" id="edit-form" action="edit" method="POST">
         <fieldset>
           <legend>修改密码</legend>
