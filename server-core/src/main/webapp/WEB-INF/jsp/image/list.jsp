@@ -185,8 +185,7 @@
                   <a href="${img.path}" target="_blank">${img.path}</a>
                 </c:if>
                 <c:if test="${img.storageBucket.type ne 'weibo'}">
-                  <a href="<spring:message code="redirectPath"></spring:message>${img.redirectCode}" target="_blank"><spring:message
-                      code="redirectPath"></spring:message>${img.redirectCode}</a>
+                  <a href="${pageContext.request.contextPath}/img/m/${img.generatedCode}" target="_blank">查看</a>
                 </c:if>
 
               </c:if> <c:if test="${img.redirectCode eq null}">
