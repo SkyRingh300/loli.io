@@ -18,19 +18,53 @@
         document.write("<input type='text' class='col-sm-8' value='"+window.location.href+"'/>");
     }
 
-    $(document).ready(function() {
-        $(".image-show-links input").mouseover(function() {
-            $(this).focus();
-            $(this).select();
+    $(document).ready(
+        function() {
+            $(".image-show-links input").mouseover(function() {
+                $(this).focus();
+                $(this).select();
+            });
+            //share buttons start
+            $("#share-input").val(window.location.href);
+            var href = $("#weibo-share-button").attr("link");
+            href = href.replace("$(url)", encodeURI(window.location.href));
+            $("#weibo-share-button").attr("link", href);
+
+            href = $("#tt-share-button").attr("link");
+            href = href.replace("$(url)", encodeURI(window.location.href));
+            href = href.replace("$(pic)",
+                encodeURI("<spring:message code="redirectPath"></spring:message>${image.redirectCode}"));
+
+            $("#tt-share-button").attr("link", href);
+
+            href = $("#renren-share-button").attr("link");
+            href = href.replace("$(url)", encodeURI(window.location.href));
+            href = href.replace("$(pic)",
+                encodeURI("<spring:message code="redirectPath"></spring:message>${image.redirectCode}"));
+
+            $("#renren-share-button").attr("link", href);
+
+            href = $("#qz-share-button").attr("link");
+            href = href.replace("$(url)", encodeURI(window.location.href));
+            href = href.replace("$(pic)",
+                encodeURI("<spring:message code="redirectPath"></spring:message>${image.redirectCode}"));
+
+            $("#qz-share-button").attr("link", href);
+
+            $(".image-share-buttons").click(
+                function() {
+                    window.open($(this).attr("link"), 'newwindow',
+                        'toolbar=no,menubar=no,scrollbars=no,resizable=no,location=no,status=no');
+                });
+
+            //share buttons end
+
+            var v = $("#bb-input").val();
+
+            v = "[URL=" + window.location.href + "]" + v + "[/URL]";
+            $("#bb-input").val(v);
+
         });
-        $("#share-input").val(window.location.href);
-
-        var v = $("#bb-input").val();
-
-        v = "[URL=" + window.location.href + "]" + v + "[/URL]";
-        $("#bb-input").val(v);
-
-    });
 </script>
 
 <style>
@@ -73,6 +107,9 @@
     /*border: 2px solid rgb(120, 120, 120);*/
     border-radius: 1px;
     background-color: rgb(230, 230, 230);
+    http: //open.weibo.com/wiki/%E8%B5%9E%E7%BB%84% E4%BB%B6Weibo_Meta_Tags%E5%8F%8A%E5%AF%B9OpenGraph%E6%94% AF%E6%8C%81%
+        E8%8C%83% E7%95% B4%E8%AF%B4%E6%98% 8E%E6%96% 87% E6%A1%A3#.E5 .8D .95 .E4 .B8 .AA .E5 .B1 .9E .E6 .80 .A7 .E7
+        .9A .84 .E5 .A4 .9A .E5 .80 .BC .E5 .AE .9A .E4 .B9 .89
     color: rgb(90, 90, 90);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
@@ -96,6 +133,10 @@
     max-height: 95%;
     margin: 5px;
 }
+
+.image-show-title {
+    padding-bottom: 5px;
+}
 </style>
 </head>
 <body>
@@ -107,13 +148,13 @@
           <div class="image-show-body">
             <a target="_blank" href="<spring:message code="redirectPath"></spring:message>${image.redirectCode}"><img
               src="<spring:message code="redirectPath"></spring:message>${image.redirectCode}" /></a>
+            <h3 class="image-show-title">${image.originName}</h3>
           </div>
 
           <div class="image-show-info">
             <span>上传:&nbsp;<c:if test="${empty image.user.name}">
           &lt;昵称未设置&gt;
-        </c:if>
-              <c:if test="${not empty image.user.name}">
+        </c:if> <c:if test="${not empty image.user.name}">
           ${image.user.name }
         </c:if>
             </span> <span>上传时间: <fmt:formatDate value="${image.date}" pattern="yyyy-MM-dd HH:mm:ss" /></span>
@@ -121,8 +162,25 @@
         </div>
       </div>
       <div class="image-show-right">
-        <div class="image-show-share-buttons"></div>
         <div class="image-show-links">
+
+          <div class="image-show-share-buttons">
+            <h3>分享到</h3>
+            <a href="javascript:void(0)" id="weibo-share-button" class="image-share-buttons" target="_window"
+              type="button"
+              link="http://service.weibo.com/share/share.php?url=$(url)&appkey=&title=%E5%88%86%E4%BA%AB%E5%9B%BE%E7%89%87&pic=<spring:message code="redirectPath"></spring:message>${image.redirectCode}&ralateUid=&language=">
+              <img src="${pageContext.request.contextPath}/static/img/weibo_share.png">
+            </a> <a href="javascript:void(0)" id="tt-share-button" class="image-share-buttons" type="button"
+              link="http://share.v.t.qq.com/index.php?c=share&a=index&url=$(url)&appkey=801547889&title=%E5%88%86%E4%BA%AB%E5%9B%BE%E7%89%87&pic=$(pic)&line1=">
+              <img src="${pageContext.request.contextPath}/static/img/tt_share.png"> <a href="javascript:void(0)"
+              id="renren-share-button" class="image-share-buttons" type="button"
+              link="http://widget.renren.com/dialog/share?resourceUrl=$(url)&images=$(pic)&charset=utf-8"> <img
+                src="${pageContext.request.contextPath}/static/img/renren_share.png"> <a href="javascript:void(0)"
+                id="qz-share-button" class="image-share-buttons" type="button"
+                link="http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=$(url)&showcount=1&desc=&summary=&title=%E5%88%86%E4%BA%AB%E5%9B%BE%E7%89%87&site=&pics=$(pic)&style=203&width=98&height=22&otype=share">
+                  <img src="${pageContext.request.contextPath}/static/img/qz_share.png">
+              </a>
+          </div>
           <div>
             <h3>分享链接</h3>
             <input class="image-show-url" id="share-input" readonly value="">
