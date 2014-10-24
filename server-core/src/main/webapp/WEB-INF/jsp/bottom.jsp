@@ -5,7 +5,7 @@
   <div class="container">
 
     <div class="column">
-      <a href="${pageContext.request.contextPath}/file">文件</a> <a href="https://www.upyun.com/" target="_blank">又拍云</a>
+      <a href="https://www.upyun.com/" target="_blank">又拍云</a>
     </div>
     <div class="column">
       <a href="${pageContext.request.contextPath}/terms">使用条款</a> <a href="${pageContext.request.contextPath}/about">关于本站</a>

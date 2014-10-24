@@ -87,6 +87,18 @@ public class UploadedImage implements Serializable {
     @Column
     private String path;
 
+    @Column(name = "smallPath")
+    private String smallPath;
+
+    @Column(name = "small_square_path")
+    private String smallSquarePath;
+
+    @Column(name = "middlePath")
+    private String middlePath;
+
+    @Column(name = "largePath")
+    private String largePath;
+
     @Column(name = "generated_name")
     private String generatedName;
 
@@ -236,5 +248,29 @@ public class UploadedImage implements Serializable {
 
     public void setShare(Boolean share) {
         this.share = share;
+    }
+
+    public String getSmallPath() {
+        return smallPath;
+    }
+
+    public void setSmallPath(String smallPath) {
+        this.smallPath = smallPath;
+    }
+
+    public String getMiddlePath() {
+        return middlePath;
+    }
+
+    public void setMiddlePath(String middlePath) {
+        this.middlePath = middlePath;
+    }
+
+    public String getLargePath() {
+        return largePath;
+    }
+
+    public void setLargePath(String largePath) {
+        this.largePath = largePath;
     }
 }

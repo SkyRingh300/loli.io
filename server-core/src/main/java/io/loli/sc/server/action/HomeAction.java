@@ -71,20 +71,6 @@ public class HomeAction {
         return "download";
     }
 
-    @RequestMapping(value = { "file" })
-    public String fileUpload(HttpServletRequest request) {
-        String userAgent = request.getHeader("user-agent");
-        List<String> list = new ArrayList<>();
-        String current = getOs(userAgent);
-        list.add("Windows");
-        list.add("Mac");
-        list.add("Linux");
-        list.remove(current);
-        request.setAttribute("list", list);
-        request.setAttribute("current", current);
-        return "image/fileUpload";
-    }
-
     @RequestMapping(value = { "about" })
     public String about(HttpServletRequest request) {
         return "about";

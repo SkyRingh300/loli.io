@@ -1,7 +1,6 @@
 package io.loli.sc.server.action.social;
 
 import io.loli.sc.server.entity.Social;
-import io.loli.sc.server.entity.User;
 import io.loli.sc.server.social.parent.AuthInfo;
 import io.loli.sc.server.social.weibo.QQAuthManager;
 
