@@ -47,7 +47,7 @@
   </form>
   <div id="message">
     <ul>
-      <li>请不要在赌博、色情等敏感信息或者可能会对互联网造成危害的网站中使用本图床，发现立即屏蔽此类网站！</li>
+      <li>萝莉图床已屏蔽部分色情、赌博网站，具体见ban list</li>
     </ul>
     <c:if test="${not empty param.weibo}">
       <ul>

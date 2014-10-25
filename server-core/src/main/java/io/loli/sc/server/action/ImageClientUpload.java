@@ -185,6 +185,10 @@ public class ImageClientUpload {
             logger.info(imageObj.getUser().getEmail() + "上传文件:" + imageObj.getOriginName() + ", 链接为"
                 + imageObj.getPath());
         }
+
+        service.execute(() -> {
+            uic.updateThumbnail(imageObj, file, uploader);
+        });
         return imageObj;
     }
 

@@ -4,12 +4,24 @@ import io.loli.sc.server.dao.UploadedImageDao;
 import io.loli.sc.server.entity.StorageBucket;
 import io.loli.sc.server.entity.UploadedImage;
 import io.loli.sc.server.storage.StorageUploader;
+import io.loli.util.image.ThumbnailUtil;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Iterator;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 @Named("imageService")
@@ -129,4 +141,69 @@ public class UploadedImageService {
         }
     }
 
+    @Transactional
+    public void updateThumbnail(UploadedImage image, File file, StorageUploader uploader) {
+        String format = file.getName().contains(".") ? file.getName().substring(file.getName().lastIndexOf(".") + 1)
+            : "png";
+
+        try {
+            String tempDir = System.getProperty("java.io.tmpdir");
+            File f0 = new File(tempDir, image.getGeneratedCode() + "q." + format);
+            toFile(ThumbnailUtil.cutSqureWithResizeSmall(new BufferedInputStream(new FileInputStream(file)), format),
+                f0);
+            uploader.upload(f0, image.getContentType());
+            image.setSmallSquareName(f0.getName());
+
+            File f1 = new File(tempDir, image.getGeneratedCode() + "s." + format);
+            toFile(ThumbnailUtil.resizeSmall(new BufferedInputStream(new FileInputStream(file)), format), f1);
+            uploader.upload(f1, image.getContentType());
+            image.setSmallName(f1.getName());
+
+            File f2 = new File(tempDir, image.getGeneratedCode() + "m." + format);
+            toFile(ThumbnailUtil.resizeMiddle(new BufferedInputStream(new FileInputStream(file)), format), f2);
+            uploader.upload(f2, image.getContentType());
+            image.setMiddleName(f2.getName());
+
+            File f3 = new File(tempDir, image.getGeneratedCode() + "l." + format);
+            toFile(ThumbnailUtil.resizeBig(new BufferedInputStream(new FileInputStream(file)), format), f3);
+            uploader.upload(f3, image.getContentType());
+            image.setLargeName(f3.getName());
+
+            this.update(image);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void toFile(OutputStream os, File file) {
+        try {
+            FileUtils.writeByteArrayToFile(file, ((ByteArrayOutputStream) os).toByteArray());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                os.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public String getImageType(File file) {
+        try (ImageInputStream iis = ImageIO.createImageInputStream(file);) {
+            Iterator<ImageReader> iter = ImageIO.getImageReaders(iis);
+            if (!iter.hasNext()) {
+                return "";
+            }
+
+            ImageReader reader = iter.next();
+
+            return reader.getFormatName();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // The image could not be read
+        return "";
+    }
 }

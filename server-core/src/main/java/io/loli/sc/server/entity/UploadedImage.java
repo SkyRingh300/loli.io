@@ -87,17 +87,17 @@ public class UploadedImage implements Serializable {
     @Column
     private String path;
 
-    @Column(name = "smallPath")
-    private String smallPath;
+    @Column(name = "small_name")
+    private String smallName;
 
-    @Column(name = "small_square_path")
-    private String smallSquarePath;
+    @Column(name = "small_square_name")
+    private String smallSquareName;
 
-    @Column(name = "middlePath")
-    private String middlePath;
+    @Column(name = "middle_name")
+    private String middleName;
 
-    @Column(name = "largePath")
-    private String largePath;
+    @Column(name = "large_name")
+    private String largeName;
 
     @Column(name = "generated_name")
     private String generatedName;
@@ -250,27 +250,36 @@ public class UploadedImage implements Serializable {
         this.share = share;
     }
 
-    public String getSmallPath() {
-        return smallPath;
+    public String getSmallName() {
+        return smallName;
     }
 
-    public void setSmallPath(String smallPath) {
-        this.smallPath = smallPath;
+    public void setSmallName(String smallName) {
+        this.smallName = smallName;
     }
 
-    public String getMiddlePath() {
-        return middlePath;
+    public String getSmallSquareName() {
+        return smallSquareName;
     }
 
-    public void setMiddlePath(String middlePath) {
-        this.middlePath = middlePath;
+    public void setSmallSquareName(String smallSquareName) {
+        this.smallSquareName = smallSquareName;
     }
 
-    public String getLargePath() {
-        return largePath;
+    public String getMiddleName() {
+        return middleName;
     }
 
-    public void setLargePath(String largePath) {
-        this.largePath = largePath;
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
     }
+
+    public String getLargeName() {
+        return largeName;
+    }
+
+    public void setLargeName(String largeName) {
+        this.largeName = largeName;
+    }
+
 }
