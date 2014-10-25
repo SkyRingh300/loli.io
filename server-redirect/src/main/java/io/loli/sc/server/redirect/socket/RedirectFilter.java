@@ -16,6 +16,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.Scanner;
+import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,6 +37,25 @@ public class RedirectFilter implements RequestAuthFilter {
     private static final Logger logger = LogManager.getLogger(RedirectHandler.class);
 
     private static final TaskExecutor executor = new TaskExecutor(30);
+
+    private static Set<String> blackList = new LinkedHashSet<String>();
+
+    {
+        try (InputStream is = this.getClass().getResourceAsStream("/blacklist.txt");) {
+            @SuppressWarnings("resource")
+            Scanner scanner = new Scanner(is);
+            while (scanner.hasNextLine()) {
+                String str = scanner.nextLine();
+                if (str != null && !"".equals(str.trim())) {
+                    blackList.add(str);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            logger.error(e);
+            e.printStackTrace();
+        }
+    }
 
     private void send404(Response response) {
         response.setStatus(HttpStatus.NOT_FOUND_404);
@@ -74,6 +96,19 @@ public class RedirectFilter implements RequestAuthFilter {
 
                 logger.info("找到url为:" + url);
                 String referer = request.getHeader(Header.Referer);
+
+                // Do with black list
+                if (referer != null && !referer.trim().equals("") && !blackList.isEmpty()) {
+
+                    for (String site : blackList) {
+                        if (referer.startsWith(site)) {
+                            logger.warn("该网址被禁止访问, referer是" + referer);
+                            send403(response);
+                            return;
+                        }
+                    }
+                }
+
                 String ip = request.getRemoteAddr();
                 if (ip != null && ip.equals("127.0.0.1")) {
                     ip = request.getHeader("X-Real-IP");
@@ -124,5 +159,22 @@ public class RedirectFilter implements RequestAuthFilter {
             send404(response);
         }
 
+    }
+
+    private void send403(Response response) {
+        response.setStatus(HttpStatus.FORBIDDEN_403);
+
+        response.setContentType("image/png");
+
+        try (InputStream is = this.getClass().getResourceAsStream("/403.png");
+            OutputStream os = response.getOutputStream();) {
+            byte[] b = new byte[1024];
+            while (is.read(b) >= 0) {
+                os.write(b);
+            }
+
+        } catch (IOException e) {
+            logger.error(e);
+        }
     }
 }
