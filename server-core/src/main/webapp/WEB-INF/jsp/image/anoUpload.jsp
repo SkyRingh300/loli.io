@@ -46,9 +46,6 @@
     </ul>
   </form>
   <div id="message">
-    <ul>
-      <li>萝莉图床已屏蔽部分色情、赌博网站，具体见ban list</li>
-    </ul>
     <c:if test="${not empty param.weibo}">
       <ul>
         <li>微博图床文件最大为5M</li>

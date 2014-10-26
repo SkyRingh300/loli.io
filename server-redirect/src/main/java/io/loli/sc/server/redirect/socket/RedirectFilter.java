@@ -74,16 +74,103 @@ public class RedirectFilter implements RequestAuthFilter {
         }
     }
 
+    public void sendOutput(String url, String contentType, Request req, Response resp) {
+        InputStream input = null;
+
+        try {
+            OutputStream output = resp.getOutputStream();
+            long total = 0;
+            if (Config.useCache) {
+                byte[] bytes = cache.getBytes(url);
+
+                total = bytes.length;
+                input = new BufferedInputStream(new ByteArrayInputStream(bytes));
+            } else {
+                Pair<Long, InputStream> pair = cache.get(url);
+                input = pair.getValue();
+                total = pair.getKey();
+            }
+
+            if ((!"".equals(contentType)) && null != contentType) {
+                resp.setContentType(contentType);
+            }
+
+            resp.setHeader("Cache-Control", "max-age=15552000");
+            if (total != 0) {
+                resp.setContentLengthLong(total);
+            }
+            byte[] buffer = new byte[2048];
+            for (int length = 0; (length = input.read(buffer)) > 0;) {
+                output.write(buffer, 0, length);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            send404(resp);
+        } finally {
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     /*
      * 当配置为使用缓存且(未配置exclude或者url不包含exclude字符串)时，使用缓存
      */
     public void filter(final Request request, final Response response) {
+
+        String referer = request.getHeader(Header.Referer);
+
+        // Do with black list
+        if (referer != null && !referer.trim().equals("") && !blackList.isEmpty()) {
+
+            for (String site : blackList) {
+                if (referer.startsWith(site)) {
+                    logger.warn("该网址被禁止访问, referer是" + referer);
+                    send403(response);
+                    return;
+                }
+            }
+        }
+
         try {
             String code = request.getRequestURI();
             logger.info("用户请求的url为:" + code);
             if (code.startsWith("/")) {
                 code = code.substring(1);
             }
+
+            // 缩略图
+            if (code.contains(".")) {
+                String name = code.substring(0, code.indexOf("."));
+                if (name.length() == 7) {
+                    String format = code.substring(code.indexOf(".") + 1);
+                    if (name.endsWith("q")) {
+                        String origin = name.substring(0, 6) + "." + format;
+                        Pair<String, String> result = imageDao.findUrlByCode(origin);
+                        try {
+                            String squarePath = imageDao.findSquarePathByCode(origin);
+                            System.out.println(squarePath);
+                            if (StringUtils.isNullOrEmpty(squarePath)) {
+                                sendOutput(result.getKey(), result.getValue(), request, response);
+                                return;
+                            }
+                            String contentType = result.getValue();
+                            sendOutput(squarePath, contentType, request, response);
+                            return;
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+
+            }
+
             Pair<String, String> result = imageDao.findUrlByCode(code);
             if (StringUtils.isNullOrEmpty(result.getKey()) && code.length() == 6) {
                 result = imageDao.findUrlLikeCode(code);
@@ -95,19 +182,6 @@ public class RedirectFilter implements RequestAuthFilter {
             } else {
 
                 logger.info("找到url为:" + url);
-                String referer = request.getHeader(Header.Referer);
-
-                // Do with black list
-                if (referer != null && !referer.trim().equals("") && !blackList.isEmpty()) {
-
-                    for (String site : blackList) {
-                        if (referer.startsWith(site)) {
-                            logger.warn("该网址被禁止访问, referer是" + referer);
-                            send403(response);
-                            return;
-                        }
-                    }
-                }
 
                 String ip = request.getRemoteAddr();
                 if (ip != null && ip.equals("127.0.0.1")) {
@@ -116,42 +190,7 @@ public class RedirectFilter implements RequestAuthFilter {
                 final String fip = ip;
                 String ua = request.getHeader(Header.UserAgent);
                 executor.execute(() -> logDao.save(url, ua, referer, fip, new Date()));
-                InputStream input = null;
-
-                try {
-                    OutputStream output = response.getOutputStream();
-                    long total = 0;
-                    if (Config.useCache) {
-                        byte[] bytes = cache.getBytes(url);
-
-                        total = bytes.length;
-                        input = new BufferedInputStream(new ByteArrayInputStream(bytes));
-                    } else {
-                        Pair<Long, InputStream> pair = cache.get(url);
-                        input = pair.getValue();
-                        total = pair.getKey();
-                    }
-
-                    if ((!"".equals(result.getValue())) && null != result.getValue()) {
-                        response.setContentType(result.getValue());
-                    }
-
-                    response.setHeader("Cache-Control", "max-age=15552000");
-                    if (total != 0) {
-                        response.setContentLengthLong(total);
-                    }
-                    byte[] buffer = new byte[2048];
-                    for (int length = 0; (length = input.read(buffer)) > 0;) {
-                        output.write(buffer, 0, length);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    send404(response);
-                } finally {
-                    if (input != null) {
-                        input.close();
-                    }
-                }
+                sendOutput(url, result.getValue(), request, response);
             }
 
         } catch (Exception e) {

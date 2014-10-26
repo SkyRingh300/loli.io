@@ -67,7 +67,7 @@
 
     }
     $(document).ready(function(e) {
-        $(".delete").click(function(e) {
+        $(".image-list-delete-btn").click(function(e) {
             if (window.confirm("删除后无法恢复！ 确认删除吗？")) {
             } else {
                 e.preventDefault();
@@ -95,7 +95,7 @@
                     html += '<input type="text" class="col-md-2 form-control tag-input" onblur="updateTag(this)">';
                 }
                 $(td).parent().find("span").hide();
-                $(td).parent().append($(html));
+                $(td).after($(html));
                 $(td).next().focus();
             });
         });
@@ -109,7 +109,10 @@
 
 .tag-input {
     padding: 0 !important;
-    height: 22px !important;
+    height: 20px !important;
+    max-width: 50px;
+    display: inline;
+    float: none;
 }
 
 .bg-info {
@@ -119,6 +122,33 @@
 .info {
     width: 100% !important;
     margin-bottom: 15px !important;
+}
+
+.image-list-table-show {
+    height: 150px;
+    width: 150px;
+}
+
+.image-list-table-single {
+    float: left;
+    padding: 10px;
+    margin: 5px;
+    overflow: hidden;
+    border-radius: 2px;
+    background-color: rgb(230, 230, 230);
+}
+
+.image-list-table {
+    float: left;
+    margin-top: 40px;
+}
+
+.image-list-delete-btn {
+    float: right;
+}
+
+.image-list-table-single-control {
+    margin-top: 5px;
 }
 </style>
 </head>
@@ -158,75 +188,58 @@
     </div>
 
   </div>
-  <c:if test="${not(requestScope.totalCount eq 0)}">
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th width="40%">文件名</th>
-          <th width="20%">上传时间</th>
-          <th width="10%">分类</th>
-          <th width="25%">链接</th>
-          <th width="10%">操作</th>
-        </tr>
-      </thead>
-      <tbody>
-        <c:forEach items="${imgList}" var="img">
-          <tr id="${img.id}">
-            <td>${img.originName}</td>
-            <td><fmt:formatDate value="${img.date}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
-            <td class="tag-td"><span class="tag-span label label-default" tag-id="${img.tag.id}"> <c:if
-                  test="${img.tag eq null}">无</c:if> <c:if test="${img.tag ne null}">
-						${img.tag.name}
-						</c:if>
-            </span></td>
 
-            <td><c:if test="${img.redirectCode ne null}">
-                <c:if test="${img.storageBucket.type eq 'weibo'}">
-                  <a href="${img.path}" target="_blank">${img.path}</a>
-                </c:if>
-                <c:if test="${img.storageBucket.type ne 'weibo'}">
-                  <a href="${pageContext.request.contextPath}/img/m/${img.generatedCode}" target="_blank">查看</a>
-                </c:if>
+  <div class="image-list-table">
+    <c:forEach items="${imgList}" var="img">
+      <div class="image-list-table-single">
+        <div class="image-list-table-single-img">
 
-              </c:if> <c:if test="${img.redirectCode eq null}">
-                <a href="${img.path}" target="_blank">${img.path}</a>
-              </c:if></td>
-            <td><c:if test="${img.storageBucket.type ne 'weibo'}">
-                <a type="button" class="btn-danger delete btn btn-xs"
-                  href="${pageContext.request.contextPath}/img/delete?id=${img.id}">删除</a>
-              </c:if></td>
-          </tr>
-        </c:forEach>
 
-      </tbody>
-    </table>
-    <div class="pages">
-      <ul class="pagination">
+          <a href="${pageContext.request.contextPath}/img/m/${img.generatedCode}"><img class="image-list-table-show"
+            src="<spring:message code="redirectPath"></spring:message><c:if test="${not empty img.smallSquareName}">${img.smallSquareName}</c:if><c:if test="${empty img.smallSquareName}">${img.redirectCode}</c:if>"></a>
+        </div>
+        <div class="image-list-table-single-control">
+          分类: <span class="tag-span label label-default" tag-id="${img.tag.id}"> <c:if test="${img.tag eq null}">无</c:if>
+            <c:if test="${img.tag ne null}">
+            ${img.tag.name}
+          </c:if>
+          </span>
+          <c:if test="${img.storageBucket.type ne 'weibo'}">
+            <a type="button" class="btn-danger image-list-delete-btn btn btn-xs"
+              href="${pageContext.request.contextPath}/img/delete?id=${img.id}">删除</a>
+          </c:if>
+        </div>
+      </div>
+    </c:forEach>
+  </div>
 
-        <li <c:if test="${not hasLast}">class="disabled"</c:if>><a
-          href="${pageContext.request.contextPath}/img/<c:if test="${requestScope.fileName eq null}">list/</c:if><c:if test="${not(requestScope.fileName eq null)}">search?fileName=${requestScope.fileName}&tag=${param.tag}&page=</c:if><c:if test="${hasLast}">${currentPage-1}</c:if><c:if test="${not hasLast}">#</c:if>">&laquo;</a></li>
 
-        <c:forEach begin="1" end="${pageCount}" varStatus="status">
-          <c:choose>
-            <c:when
-              test="${status.index==0||status.index==1||status.index==pageCount||status.index==pageCount-1||status.index==currentPage||status.index==currentPage-1||status.index==currentPage-2||status.index==currentPage-3||status.index==currentPage+1||status.index==currentPage+2||status.index==currentPage+3}">
+  <div class="pages">
+    <ul class="pagination">
 
-              <li <c:if test="${currentPage eq status.index}">class="active"</c:if>><a
-                href="${pageContext.request.contextPath}/img/<c:if test="${requestScope.fileName eq null}">list/</c:if><c:if test="${not(requestScope.fileName eq null)}">search?fileName=${requestScope.fileName}&tag=${param.tag}&page=</c:if><c:if test="${currentPage eq status.index}">#</c:if><c:if test="${not (currentPage eq status.index)}">${status.index}</c:if>">${status.index}</a></li>
+      <li <c:if test="${not hasLast}">class="disabled"</c:if>><a
+        href="${pageContext.request.contextPath}/img/<c:if test="${requestScope.fileName eq null}">list/</c:if><c:if test="${not(requestScope.fileName eq null)}">search?fileName=${requestScope.fileName}&tag=${param.tag}&page=</c:if><c:if test="${hasLast}">${currentPage-1}</c:if><c:if test="${not hasLast}">#</c:if>">&laquo;</a></li>
 
-            </c:when>
-            <c:otherwise>
+      <c:forEach begin="1" end="${pageCount}" varStatus="status">
+        <c:choose>
+          <c:when
+            test="${status.index==0||status.index==1||status.index==pageCount||status.index==pageCount-1||status.index==currentPage||status.index==currentPage-1||status.index==currentPage-2||status.index==currentPage-3||status.index==currentPage+1||status.index==currentPage+2||status.index==currentPage+3}">
 
-            </c:otherwise>
-          </c:choose>
+            <li <c:if test="${currentPage eq status.index}">class="active"</c:if>><a
+              href="${pageContext.request.contextPath}/img/<c:if test="${requestScope.fileName eq null}">list/</c:if><c:if test="${not(requestScope.fileName eq null)}">search?fileName=${requestScope.fileName}&tag=${param.tag}&page=</c:if><c:if test="${currentPage eq status.index}">#</c:if><c:if test="${not (currentPage eq status.index)}">${status.index}</c:if>">${status.index}</a></li>
 
-        </c:forEach>
-        <li <c:if test="${not hasNext}">class="disabled"</c:if>><a
-          href="${pageContext.request.contextPath}/img/<c:if test="${requestScope.fileName eq null}">list/</c:if><c:if test="${not(requestScope.fileName eq null)}">search?fileName=${requestScope.fileName}&tag=${param.tag}&page=</c:if><c:if test="${hasNext}">${currentPage+1}</c:if><c:if test="${not hasLast}">#</c:if>">&raquo;</a></li>
-      </ul>
-    </div>
+          </c:when>
+          <c:otherwise>
 
-  </c:if>
+          </c:otherwise>
+        </c:choose>
+
+      </c:forEach>
+      <li <c:if test="${not hasNext}">class="disabled"</c:if>><a
+        href="${pageContext.request.contextPath}/img/<c:if test="${requestScope.fileName eq null}">list/</c:if><c:if test="${not(requestScope.fileName eq null)}">search?fileName=${requestScope.fileName}&tag=${param.tag}&page=</c:if><c:if test="${hasNext}">${currentPage+1}</c:if><c:if test="${not hasLast}">#</c:if>">&raquo;</a></li>
+    </ul>
+  </div>
+
 
 
 

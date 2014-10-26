@@ -1,7 +1,6 @@
 package io.loli.sc.server.service;
 
 import io.loli.sc.server.dao.UploadedImageDao;
-import io.loli.sc.server.entity.StorageBucket;
 import io.loli.sc.server.entity.UploadedImage;
 import io.loli.sc.server.storage.StorageUploader;
 import io.loli.util.image.ThumbnailUtil;
@@ -44,9 +43,11 @@ public class UploadedImageService {
     @Transactional
     public void delete(int id) {
         UploadedImage image = this.findById(id);
-        StorageBucket sb = image.getStorageBucket();
-        StorageUploader.newInstance(sb).delete(image.getPath().substring(image.getPath().lastIndexOf("/") + 1));
-        System.out.println(image.getPath().substring(image.getPath().indexOf("/") + 1));
+        // StorageBucket sb = image.getStorageBucket();
+        // StorageUploader.newInstance(sb).delete(image.getPath().substring(image.getPath().lastIndexOf("/")
+        // + 1));
+        // System.out.println(image.getPath().substring(image.getPath().indexOf("/")
+        // + 1));
         image.setDelFlag(true);
     }
 
@@ -60,7 +61,7 @@ public class UploadedImageService {
         return ud.findById(id);
     }
 
-    private int maxResults = 20;
+    private int maxResults = 24;
 
     /**
      * 分页查询出指定用户的截图列表
