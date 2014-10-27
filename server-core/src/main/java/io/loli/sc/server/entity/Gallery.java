@@ -77,4 +77,12 @@ public class Gallery {
         this.images = images;
     }
 
+    public Boolean getDelFlag() {
+        return delFlag;
+    }
+
+    public void setDelFlag(Boolean delFlag) {
+        this.delFlag = delFlag;
+    }
+
 }

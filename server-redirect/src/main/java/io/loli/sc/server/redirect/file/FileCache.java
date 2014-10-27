@@ -85,10 +85,9 @@ public class FileCache implements Cache {
         // 当该文件不存在时，就调用saveFile方法下载
         if (!Files.exists(p)) {
             logger.info(path + "没有在缓存中找到");
-            synchronized (this) {
-                if (!Files.exists(p)) {
-                    this.saveFile(path);
-                }
+
+            if (!Files.exists(p)) {
+                this.saveFile(path);
             }
 
         } else {

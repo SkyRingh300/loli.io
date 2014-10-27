@@ -51,6 +51,10 @@ public class UploadedImageService {
         image.setDelFlag(true);
     }
 
+    public List<UploadedImage> findAll() {
+        return ud.findAll();
+    }
+
     /**
      * 根据图片id将查询出此图片的信息
      * 
