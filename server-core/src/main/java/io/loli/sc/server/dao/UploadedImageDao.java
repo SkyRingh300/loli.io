@@ -84,4 +84,20 @@ public class UploadedImageDao {
         return em.createQuery("from UploadedImage where generatedCode=:code and delFlag=false", UploadedImage.class)
             .setParameter("code", generatedCode).getResultList();
     }
+
+    public List<UploadedImage> findAll() {
+        return em.createQuery("from UploadedImage where delFlag=false", UploadedImage.class).getResultList();
+    }
+
+    public UploadedImage findNext(int uid, int imageId) {
+        return em
+            .createQuery("from UploadedImage where delFlag=false and user.id=:uid and id>:imageId", UploadedImage.class)
+            .setParameter("uid", uid).setParameter("imageId", imageId).setMaxResults(1).getSingleResult();
+    }
+
+    public UploadedImage findLast(int uid, int imageId) {
+        return em
+            .createQuery("from UploadedImage where delFlag=false and user.id=:uid and id<:imageId", UploadedImage.class)
+            .setParameter("uid", uid).setParameter("imageId", imageId).setMaxResults(1).getSingleResult();
+    }
 }
