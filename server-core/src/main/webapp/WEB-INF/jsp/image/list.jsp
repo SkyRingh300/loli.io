@@ -210,7 +210,7 @@
           <li class="divider"></li>
         </c:if>
         <c:forEach items="${galleries}" var="gal">
-          <li><a href="${pageContext.request.contextPath}/gallery/${gal.id}">${gal.title}</a></li>
+          <li><a href="${pageContext.request.contextPath}/gallery/img/${gal.id}">${gal.title}</a></li>
         </c:forEach>
       </ul>
     </div>
@@ -227,7 +227,7 @@
             src="<spring:message code="redirectPath"></spring:message><c:if test="${not empty img.smallSquareName}">${img.smallSquareName}</c:if><c:if test="${empty img.smallSquareName}">${img.redirectCode}</c:if>"></a>
         </div>
         <div class="image-list-table-single-control">
-          分类: <span class="tag-span label label-default" tag-id="${img.tag.id}"> <c:if test="${img.tag eq null}">无</c:if>
+          标签: <span class="tag-span label label-default" tag-id="${img.tag.id}"> <c:if test="${img.tag eq null}">无</c:if>
             <c:if test="${img.tag ne null}">
             ${img.tag.name}
           </c:if>

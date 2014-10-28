@@ -13,11 +13,11 @@
 
 
 <jsp:include page="../static.jsp"></jsp:include>
+
 <script>
     function writeCurrentUrl() {
         document.write("<input type='text' class='col-sm-8' value='"+window.location.href+"'/>");
     }
-
     $(document).ready(
         function() {
             $(".image-show-links input").mouseover(function() {
@@ -64,6 +64,12 @@
             v = "[URL=" + window.location.href + "]" + v + "[/URL]";
             $("#bb-input").val(v);
 
+            // clip
+            var client = new ZeroClipboard($(".copy-buttons"));
+            client.on("copy", function(event) {
+                var clipboard = event.clipboardData;
+                clipboard.setData("text/plain", $(event.target).prev().val());
+            });
         });
 </script>
 
@@ -109,8 +115,7 @@
     background-color: rgb(230, 230, 230);
     http: //open.weibo.com/wiki/%E8%B5%9E%E7%BB%84% E4%BB%B6Weibo_Meta_Tags%E5%8F%8A%E5%AF%B9OpenGraph%E6%94% AF%E6%8C%81%
         E8%8C%83% E7%95% B4%E8%AF%B4%E6%98% 8E%E6%96% 87% E6%A1%A3#.E5 .8D .95 .E4 .B8 .AA .E5 .B1 .9E .E6 .80 .A7 .E7
-        .9A .84 .E5 .A4 .9A .E5 .80 .BC .E5 .AE .9A .E4 .B9 .89
-    color: rgb(90, 90, 90);
+        .9A .84 .E5 .A4 .9A .E5 .80 .BC .E5 .AE .9A .E4 .B9 .89 color: rgb(90, 90, 90);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
@@ -184,32 +189,38 @@
           <div>
             <h3>分享链接</h3>
             <input class="image-show-url" id="share-input" readonly value="">
+            <button class="copy-buttons" type="button" class="btn btn-xs">复制</button>
           </div>
           <div>
             <h3>原图链接</h3>
             <input class="image-show-url" readonly id="origin-input"
               value="<spring:message code="redirectPath"></spring:message>${image.redirectCode}">
+            <button class="copy-buttons" type="button" class="btn btn-xs">复制</button>
           </div>
 
           <div>
             <h3>Markdown</h3>
             <input class="image-show-url" readonly id="md-input"
               value="[LOLI.IO](<spring:message code="redirectPath"></spring:message>${image.redirectCode})">
+            <button class="copy-buttons" type="button" class="btn btn-xs">复制</button>
           </div>
           <div>
             <h3>HTML</h3>
             <input type="text" class="image-show-url" readonly id="html-input"
               value="&lt;img src=&quot;<spring:message code="redirectPath"></spring:message>${image.redirectCode}&quot;&gt;">
+            <button class="copy-buttons" type="button" class="btn btn-xs">复制</button>
           </div>
           <div>
             <h3>BB CODE</h3>
             <input class="image-show-url" id="bb-input" readonly
               value="[IMG]<spring:message code="redirectPath"></spring:message>${image.redirectCode}[/IMG]">
+            <button class="copy-buttons" type="button" class="btn btn-xs">复制</button>
           </div>
         </div>
       </div>
     </div>
   </div>
   <jsp:include page="../bottom.jsp"></jsp:include>
+  <script src="${pageContext.request.contextPath}/static/ext/clip/ZeroClipboard.min.js"></script>
 </body>
 </html>

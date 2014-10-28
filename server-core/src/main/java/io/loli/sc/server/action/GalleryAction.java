@@ -67,13 +67,13 @@ public class GalleryAction {
         return "/gallery/show/" + gallery.getId();
     }
 
-    @RequestMapping(value = "show/${id}")
+    @RequestMapping(value = "img/{id}")
     public String list(@PathVariable(value = "id") int id, Model model, HttpServletRequest request) {
-        return "redirect: /gallery/show/" + id + "/" + 1;
+        return "redirect: /gallery/img/" + id + "/" + 1;
     }
 
-    @RequestMapping(value = "show/${id}/${page}")
-    public String listPage(@PathVariable(value = "id") int id, @PathVariable int page, Model model,
+    @RequestMapping(value = "img/{id}/{page}")
+    public String listPage(@PathVariable(value = "id") int id, @PathVariable(value = "page") int page, Model model,
         HttpServletRequest request) {
         // TODO
         return null;
