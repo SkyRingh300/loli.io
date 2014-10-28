@@ -1,5 +1,6 @@
 package io.loli.sc.server.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -24,7 +25,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "tag")
 @NamedQueries(value = { @NamedQuery(name = "Tag.findByNameAndUser", query = "select t from Tag t where t.name=:name and t.user.id=:userId") })
-public class Tag {
+public class Tag implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;

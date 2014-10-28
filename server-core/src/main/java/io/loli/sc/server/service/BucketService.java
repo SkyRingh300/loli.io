@@ -14,13 +14,13 @@ import javax.inject.Singleton;
 @Named
 @Singleton
 public class BucketService {
-    private static List<StorageBucket> bucketList;
-    private static StorageBucket[] bucketArray;
+    private List<StorageBucket> bucketList;
+    private StorageBucket[] bucketArray;
 
-    private static StorageBucket[] imageArray;
-    private static StorageBucket[] fileArray;
-    public static List<StorageBucket> weiboList;
-    public static List<StorageBucket> weiboMobileList;
+    private StorageBucket[] imageArray;
+    private StorageBucket[] fileArray;
+    public List<StorageBucket> weiboList;
+    public List<StorageBucket> weiboMobileList;
 
     @Inject
     public BucketService(BucketDao bucketDao) {

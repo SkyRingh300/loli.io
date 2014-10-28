@@ -91,7 +91,6 @@ public class UploadedImageService {
     }
 
     public List<UploadedImage> listByUIdAndFileName(int u_id, String fileName, int firstPosition, Integer tag) {
-        System.out.println(tag);
         return this.listByUIdAndFileName(u_id, fileName, firstPosition, maxResults, tag);
     }
 
