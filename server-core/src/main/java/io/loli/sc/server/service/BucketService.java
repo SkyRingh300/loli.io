@@ -19,7 +19,7 @@ public class BucketService {
 
     private StorageBucket[] imageArray;
     private StorageBucket[] fileArray;
-    public List<StorageBucket> weiboList;
+    public static List<StorageBucket> weiboList;
     public List<StorageBucket> weiboMobileList;
 
     @Inject
@@ -60,9 +60,9 @@ public class BucketService {
         }
 
     }
-    
-    public void refresh(){
-        
+
+    public void refresh() {
+
     }
 
     public List<StorageBucket> list() {
@@ -101,7 +101,7 @@ public class BucketService {
         weiboList.add(result);
         return result;
     }
-    
+
     public synchronized StorageBucket weiboMobileBucket() {
         StorageBucket result = weiboMobileList.get(0);
         weiboMobileList.remove(0);

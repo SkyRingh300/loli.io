@@ -13,6 +13,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "gallery")
 public class Gallery {
@@ -25,6 +27,7 @@ public class Gallery {
     private String description;
 
     @Column(name = "del_flag")
+    @JsonIgnore
     private Boolean delFlag = false;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -32,9 +35,11 @@ public class Gallery {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     @ManyToMany
+    @JsonIgnore
     private List<UploadedImage> images;
 
     public int getId() {

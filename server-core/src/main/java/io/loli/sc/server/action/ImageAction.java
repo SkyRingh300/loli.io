@@ -1,7 +1,9 @@
 package io.loli.sc.server.action;
 
+import io.loli.sc.server.entity.Gallery;
 import io.loli.sc.server.entity.UploadedImage;
 import io.loli.sc.server.entity.User;
+import io.loli.sc.server.service.GalleryService;
 import io.loli.sc.server.service.UploadedImageService;
 import io.loli.sc.server.service.UserService;
 
@@ -36,6 +38,9 @@ public class ImageAction {
     @Inject
     private UserService userService;
 
+    @Inject
+    private GalleryService gs;
+
     @RequestMapping(value = "/m/{redirectCode}", method = RequestMethod.GET)
     public String show(@PathVariable(value = "redirectCode") String redirectCode, Model model) {
         UploadedImage image = imageService.findByCode(redirectCode);
@@ -58,10 +63,10 @@ public class ImageAction {
         if (user == null) {
             return "redirect:/user/login";
         }
-        int u_id = ((User) request.getSession().getAttribute("user")).getId();
+        int uid = ((User) request.getSession().getAttribute("user")).getId();
 
-        List<UploadedImage> list = imageService.listByUId(u_id, firstPosition);
-        int totalCount = imageService.countByUId(u_id);
+        List<UploadedImage> list = imageService.listByUId(uid, firstPosition);
+        int totalCount = imageService.countByUId(uid);
         int pageCount = (int) Math.ceil((float) totalCount / (float) imageService.getMaxResults());
         boolean hasLast = page != 1;
         boolean hasNext = page != pageCount;
@@ -77,6 +82,9 @@ public class ImageAction {
             user = userService.findById(user.getId());
             model.addAttribute("tagList", user.getTagList());
         }
+
+        List<Gallery> galList = gs.listByUser(uid);
+        model.addAttribute("galleries", galList);
         return "image/list";
     }
 

@@ -14,7 +14,7 @@
     color: rgb(230, 230, 230) !important;
 }
 
-.open>a {
+.navbar-right>.open>a {
     background-color: rgb(77, 77, 77) !important;
 }
 </style>

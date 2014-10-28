@@ -100,6 +100,10 @@
             });
         });
 
+        $("#add-gallery-submit").click(function() {
+            $("#add-gallery-form").submit();
+        });
+
     });
 </script>
 <style>
@@ -150,6 +154,10 @@
 .image-list-table-single-control {
     margin-top: 5px;
 }
+
+.image-gallery-list>a {
+    background-color: white;
+}
 </style>
 </head>
 <jsp:include page="../top.jsp"></jsp:include>
@@ -165,6 +173,7 @@
         ${param.message}
       </div>
     </c:if>
+    <!-- 
     <div class="col-md-8">
       <form role="form" class="form-inline" action="${pageContext.request.contextPath}/img/search">
         <div class="input-group">
@@ -185,6 +194,25 @@
           </span>
         </div>
       </form>
+    </div>
+ -->
+  </div>
+
+  <div class="image-list-controllers">
+    <div class="btn-group image-gallery-list">
+      <a class="btn btn-default">全部图片</a>
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span> <span class="sr-only"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+        <li><a href="javascript:void(0)" id="create-gallery-btn" data-toggle="modal" data-target="#newGallery">新建相册</a></li>
+        <c:if test="${not empty galleries}">
+          <li class="divider"></li>
+        </c:if>
+        <c:forEach items="${galleries}" var="gal">
+          <li><a href="${pageContext.request.contextPath}/gallery/${gal.id}">${gal.title}</a></li>
+        </c:forEach>
+      </ul>
     </div>
 
   </div>
@@ -218,7 +246,7 @@
     <ul class="pagination">
 
       <li <c:if test="${not hasLast}">class="disabled"</c:if>><a
-        href="${pageContext.request.contextPath}/img/<c:if test="${requestScope.fileName eq null}">list/</c:if><c:if test="${not(requestScope.fileName eq null)}">search?fileName=${requestScope.fileName}&tag=${param.tag}&page=</c:if><c:if test="${hasLast}">${currentPage-1}</c:if><c:if test="${not hasLast}">#</c:if>">&laquo;</a></li>
+        href="<c:if test="${requestScope.fileName eq null}"></c:if><c:if test="${not(requestScope.fileName eq null)}">search?fileName=${requestScope.fileName}&tag=${param.tag}&page=</c:if><c:if test="${hasLast}">${currentPage-1}</c:if><c:if test="${not hasLast}">#</c:if>">&laquo;</a></li>
 
       <c:forEach begin="1" end="${pageCount}" varStatus="status">
         <c:choose>
@@ -226,7 +254,7 @@
             test="${status.index==0||status.index==1||status.index==pageCount||status.index==pageCount-1||status.index==currentPage||status.index==currentPage-1||status.index==currentPage-2||status.index==currentPage-3||status.index==currentPage+1||status.index==currentPage+2||status.index==currentPage+3}">
 
             <li <c:if test="${currentPage eq status.index}">class="active"</c:if>><a
-              href="${pageContext.request.contextPath}/img/<c:if test="${requestScope.fileName eq null}">list/</c:if><c:if test="${not(requestScope.fileName eq null)}">search?fileName=${requestScope.fileName}&tag=${param.tag}&page=</c:if><c:if test="${currentPage eq status.index}">#</c:if><c:if test="${not (currentPage eq status.index)}">${status.index}</c:if>">${status.index}</a></li>
+              href="<c:if test="${requestScope.fileName eq null}"></c:if><c:if test="${not(requestScope.fileName eq null)}">search?fileName=${requestScope.fileName}&tag=${param.tag}&page=</c:if><c:if test="${currentPage eq status.index}">#</c:if><c:if test="${not (currentPage eq status.index)}">${status.index}</c:if>">${status.index}</a></li>
 
           </c:when>
           <c:otherwise>
@@ -236,7 +264,7 @@
 
       </c:forEach>
       <li <c:if test="${not hasNext}">class="disabled"</c:if>><a
-        href="${pageContext.request.contextPath}/img/<c:if test="${requestScope.fileName eq null}">list/</c:if><c:if test="${not(requestScope.fileName eq null)}">search?fileName=${requestScope.fileName}&tag=${param.tag}&page=</c:if><c:if test="${hasNext}">${currentPage+1}</c:if><c:if test="${not hasLast}">#</c:if>">&raquo;</a></li>
+        href="<c:if test="${requestScope.fileName eq null}">list/</c:if><c:if test="${not(requestScope.fileName eq null)}">search?fileName=${requestScope.fileName}&tag=${param.tag}&page=</c:if><c:if test="${hasNext}">${currentPage+1}</c:if><c:if test="${not hasLast}">#</c:if>">&raquo;</a></li>
     </ul>
   </div>
 
@@ -249,4 +277,47 @@
     <p class="bg-info  col-md-8">未搜索出结果</p>
   </div>
 </c:if>
+
+
+
+<!-- 新建相册模态框 -->
+<div class="modal" id="newGallery">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">新建相册</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal" id="add-gallery-form" action="${pageContext.request.contextPath}/gallery/add"
+          method="post" role="form">
+          <div class="form-group">
+            <label for="title" class="col-sm-2 control-label">相册名</label>
+            <div class="col-sm-10">
+              <input type="text" name="title" class="form-control" id="title" placeholder="相册名(可不填)">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="description" class="col-sm-2 control-label">描述</label>
+            <div class="col-sm-10">
+              <input type="text" name="description" class="form-control" id="description" placeholder="描述(可不填)">
+            </div>
+          </div>
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="add-gallery-submit">创建</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
 <jsp:include page="../bottom.jsp"></jsp:include>

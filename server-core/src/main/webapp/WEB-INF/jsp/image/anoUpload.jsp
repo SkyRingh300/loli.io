@@ -9,6 +9,10 @@
 #drop {
     border-image: url('${pageContext.request.contextPath}/static/ext/uploader/border-image.png') 25 repeat !important;
 }
+
+#html {
+    float: right;
+}
 </style>
 
 
@@ -26,18 +30,11 @@
       <h3>拖动图片到这里或者</h3>
       <a class="btn">选择图片</a>&nbsp; <input type="file" name="image" multiple />
     </div>
-    <button id="clear" type="button" class="btn btn-sm btn-primary">清空上传列表</button>
     &nbsp;
     <c:if test="${sessionScope.user ne null}">
-      <button id="html" type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#htmlSelect">获取链接</button>
       <button id="url" type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#urlFetch">url下载</button>
-
-      <c:if test="${not empty param.weibo}">
-        <button type="button" id="weibo1" onclick="window.location.href='${pageContext.request.contextPath}/'"
-          class="btn btn-sm btn-primary">原图床</button>
-      </c:if>
-      <button type="button" id="weibo2" onclick="window.location.href='${pageContext.request.contextPath}/?weibo=weibo'"
-        class="btn btn-sm btn-primary">微博图床</button>
+      <button id="gallery" type="button" class="btn btn-sm btn-primary">添加到相册</button>
+      <button id="html" type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#htmlSelect">获取链接</button>
     </c:if>
     <c:if test="${not empty param.weibo}">
       <input type="hidden" id="weibo" name="type" value="${param.weibo}">
@@ -66,7 +63,7 @@
         <button type="button" class="close" data-dismiss="modal">
           <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
         </button>
-        <h4 class="modal-title">获取代码</h4>
+        <h4 class="modal-title">批量获取</h4>
       </div>
       <div class="modal-body">
         <div class="btn-group" data-toggle="buttons">
