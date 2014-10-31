@@ -41,7 +41,7 @@
           <div class="form-group">
             <label for="user-password" class="col-sm-4 control-label">密码</label>
             <div class="col-sm-4">
-              <input type="password" class="form-control" id="user-password" name="password_ori" placeholder="Password">
+              <input type="password" class="form-control" id="user-password" placeholder="Password">
             </div>
             <span class="label label-danger" id="password_error"></span>
           </div>
