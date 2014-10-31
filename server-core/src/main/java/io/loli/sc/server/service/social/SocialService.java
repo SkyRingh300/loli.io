@@ -13,12 +13,8 @@ import javax.inject.Named;
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 
-import org.apache.log4j.Logger;
-
 @Named
 public class SocialService {
-
-    private static final Logger logger = Logger.getLogger(SocialService.class);
 
     @Inject
     private SocialDao sd;

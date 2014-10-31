@@ -3,7 +3,6 @@ package io.loli.sc.server.service;
 import io.loli.sc.server.dao.BucketDao;
 import io.loli.sc.server.entity.StorageBucket;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,8 +18,6 @@ public class BucketService {
 
     private StorageBucket[] imageArray;
     private StorageBucket[] fileArray;
-    public static List<StorageBucket> weiboList;
-    public List<StorageBucket> weiboMobileList;
 
     @Inject
     public BucketService(BucketDao bucketDao) {
@@ -29,12 +26,6 @@ public class BucketService {
         }
         if (bucketArray == null) {
             bucketArray = bucketList.toArray(new StorageBucket[bucketList.size()]);
-        }
-        if (weiboList == null) {
-            weiboList = new ArrayList<>();
-        }
-        if (weiboMobileList == null) {
-            weiboMobileList = new ArrayList<>();
         }
         if (imageArray == null) {
             List<StorageBucket> list = bucketList.stream()
@@ -45,18 +36,6 @@ public class BucketService {
             List<StorageBucket> list = bucketList.stream()
                 .filter(item -> item.getFileType().equals(StorageBucket.FILE_TYPE)).collect(Collectors.toList());
             fileArray = list.toArray(new StorageBucket[list.size()]);
-        }
-
-        if (weiboList.isEmpty()) {
-            bucketList.stream().filter(item -> item.getFileType().equals(StorageBucket.WEIBO_TYPE)).forEach((obj) -> {
-                weiboList.add(obj);
-            });
-        }
-        if (weiboMobileList.isEmpty()) {
-            bucketList.stream().filter(item -> item.getFileType().equals(StorageBucket.WEIBO_MOBILE_TYPE))
-                .forEach((obj) -> {
-                    weiboMobileList.add(obj);
-                });
         }
 
     }
@@ -93,20 +72,6 @@ public class BucketService {
         double d = Math.random();
         int i = (int) (d * bucketArray.length);
         return bucketArray[i];
-    }
-
-    public synchronized StorageBucket weiboBucket() {
-        StorageBucket result = weiboList.get(0);
-        weiboList.remove(0);
-        weiboList.add(result);
-        return result;
-    }
-
-    public synchronized StorageBucket weiboMobileBucket() {
-        StorageBucket result = weiboMobileList.get(0);
-        weiboMobileList.remove(0);
-        weiboMobileList.add(result);
-        return result;
     }
 
 }

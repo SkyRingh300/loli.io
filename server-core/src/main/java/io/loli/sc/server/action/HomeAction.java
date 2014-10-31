@@ -1,9 +1,5 @@
 package io.loli.sc.server.action;
 
-import io.loli.sc.server.service.BucketService;
-import io.loli.sc.server.storage.WeiboStorageUploader;
-import io.loli.util.bean.Pair;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +7,6 @@ import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,23 +23,6 @@ public class HomeAction {
         // if ("http".equals(request.getScheme())) {
         // return "redirect:https://" + request.getServerName();
         // }
-
-        if (StringUtils.isNotBlank(weibo)) {
-            Pair<Integer, Integer> res = new Pair<>(0, 0);
-            try {
-                BucketService.weiboList.stream().forEach(
-                    obj -> {
-                        Pair<Integer, Integer> result = ((WeiboStorageUploader) WeiboStorageUploader.newInstance(obj))
-                            .getLimit();
-                        res.setKey(res.getKey() + result.getKey());
-                        res.setValue(res.getValue() + result.getValue());
-                    });
-            } catch (Exception e) {
-                logger.error(e);
-            }
-            request.setAttribute("limit", res);
-        }
-
         return "index";
     }
 

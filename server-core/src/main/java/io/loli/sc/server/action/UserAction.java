@@ -43,8 +43,6 @@ public class UserAction {
 
     private static final String LOGIN_INPUT = "/user/login";
 
-    private static final String EDIT_INPUT = "/user/login";
-
     private static final String MSG_NAME = "message";
 
     private static final String TOKEN_NAME = "token";

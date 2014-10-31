@@ -113,9 +113,7 @@
     /*border: 2px solid rgb(120, 120, 120);*/
     border-radius: 1px;
     background-color: rgb(230, 230, 230);
-    http: //open.weibo.com/wiki/%E8%B5%9E%E7%BB%84% E4%BB%B6Weibo_Meta_Tags%E5%8F%8A%E5%AF%B9OpenGraph%E6%94% AF%E6%8C%81%
-        E8%8C%83% E7%95% B4%E8%AF%B4%E6%98% 8E%E6%96% 87% E6%A1%A3#.E5 .8D .95 .E4 .B8 .AA .E5 .B1 .9E .E6 .80 .A7 .E7
-        .9A .84 .E5 .A4 .9A .E5 .80 .BC .E5 .AE .9A .E4 .B9 .89 color: rgb(90, 90, 90);
+    color: rgb(90, 90, 90);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
