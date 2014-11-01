@@ -101,14 +101,143 @@
         });
 
         $("#add-gallery-submit").click(function() {
-            $("#add-gallery-form").submit();
+            var title = $("#title").val();
+            var description = $("#description").val();
+            $.post("${pageContext.request.contextPath}/gallery/edit/addWithJsonResponse", {
+                title : title,
+                description : description
+            }, function(result) {
+
+                if (result && result.id) {
+                    $('#newGallery').modal('hide')
+                    alert("创建成功");
+                    reloadGalleryList(function() {
+                        $("a[gid=" + result.id + "]").click();
+                    });
+                }
+            });
+
         });
 
+        rebindGalleryClick();
+        reloadImages(0, 1);
     });
+
+    // 重新加载下拉列表中的gallery
+    function reloadGalleryList(fun, param) {
+        $
+            .post(
+                "${pageContext.request.contextPath}/gallery/fetch/jsonList",
+                function(result) {
+                    var fobj = $(".dropdown-divider").parent();
+                    $(".dropdown-gallery").remove();
+                    for (i = 0; i < result.length; i++) {
+                        var obj = $("<li class='dropdown-gallery' gid='"+result[i].id+"'><a href='javascript:void(0)' class='dropdown-gallery-a'></a></li>");
+                        obj.find("a").attr("gid", result[i].id);
+                        obj.find("a").text(result[i].title);
+                        fobj.append(obj);
+                    }
+
+                    rebindGalleryClick();
+                    if (fun && !param) {
+                        fun();
+                    }
+                    if (fun && param) {
+                        fun(param);
+                    }
+                });
+    }
+
+    function rebindGalleryClick() {
+        $(".dropdown-gallery").click(function() {
+            var gid = $(this).find("a").attr("gid");
+            changeMainGallery($("a[gid=" + gid + "]").parent().get(0));
+            //reloadGalleryList();
+            //loadImageList(gid, page);
+        });
+
+        $(".dropdown-all").click(function() {
+            if ($(".dropdown-default").attr("gid")) {
+                var move = $(".dropdown-default");
+                var gid = move.attr("gid");
+                move.remove();
+                $("li[gid=" + gid + "]").append(move);
+                move.removeAttr("class");
+                $("li[gid=" + gid + "]").show();
+                move.attr("href", "javascript:void(0)");
+            }
+            if ($(this).parent().attr("class") == "dropdown-all-li") {
+
+                $(this).parent().hide();
+                $(".dropdown-gallery-toggle").before($(this));
+                $(this).attr("class", "btn btn-default dropdown-all");
+            }
+
+        });
+    }
+
+    function changeMainGallery(obj) {
+        obj = $(obj).find("a");
+        $(obj).parent().hide();
+        if ($(".dropdown-default").attr("gid")) {
+            var move = $(".dropdown-default");
+            var gid = move.attr("gid");
+            move.remove();
+            $("li[gid=" + gid + "]").append(move);
+            move.removeAttr("class");
+            move.attr("href", "javascript:void(0)");
+        }
+        $("li[gid=" + gid + "]").show();
+        $(".dropdown-gallery-toggle").before($(obj));
+        $(obj).attr("class", "btn btn-default dropdown-default");
+        $(obj).removeAttr("href");
+        $(".dropdown-all").removeClass("btn btn-default");
+        $(".dropdown-all").attr("href", "javascript:void(0)");
+        $(".dropdown-all-li").append($(".dropdown-all"));
+        $(".dropdown-all-li").show();
+    }
+
+    function loadPage() {
+
+        setPage(total, current);
+    }
+
+    function reloadImages(galleryId, currentPage) {
+        $
+            .post(
+                "${pageContext.request.contextPath}/img/jsonList",
+                {
+                    gid : galleryId,
+                    page : currentPage
+                },
+                function(result) {
+                    var redirectPage = "<spring:message code='redirectPath'/>";
+                    for (i = 0; i < result.length; i++) {
+                        var img = result[i];
+
+                        var obj = $('<div class="image-list-table-single"><div class="image-list-table-single-img"><a><img class="image-list-table-show"></a></div><div class="image-list-table-single-control"><a type="button" class="btn-danger image-list-delete-btn btn btn-xs">删除</a></div></div>');
+                        if (img.smallName) {
+                            obj.find("img").attr("src", redirectPage + img.smallSquareName);
+                        } else {
+                            obj.find("img").attr("src", redirectPage + img.generatedName);
+                        }
+                        $(".image-list-table").append(obj);
+                    }
+                });
+    }
+
+    function setPage(total, current) {
+
+    }
 </script>
 <style>
 .search-form {
     padding-left: 0px !important;
+}
+
+.dropdown-default {
+    width: 160px;
+    text-align: left;
 }
 
 .tag-input {
@@ -158,6 +287,15 @@
 .image-gallery-list>a {
     background-color: white;
 }
+
+.dropdown-all-li {
+    display: none;
+}
+
+.image-gallery-list>.dropdown-all {
+    width: 160px;
+    text-align: left;
+}
 </style>
 </head>
 <jsp:include page="../top.jsp"></jsp:include>
@@ -200,77 +338,31 @@
 
   <div class="image-list-controllers">
     <div class="btn-group image-gallery-list">
-      <a class="btn btn-default">全部图片</a>
-      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+      <a class="btn btn-default dropdown-all">全部图片</a>
+      <button type="button" class="btn btn-default dropdown-toggle dropdown-gallery-toggle" data-toggle="dropdown">
         <span class="caret"></span> <span class="sr-only"></span>
       </button>
       <ul class="dropdown-menu" role="menu">
         <li><a href="javascript:void(0)" id="create-gallery-btn" data-toggle="modal" data-target="#newGallery">新建相册</a></li>
         <c:if test="${not empty galleries}">
-          <li class="divider"></li>
+          <li class="dropdown-all-li"></li>
+          <li class="divider dropdown-divider"></li>
         </c:if>
         <c:forEach items="${galleries}" var="gal">
-          <li><a href="${pageContext.request.contextPath}/gallery/img/${gal.id}">${gal.title}</a></li>
+          <li class="dropdown-gallery" gid="${gal.id}"><a href="javascript:void(0)" gid="${gal.id}">${gal.title}</a></li>
         </c:forEach>
       </ul>
     </div>
 
   </div>
 
-  <div class="image-list-table">
-    <c:forEach items="${imgList}" var="img">
-      <div class="image-list-table-single">
-        <div class="image-list-table-single-img">
-
-
-          <a href="${pageContext.request.contextPath}/img/m/${img.generatedCode}"><img class="image-list-table-show"
-            src="<spring:message code="redirectPath"></spring:message><c:if test="${not empty img.smallSquareName}">${img.smallSquareName}</c:if><c:if test="${empty img.smallSquareName}">${img.redirectCode}</c:if>"></a>
-        </div>
-        <div class="image-list-table-single-control">
-          标签: <span class="tag-span label label-default" tag-id="${img.tag.id}"> <c:if test="${img.tag eq null}">无</c:if>
-            <c:if test="${img.tag ne null}">
-            ${img.tag.name}
-          </c:if>
-          </span>
-          <c:if test="${img.storageBucket.type ne 'weibo'}">
-            <a type="button" class="btn-danger image-list-delete-btn btn btn-xs"
-              href="${pageContext.request.contextPath}/img/delete?id=${img.id}">删除</a>
-          </c:if>
-        </div>
-      </div>
-    </c:forEach>
-  </div>
-
+  <div class="image-list-table"></div>
 
   <div class="pages">
-    <ul class="pagination">
+    <ul class="pagination page-ul">
 
-      <li <c:if test="${not hasLast}">class="disabled"</c:if>><a
-        href="<c:if test="${requestScope.fileName eq null}"></c:if><c:if test="${not(requestScope.fileName eq null)}">search?fileName=${requestScope.fileName}&tag=${param.tag}&page=</c:if><c:if test="${hasLast}">${currentPage-1}</c:if><c:if test="${not hasLast}">#</c:if>">&laquo;</a></li>
-
-      <c:forEach begin="1" end="${pageCount}" varStatus="status">
-        <c:choose>
-          <c:when
-            test="${status.index==0||status.index==1||status.index==pageCount||status.index==pageCount-1||status.index==currentPage||status.index==currentPage-1||status.index==currentPage-2||status.index==currentPage-3||status.index==currentPage+1||status.index==currentPage+2||status.index==currentPage+3}">
-
-            <li <c:if test="${currentPage eq status.index}">class="active"</c:if>><a
-              href="<c:if test="${requestScope.fileName eq null}"></c:if><c:if test="${not(requestScope.fileName eq null)}">search?fileName=${requestScope.fileName}&tag=${param.tag}&page=</c:if><c:if test="${currentPage eq status.index}">#</c:if><c:if test="${not (currentPage eq status.index)}">${status.index}</c:if>">${status.index}</a></li>
-
-          </c:when>
-          <c:otherwise>
-
-          </c:otherwise>
-        </c:choose>
-
-      </c:forEach>
-      <li <c:if test="${not hasNext}">class="disabled"</c:if>><a
-        href="<c:if test="${requestScope.fileName eq null}">list/</c:if><c:if test="${not(requestScope.fileName eq null)}">search?fileName=${requestScope.fileName}&tag=${param.tag}&page=</c:if><c:if test="${hasNext}">${currentPage+1}</c:if><c:if test="${not hasLast}">#</c:if>">&raquo;</a></li>
     </ul>
   </div>
-
-
-
-
 </div>
 <c:if test="${(requestScope.totalCount eq 0) and not(requestScope.fileName eq null)}">
   <div class="container">
@@ -291,7 +383,7 @@
         <h4 class="modal-title">新建相册</h4>
       </div>
       <div class="modal-body">
-        <form class="form-horizontal" id="add-gallery-form" action="${pageContext.request.contextPath}/gallery/add"
+        <form class="form-horizontal" id="add-gallery-form" action="${pageContext.request.contextPath}/gallery/edit/add"
           method="post" role="form">
           <div class="form-group">
             <label for="title" class="col-sm-2 control-label">相册名</label>
@@ -318,6 +410,5 @@
   <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
-
 
 <jsp:include page="../bottom.jsp"></jsp:include>

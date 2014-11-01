@@ -35,6 +35,7 @@ public class UploadedImage implements Serializable {
 
     @JoinColumn
     @ManyToOne(cascade = CascadeType.REFRESH)
+    @JsonIgnore
     private User user;
 
     @Column
@@ -61,6 +62,7 @@ public class UploadedImage implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "tag_id")
+    @JsonIgnore
     private Tag tag;
 
     /**
@@ -85,6 +87,7 @@ public class UploadedImage implements Serializable {
     private String redirectCode;
 
     @Column
+    @JsonIgnore
     private String path;
 
     @Column(name = "small_name")

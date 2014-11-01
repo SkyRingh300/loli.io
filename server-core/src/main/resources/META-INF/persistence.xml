@@ -16,6 +16,7 @@
         <class>io.loli.sc.server.entity.Social</class>
         <class>io.loli.sc.server.entity.oauth2.AccessToken</class>
         <class>io.loli.sc.server.entity.oauth2.Application</class>
+        <class>io.loli.sc.server.entity.Gallery</class>
     </persistence-unit>
 
 </persistence>

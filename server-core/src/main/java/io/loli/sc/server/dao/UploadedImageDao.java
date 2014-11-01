@@ -100,4 +100,16 @@ public class UploadedImageDao {
             .createQuery("from UploadedImage where delFlag=false and user.id=:uid and id<:imageId", UploadedImage.class)
             .setParameter("uid", uid).setParameter("imageId", imageId).setMaxResults(1).getSingleResult();
     }
+
+    public List<UploadedImage> findByGalIdAndUId(int uid, Integer gid, int firstPosition, int maxResults) {
+        return em
+            .createQuery("from UploadedImage where delFlag=false and user.id=:uid and gallery.id=:gid",
+                UploadedImage.class).setParameter("uid", uid).setParameter("gid", gid).setFirstResult(firstPosition)
+            .setMaxResults(maxResults).getResultList();
+    }
+
+    public int countByGalIdAndUId(int uid, Integer gid) {
+        return em.createQuery("from UploadedImage where delFlag=false and user.id=:uid and gallery.id=:gid", int.class)
+            .setParameter("uid", uid).setParameter("gid", gid).getSingleResult();
+    }
 }

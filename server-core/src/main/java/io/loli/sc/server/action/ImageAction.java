@@ -12,12 +12,15 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.ui.Model;
@@ -25,6 +28,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Named
@@ -187,4 +191,40 @@ public class ImageAction {
             }
         }
     }
+
+    @RequestMapping(value = "jsonList")
+    @ResponseBody
+    public List<UploadedImage> list(HttpSession session, @RequestParam(value = "gid", required = false) Integer gid,
+        @RequestParam(value = "page", required = false) Integer page) {
+        if (page == null || page == 0) {
+            page = 1;
+        }
+        Object user = session.getAttribute("user");
+
+        List<UploadedImage> result = new ArrayList<>();
+        if (gid == null || gid == 0) {
+            result = imageService.listByUId(((User) user).getId(), imageService.getMaxResults() * (page - 1));
+        } else {
+            result = imageService.findByGalIdAndUId(((User) user).getId(), gid, page);
+        }
+
+        return result;
+    }
+
+    @RequestMapping(value = "pageCount")
+    @ResponseBody
+    public String pageCount(HttpSession session, @RequestParam(value = "gid", required = false) Integer gid) {
+
+        Object user = session.getAttribute("user");
+        int result = 0;
+        if (gid == null || gid == 0) {
+            result = imageService.countByUId(((User) user).getId());
+        } else {
+            result = imageService.countByGalIdAndUId(((User) user).getId(), gid);
+        }
+        double d = (double) result / imageService.getMaxResults();
+        BigDecimal bd = new BigDecimal(d);
+        return String.valueOf(bd.setScale(0, BigDecimal.ROUND_UP).intValue());
+    }
+
 }

@@ -210,4 +210,13 @@ public class UploadedImageService {
         // The image could not be read
         return "";
     }
+
+    public List<UploadedImage> findByGalIdAndUId(int id, Integer gid, int page) {
+        int start = this.getMaxResults() * (page - 1);
+        return ud.findByGalIdAndUId(id, gid, start, this.getMaxResults());
+    }
+
+    public int countByGalIdAndUId(int id, Integer gid) {
+        return ud.countByGalIdAndUId(id, gid);
+    }
 }

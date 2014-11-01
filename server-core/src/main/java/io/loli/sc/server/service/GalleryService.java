@@ -6,6 +6,7 @@ import io.loli.sc.server.entity.Gallery;
 import io.loli.sc.server.entity.UploadedImage;
 import io.loli.sc.server.entity.User;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -23,6 +24,7 @@ public class GalleryService {
 
     @Transactional
     public void save(Gallery g) {
+        g.setDate(new Date());
         gd.save(g);
     }
 

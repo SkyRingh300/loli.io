@@ -5,7 +5,9 @@ import io.loli.sc.server.entity.User;
 import io.loli.sc.server.service.GalleryService;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -27,7 +29,7 @@ public class GalleryAction {
     @Inject
     private GalleryService gs;
 
-    @RequestMapping(value = "addWithJsonResponse")
+    @RequestMapping(value = "edit/addWithJsonResponse")
     @ResponseBody
     public Gallery addWithJsonResponse(@RequestParam(required = false) String title,
         @RequestParam(required = false) String description, HttpSession session) {
@@ -39,7 +41,7 @@ public class GalleryAction {
         }
         Object userObj = session.getAttribute("user");
 
-        Gallery gallery = new Gallery();
+        Gallery gallery = new Gallery(); 
         gallery.setUser((User) userObj);
         gallery.setTitle(title);
         gallery.setDescription(description);
@@ -47,8 +49,7 @@ public class GalleryAction {
         return gallery;
     }
 
-    @RequestMapping(value = "add")
-    @ResponseBody
+    @RequestMapping(value = "edit/add")
     public String add(@RequestParam(required = false) String title, @RequestParam(required = false) String description,
         HttpSession session) {
         if (StringUtils.isBlank(title)) {
@@ -69,14 +70,18 @@ public class GalleryAction {
 
     @RequestMapping(value = "img/{id}")
     public String list(@PathVariable(value = "id") int id, Model model, HttpServletRequest request) {
-        return "redirect: /gallery/img/" + id + "/" + 1;
+        return "redirect:/gallery/img/" + id + "/" + 1;
     }
 
-    @RequestMapping(value = "img/{id}/{page}")
-    public String listPage(@PathVariable(value = "id") int id, @PathVariable(value = "page") int page, Model model,
-        HttpServletRequest request) {
-        // TODO
-        return null;
+    @RequestMapping(value = "fetch/jsonList")
+    @ResponseBody
+    public List<Gallery> jsonList(HttpSession session) {
+        List<Gallery> galList = new ArrayList<>();
+        Object user = session.getAttribute("user");
+        if (user instanceof User) {
+            int uid = ((User) user).getId();
+            galList = gs.listByUser(uid);
+        }
+        return galList;
     }
-
 }
