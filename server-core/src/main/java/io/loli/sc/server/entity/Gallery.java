@@ -10,8 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -44,7 +44,7 @@ public class Gallery implements Serializable {
     @JsonIgnore
     private User user;
 
-    @ManyToMany
+    @OneToMany
     @JsonIgnore
     private List<UploadedImage> images;
 

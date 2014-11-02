@@ -38,6 +38,11 @@ public class UploadedImage implements Serializable {
     @JsonIgnore
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "gallery_id")
+    @JsonIgnore
+    private Gallery gallery;
+
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
@@ -283,6 +288,14 @@ public class UploadedImage implements Serializable {
 
     public void setLargeName(String largeName) {
         this.largeName = largeName;
+    }
+
+    public Gallery getGallery() {
+        return gallery;
+    }
+
+    public void setGallery(Gallery gallery) {
+        this.gallery = gallery;
     }
 
 }

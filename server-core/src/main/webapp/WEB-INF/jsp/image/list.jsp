@@ -121,6 +121,7 @@
 
         rebindGalleryClick();
         reloadImages(0, 1);
+        loadPage(gid);
     });
 
     // 重新加载下拉列表中的gallery
@@ -172,10 +173,16 @@
                 $(".dropdown-gallery-toggle").before($(this));
                 $(this).attr("class", "btn btn-default dropdown-all");
             }
-
+            gid = 0;
+            page = 1;
+            reloadImages(0, 1);
+            loadPage(gid);
         });
     }
 
+    var page = 1;
+    var gid = 0;
+    var totalPage;
     function changeMainGallery(obj) {
         obj = $(obj).find("a");
         $(obj).parent().hide();
@@ -186,7 +193,13 @@
             $("li[gid=" + gid + "]").append(move);
             move.removeAttr("class");
             move.attr("href", "javascript:void(0)");
+        } else {
         }
+
+        gid = $(obj).attr("gid");
+        page = 1;
+        reloadImages(gid, page);
+        loadPage(gid);
         $("li[gid=" + gid + "]").show();
         $(".dropdown-gallery-toggle").before($(obj));
         $(obj).attr("class", "btn btn-default dropdown-default");
@@ -197,9 +210,32 @@
         $(".dropdown-all-li").show();
     }
 
-    function loadPage() {
+    function loadPage(gid) {
+        $.post("${pageContext.request.contextPath}/img/pageCount", {
+            gid : gid
+        }, function(result) {
+            $(".page-ul").html("");
+            if (parseInt(result) > 0) {
+                var count = parseInt(result);
+                for (i = 0; i < count; i++) {
+                    var obj = $('<li><a>' + (i + 1) + '</a></li>');
+                    var a = obj.find("a");
+                    if (page == i + 1) {
+                        obj.attr("class", "active");
+                    }
+                    a.attr("href", "javascript:void(0)");
+                    a.click(function() {
+                        reloadImages(gid, parseInt($(this).text()));
+                        page = parseInt($(this).text());
+                        loadPage(gid);
+                    });
+                    $(".page-ul").append(obj);
+                }
+            } else {
+            }
+        });
 
-        setPage(total, current);
+        //setPage(total, current);
     }
 
     function reloadImages(galleryId, currentPage) {
@@ -212,6 +248,7 @@
                 },
                 function(result) {
                     var redirectPage = "<spring:message code='redirectPath'/>";
+                    $(".image-list-table").html("");
                     for (i = 0; i < result.length; i++) {
                         var img = result[i];
 
@@ -272,8 +309,8 @@
 }
 
 .image-list-table {
-    float: left;
     margin-top: 40px;
+    overflow: hidden;
 }
 
 .image-list-delete-btn {
@@ -364,14 +401,6 @@
     </ul>
   </div>
 </div>
-<c:if test="${(requestScope.totalCount eq 0) and not(requestScope.fileName eq null)}">
-  <div class="container">
-    <p class="bg-info  col-md-8">未搜索出结果</p>
-  </div>
-</c:if>
-
-
-
 <!-- 新建相册模态框 -->
 <div class="modal" id="newGallery">
   <div class="modal-dialog">

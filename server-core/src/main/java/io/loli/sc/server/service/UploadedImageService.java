@@ -217,6 +217,6 @@ public class UploadedImageService {
     }
 
     public int countByGalIdAndUId(int id, Integer gid) {
-        return ud.countByGalIdAndUId(id, gid);
+        return ud.countByGalIdAndUId(id, gid).intValue();
     }
 }

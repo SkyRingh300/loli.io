@@ -108,8 +108,9 @@ public class UploadedImageDao {
             .setMaxResults(maxResults).getResultList();
     }
 
-    public int countByGalIdAndUId(int uid, Integer gid) {
-        return em.createQuery("from UploadedImage where delFlag=false and user.id=:uid and gallery.id=:gid", int.class)
-            .setParameter("uid", uid).setParameter("gid", gid).getSingleResult();
+    public Long countByGalIdAndUId(int uid, Integer gid) {
+        return em
+            .createQuery("select count(*) from UploadedImage where delFlag=false and user.id=:uid and gallery.id=:gid",
+                Long.class).setParameter("uid", uid).setParameter("gid", gid).getSingleResult();
     }
 }
