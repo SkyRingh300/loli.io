@@ -1,11 +1,13 @@
 package io.loli.sc.server.action;
 
 import io.loli.sc.server.entity.ClientToken;
+import io.loli.sc.server.entity.Gallery;
 import io.loli.sc.server.entity.UploadedImage;
 import io.loli.sc.server.entity.User;
 import io.loli.sc.server.service.BucketService;
 import io.loli.sc.server.service.ClientTokenService;
 import io.loli.sc.server.service.FileFetchService;
+import io.loli.sc.server.service.GalleryService;
 import io.loli.sc.server.service.UploadedImageService;
 import io.loli.sc.server.service.UserService;
 import io.loli.sc.server.storage.StorageUploader;
@@ -56,6 +58,9 @@ public class ImageClientUpload {
 
     @Inject
     private UploadedImageService uic;
+
+    @Inject
+    private GalleryService gs;
 
     @Inject
     @Named("fileFetchService")
@@ -111,11 +116,11 @@ public class ImageClientUpload {
         @RequestParam(value = "email", required = false) String email,
         @RequestParam(value = "desc", required = false) String desc,
         @RequestParam(value = "image", required = true) MultipartFile imageFile, HttpServletRequest request,
-        @RequestParam(value = "type", required = false) String type) {
+        @RequestParam(value = "type", required = false) String type,
+        @RequestParam(value = "gid", required = false) Integer gid) {
 
         UploadedImage imageObj = new UploadedImage();
         imageObj.setDate(new Date());
-
         if (email == null && desc == null && token == null) {
             imageObj.setDesc(imageFile.getOriginalFilename());
         } else {
@@ -131,6 +136,12 @@ public class ImageClientUpload {
         if ((user = (User) request.getSession().getAttribute("user")) != null) {
             imageObj.setUser(user);
         }
+
+        if (gid != null) {
+            Gallery gal = gs.findById(gid);
+            imageObj.setGallery(gal);
+        }
+
         String ip = request.getRemoteAddr();
         if (ip != null && LOCAL_HOST.equals(ip)) {
             ip = request.getHeader("X-Real-IP");

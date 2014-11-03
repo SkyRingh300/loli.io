@@ -36,24 +36,10 @@
       <button id="gallery" type="button" class="btn btn-sm btn-primary">添加到相册</button>
       <button id="html" type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#htmlSelect">获取链接</button>
     </c:if>
-    <c:if test="${not empty param.weibo}">
-      <input type="hidden" id="weibo" name="type" value="${param.weibo}">
-    </c:if>
     <ul id="fileList">
     </ul>
   </form>
-  <div id="message">
-    <c:if test="${not empty param.weibo}">
-      <ul>
-        <li>微博图床文件最大为5M</li>
-        <li>微博图床：通过微博API接口上传，有上传频率限制：1小时内还可以上传<span class="label label-danger">${requestScope.limit.key}</span>张图片，24小时内还可以上传<span
-          class="label  label-danger">${requestScope.limit.value}</span>张图片。当次数为0时，请使用原图床上传。
-        </li>
-        <li>如果微博图床总是上传失败，请使用原图床</li>
-      </ul>
-    </c:if>
-
-  </div>
+  <div id="message"></div>
 </div>
 
 <div class="modal fade" id="htmlSelect">

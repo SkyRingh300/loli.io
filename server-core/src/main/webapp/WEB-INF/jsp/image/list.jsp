@@ -7,6 +7,9 @@
 
 <jsp:include page="../static.jsp"></jsp:include>
 <script type="text/javascript">
+    var page = 1;
+    var gid = 0;
+    var totalPage;
     function change(tag) {
         if ((!$(tag).attr("type")) && $(tag).val() == 0) {
             var html = '<input type="text" class="col-md-2 form-control tag-input" onblur="updateTag(this)">';
@@ -119,10 +122,47 @@
 
         });
 
+        $(".img-upload-btn").click(function() {
+            var gid = getGid();
+            $("#drop").show();
+            $("#upload-batch-url").hide();
+            $("#fileList").html("");
+            $(".url-list").hide();
+            if (gid == 0) {
+                $("#upload-to-label").text("未选择相册");
+            } else {
+                var text = $(".dropdown-gallery-toggle").prev().text();
+                $("#upload-to-label").show();
+                $("#upload-to-label").text("上传到相册:" + text);
+                $("#gid-input").val(gid);
+            }
+
+        });
+
+        $("#upload-new-gallery").click(function() {
+            $("#uploadModal").modal("hide");
+
+        });
+
+        $("#upload-continue").click(function() {
+            $(".url-list").hide();
+            $("#drop").show();
+            $("#upload-batch-url").hide();
+            $("#fileList").html("");
+            $(this).hide();
+        });
+
         rebindGalleryClick();
         reloadImages(0, 1);
         loadPage(gid);
     });
+
+    function resetUploadForm() {
+        $("#drop").show();
+        $("#fileList").html("");
+        $(".url-list").hide();
+        $("#upload-batch-url").hide();
+    }
 
     // 重新加载下拉列表中的gallery
     function reloadGalleryList(fun, param) {
@@ -180,9 +220,14 @@
         });
     }
 
-    var page = 1;
-    var gid = 0;
-    var totalPage;
+    function getGid() {
+        if ($(".dropdown-gallery-toggle").prev().attr("gid")) {
+            return parseInt($(".dropdown-gallery-toggle").prev().attr("gid"));
+        } else {
+            return 0;
+        }
+    }
+
     function changeMainGallery(obj) {
         obj = $(obj).find("a");
         $(obj).parent().hide();
@@ -263,9 +308,63 @@
                 });
     }
 
-    function setPage(total, current) {
+    // url get
+    function getPaths() {
+        var result = new Array();
+        $(".path").each(function(i, e) {
+            var h = $(this).text();
+            if (h.length >= 0) {
+                result.push(h);
+            }
+        });
 
+        return result;
     }
+
+    function getCode(prefix, suffix, array) {
+        var html = "";
+        for (var i = 0; i < array.length; i++) {
+            var line = prefix;
+            line += array[i];
+            line += suffix;
+            html += line;
+        }
+        return html;
+    }
+    $(document).ready(function() {
+        $("#url-btn").click(function() {
+            $("#result-area").html("");
+            var result = getPaths();
+            var html = getCode("", "\n", result);
+            $("#result-area").html(html);
+        });
+        $("#html-btn").click(function() {
+            $("#result-area").html("");
+            var result = getPaths();
+            var html = getCode("<img src='", "'>\n", result);
+            $("#result-area").html(html);
+        });
+        $("#img-btn").click(function() {
+            $("#result-area").html("");
+            var result = getPaths();
+            var html = getCode("[img]", "[/img]\n", result);
+            $("#result-area").html(html);
+        });
+
+        $('#html').on('click', function() {
+            $("#result-area").html("");
+            var result = getPaths();
+            var html = getCode("", "\n", result);
+            $("#result-area").html(html);
+            $('.modal .btn-group label').eq(0).click();
+        });
+
+        $("#upload-batch-url").click(function() {
+            $(".url-list").show();
+            $("#result-area").html("");
+            $("#url-btn").click();
+        });
+    });
 </script>
 <style>
 .search-form {
@@ -333,6 +432,39 @@
     width: 160px;
     text-align: left;
 }
+
+/* upload form*/
+.name {
+    margin-left: 0px !important;
+    width: 40%;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.working {
+    list-style: none;
+}
+
+#upload-continue {
+    display: none;
+}
+
+.path {
+    color: rgb(79, 79, 79);
+}
+
+.url-list {
+    display: none;
+    margin-top: 2px !important;
+}
+
+.url-list>textarea {
+    margin-bottom: 5px;
+}
+
+#upload-batch-url {
+    display: none;
+}
 </style>
 </head>
 <jsp:include page="../top.jsp"></jsp:include>
@@ -389,7 +521,9 @@
           <li class="dropdown-gallery" gid="${gal.id}"><a href="javascript:void(0)" gid="${gal.id}">${gal.title}</a></li>
         </c:forEach>
       </ul>
+
     </div>
+    <a class="btn btn-default img-upload-btn" data-target="#uploadModal" data-toggle="modal">上传图片</a>
 
   </div>
 
@@ -397,7 +531,6 @@
 
   <div class="pages">
     <ul class="pagination page-ul">
-
     </ul>
   </div>
 </div>
@@ -440,4 +573,61 @@
 </div>
 <!-- /.modal -->
 
+<!-- 新建相册模态框 -->
+<div class="modal" id="uploadModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">上传图片</h4>
+      </div>
+      <div class="modal-body">
+
+        <form id="list-upload" method="post" action="${pageContext.request.contextPath}/api/upload"
+          enctype="multipart/form-data">
+          <div id="drop">
+            <label id="upload-to-label">未选择相册</label>&nbsp;&nbsp;<a href="javascript:void(0)" data-toggle="modal"
+              data-target="#newGallery" class="btn btn-primary btn-xs" id="upload-new-gallery">新建相册</a>
+            <h3>拖动图片到这里或者</h3>
+            <a class="btn btn-primary img-select-btn">选择图片</a>&nbsp; <input type="file" name="image" multiple /> <input
+              id="gid-input" type="hidden" name="gid">
+          </div>
+          <ul id="fileList">
+          </ul>
+          <input type="hidden" id="redirectPath" value="<spring:message code="redirectPath"></spring:message>">
+
+        </form>
+
+
+        <div class="url-list">
+          <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-primary" id="url-btn"> <input type="radio" name="options">URL
+            </label> <label class="btn btn-primary" id="html-btn"> <input type="radio" name="options">HTML
+            </label> <label class="btn btn-primary" id="img-btn"> <input type="radio" name="options">[img]
+            </label>
+          </div>
+          <textarea class="form-control col-md-6" rows="8" id="result-area">
+        </textarea>
+
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="upload-batch-url">获取链接</button>
+        <button type="button" class="btn btn-primary" id="upload-continue">继续上传</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+</div>
+<script src="${pageContext.request.contextPath}/static/ext/uploader/jquery.knob.min.js"></script>
+<script src="${pageContext.request.contextPath}/static/ext/uploader/jquery.ui.widget.min.js"></script>
+<script src="${pageContext.request.contextPath}/static/ext/uploader/jquery.iframe-transport.min.js"></script>
+<script src="${pageContext.request.contextPath}/static/ext/uploader/jquery.fileupload.min.js"></script>
+<script src="${pageContext.request.contextPath}/static/ext/uploader/img.list.js"></script>
 <jsp:include page="../bottom.jsp"></jsp:include>

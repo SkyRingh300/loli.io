@@ -96,7 +96,8 @@ ul#fileList li .name {
 }
 
 .modal-body {
-    height: 240px;
+    /*height: 240px;*/
+    
 }
 
 #fetch-confirm {

@@ -65,7 +65,7 @@ public class UploadedImageService {
         return ud.findById(id);
     }
 
-    private int maxResults = 24;
+    private int maxResults = 18;
 
     /**
      * 分页查询出指定用户的截图列表

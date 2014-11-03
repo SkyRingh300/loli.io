@@ -21,11 +21,12 @@ body {
     color: #4f4f4f;
 }
 
+/*
 a, a:visited {
     outline: none;
     color: #389dc1;
 }
-
+*/
 a:hover {
     text-decoration: none;
 }
@@ -50,7 +51,7 @@ section, footer, header, aside {
 }
 
 #drop {
-    background-color: #2E3134;
+    /*background-color: #2E3134;*/
     padding: 40px 50px;
     margin-bottom: 30px;
     border: 20px solid rgba(0, 0, 0, 0);
@@ -61,7 +62,7 @@ section, footer, header, aside {
     font-weight: bold;
     color: #7f858a;
 }
-
+/*
 #drop a {
     background-color: #007a96;
     padding: 12px 26px;
@@ -77,7 +78,7 @@ section, footer, header, aside {
 #drop a:hover {
     background-color: #0986a3;
 }
-
+*/
 #drop input {
     display: none;
 }
