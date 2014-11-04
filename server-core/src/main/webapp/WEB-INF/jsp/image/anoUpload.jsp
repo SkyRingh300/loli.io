@@ -8,6 +8,7 @@
 
 #drop {
     border-image: url('${pageContext.request.contextPath}/static/ext/uploader/border-image.png') 25 repeat !important;
+    background-color: rgb(46, 49, 52) !important;
 }
 
 #html {
@@ -28,12 +29,11 @@
   <form id="upload" method="post" action="${pageContext.request.contextPath}/api/upload" enctype="multipart/form-data">
     <div id="drop">
       <h3>拖动图片到这里或者</h3>
-      <a class="btn">选择图片</a>&nbsp; <input type="file" name="image" multiple />
+      <a class="btn btn-primary">选择图片</a>&nbsp; <input type="file" name="image" multiple />
     </div>
     &nbsp;
     <c:if test="${sessionScope.user ne null}">
       <button id="url" type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#urlFetch">url下载</button>
-      <button id="gallery" type="button" class="btn btn-sm btn-primary">添加到相册</button>
       <button id="html" type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#htmlSelect">获取链接</button>
     </c:if>
     <ul id="fileList">

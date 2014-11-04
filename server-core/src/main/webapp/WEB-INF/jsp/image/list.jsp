@@ -424,6 +424,14 @@
                             $(this).text("选择");
                         }
                     });
+
+                    $(".image-list-delete-btn").click(function() {
+                        if (!confirm("删除后无法恢复，确认删除吗？")) {
+                            return;
+                        }
+                        var imgid = $(this).parent().parent().attr("img-id");
+                        batchDelete(imgid);
+                    });
                 });
     }
     // img click select
@@ -599,8 +607,11 @@
     background-color: rgb(230, 230, 230);
 }
 
-.image-list-table {
+.control-info {
     margin-top: 50px;
+}
+
+.image-list-table {
     overflow: hidden;
 }
 
@@ -678,6 +689,10 @@
     float: left;
     margin-left: 20px;
 }
+
+.dropdown-share-div {
+    display: none;
+}
 </style>
 </head>
 <jsp:include page="../top.jsp"></jsp:include>
@@ -717,7 +732,19 @@
       <button type="button" class="img-select-reverse-btn btn btn-default">反选</button>
       <button type="button" class="img-select-cancel-btn btn btn-default">取消</button>
       <button type="button" class="btn btn-default img-select-batch-link-btn">生成链接</button>
-      <button type="button" class="img-select-delete-btn btn btn-danger">删除</button>
+      <div class="btn-group dropdown-share-div">
+        <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle">
+          分享到<span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-share-list" role="menu">
+          <li><a href="javascript:void(0)">新浪微博</a></li>
+          <li><a href="javascript:void(0)">腾讯微博</a></li>
+          <li><a href="javascript:void(0)">人人网</a></li>
+          <li><a href="javascript:void(0)">QQ空间</a></li>
+        </ul>
+      </div>
+
+
       <div class="btn-group dropdown-gal-list-div">
         <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle">
           移动到<span class="caret"></span>
@@ -728,6 +755,8 @@
           </c:forEach>
         </ul>
       </div>
+      <button type="button" class="img-select-delete-btn btn btn-danger">删除</button>
+
       <!-- 用于显示有多少个图片被选中的 -->
       <label class="img-select-label"> </label>
 
@@ -735,6 +764,8 @@
     </div>
 
   </div>
+  <div class="control-info"></div>
+
   <div class="image-list-table"></div>
   <div class="pages">
     <ul class="pagination page-ul">
