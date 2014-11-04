@@ -155,6 +155,71 @@
         rebindGalleryClick();
         reloadImages(0, 1);
         loadPage(gid);
+
+        // 给全选、反选等绑定事件
+        $(".img-select-all-btn").click(function() {
+            $(".image-list-table-single").addClass("img-div-select");
+            $(".image-list-select-btn").text("取消");
+            countImgSelected();
+        });
+        $(".img-select-reverse-btn").click(function() {
+            $(".image-list-table-single").each(function() {
+                if ($(this).attr("class").indexOf("img-div-select") >= 0) {
+                    $(this).removeClass("img-div-select")
+                    $(this).find(".image-list-select-btn").text("选择");
+                } else {
+                    $(this).addClass("img-div-select");
+                    $(this).find(".image-list-select-btn").text("取消");
+                }
+            });
+            countImgSelected();
+        });
+
+        $(".img-select-cancel-btn").click(function() {
+            $(".image-list-table-single").removeClass("img-div-select");
+            $(".image-list-select-btn").text("选择");
+            countImgSelected();
+        });
+
+        $(".img-select-delete-btn").click(function() {
+            if (!confirm("删除后无法恢复，确认删除吗？")) {
+                return;
+            }
+
+            var ids = "";
+            $(".img-div-select").each(function() {
+                var imgid = $(this).attr("img-id");
+                ids += (imgid + ",");
+            });
+
+            batchDelete(ids);
+            countImgSelected();
+        });
+
+        $(".img-select-batch-link-btn").click(function() {
+            $("#linksModal").modal("show");
+        });
+
+        $(".dropdown-gal-list-div").find("li").click(function() {
+
+            var gid = $(this).attr("gid");
+            var ids = getSelectImageIds();
+            $.post("${pageContext.request.contextPath}/img/batchMove", {
+                ids : ids,
+                gid : gid
+            }, function(result) {
+                if (result.status == "success") {
+                    alert(result.message);
+                } else {
+                    alert("发生错误:" + result.message);
+                }
+                reloadImages(getGid(), page);
+                loadPage(getGid());
+                resetSelectStatus();
+
+            });
+        });
+
     });
 
     function resetUploadForm() {
@@ -162,6 +227,15 @@
         $("#fileList").html("");
         $(".url-list").hide();
         $("#upload-batch-url").hide();
+    }
+
+    function getSelectImageIds() {
+        var ids = "";
+        $(".img-div-select").each(function() {
+            var imgid = $(this).attr("img-id");
+            ids += (imgid + ",");
+        });
+        return ids;
     }
 
     // 重新加载下拉列表中的gallery
@@ -172,10 +246,17 @@
                 function(result) {
                     var fobj = $(".dropdown-divider").parent();
                     $(".dropdown-gallery").remove();
+
+                    var moveToList = $(".dropdown-gal-list");
+                    moveToList.html("");
+
                     for (i = 0; i < result.length; i++) {
                         var obj = $("<li class='dropdown-gallery' gid='"+result[i].id+"'><a href='javascript:void(0)' class='dropdown-gallery-a'></a></li>");
                         obj.find("a").attr("gid", result[i].id);
                         obj.find("a").text(result[i].title);
+
+                        var obj2 = $("<li gid='"+result[i].id+"'>" + result[i].title + "</li>");
+                        moveToList.append(obj2);
                         fobj.append(obj);
                     }
 
@@ -189,6 +270,7 @@
                 });
     }
 
+    // 绑定相册下拉列表的click事件
     function rebindGalleryClick() {
         $(".dropdown-gallery").click(function() {
             var gid = $(this).find("a").attr("gid");
@@ -202,13 +284,12 @@
                 var move = $(".dropdown-default");
                 var gid = move.attr("gid");
                 move.remove();
-                $("li[gid=" + gid + "]").append(move);
+                $(".image-gallery-list li[gid=" + gid + "]").append(move);
                 move.removeAttr("class");
-                $("li[gid=" + gid + "]").show();
+                $(".image-gallery-list li[gid=" + gid + "]").show();
                 move.attr("href", "javascript:void(0)");
             }
             if ($(this).parent().attr("class") == "dropdown-all-li") {
-
                 $(this).parent().hide();
                 $(".dropdown-gallery-toggle").before($(this));
                 $(this).attr("class", "btn btn-default dropdown-all");
@@ -220,6 +301,7 @@
         });
     }
 
+    // 获取当前的相册id
     function getGid() {
         if ($(".dropdown-gallery-toggle").prev().attr("gid")) {
             return parseInt($(".dropdown-gallery-toggle").prev().attr("gid"));
@@ -228,6 +310,23 @@
         }
     }
 
+    // 批量删除图片
+    function batchDelete(ids) {
+        $.post("${pageContext.request.contextPath}/img/batchDelete", {
+            ids : ids
+        }, function(result) {
+            if (result.status == "success") {
+                alert("删除成功");
+            } else {
+                alert("发生错误:" + result.message);
+            }
+            reloadImages(getGid(), page);
+            loadPage(getGid());
+            resetSelectStatus();
+        });
+    }
+
+    // 改变相册
     function changeMainGallery(obj) {
         obj = $(obj).find("a");
         $(obj).parent().hide();
@@ -235,7 +334,7 @@
             var move = $(".dropdown-default");
             var gid = move.attr("gid");
             move.remove();
-            $("li[gid=" + gid + "]").append(move);
+            $(".image-gallery-list li[gid=" + gid + "]").append(move);
             move.removeAttr("class");
             move.attr("href", "javascript:void(0)");
         } else {
@@ -245,7 +344,7 @@
         page = 1;
         reloadImages(gid, page);
         loadPage(gid);
-        $("li[gid=" + gid + "]").show();
+        $(".image-gallery-list li[gid=" + gid + "]").show();
         $(".dropdown-gallery-toggle").before($(obj));
         $(obj).attr("class", "btn btn-default dropdown-default");
         $(obj).removeAttr("href");
@@ -255,10 +354,12 @@
         $(".dropdown-all-li").show();
     }
 
+    // 加载分页
     function loadPage(gid) {
         $.post("${pageContext.request.contextPath}/img/pageCount", {
             gid : gid
         }, function(result) {
+            resetSelectStatus();
             $(".page-ul").html("");
             if (parseInt(result) > 0) {
                 var count = parseInt(result);
@@ -296,8 +397,14 @@
                     $(".image-list-table").html("");
                     for (i = 0; i < result.length; i++) {
                         var img = result[i];
-
-                        var obj = $('<div class="image-list-table-single"><div class="image-list-table-single-img"><a><img class="image-list-table-show"></a></div><div class="image-list-table-single-control"><a type="button" class="btn-danger image-list-delete-btn btn btn-xs">删除</a></div></div>');
+                        var obj = $('<div img-link="'
+                            + redirectPage
+                            + result[i].redirectCode
+                            + '" img-id="'
+                            + result[i].id
+                            + '" class="image-list-table-single"><div class="image-list-table-single-img"><a href="${pageContext.request.contextPath}/img/m/'
+                            + result[i].generatedCode
+                            + '" target="_blank"><img class="image-list-table-show"></a></div><div class="image-list-table-single-control"><a type="button" class="btn-primary image-list-select-btn btn btn-xs">选择</a><a type="button" class="btn-danger image-list-delete-btn btn btn-xs">删除</a></div></div>');
                         if (img.smallName) {
                             obj.find("img").attr("src", redirectPage + img.smallSquareName);
                         } else {
@@ -305,7 +412,55 @@
                         }
                         $(".image-list-table").append(obj);
                     }
+
+                    // 给选择按钮绑定事件
+                    $(".image-list-select-btn").click(function() {
+                        var nowtext = $(this).text();
+                        if (nowtext == "选择") {
+                            $(this).text("取消");
+                            imgSelect($(this).parent().parent());
+                        } else {
+                            imgUnSelect($(this).parent().parent());
+                            $(this).text("选择");
+                        }
+                    });
                 });
+    }
+    // img click select
+    //选中该div
+    function imgSelect(obj) {
+        obj.addClass("img-div-select");
+        countImgSelected();
+    }
+
+    function resetSelectStatus() {
+        $(".img-select-label").text("");
+        $(".img-select-batch-link-btn").hide();
+        $(".img-select-delete-btn").hide();
+        $(".dropdown-gal-list-div").hide();
+
+    }
+
+    // 解除该div的选中状态
+    function imgUnSelect(obj) {
+        obj.removeClass("img-div-select");
+        countImgSelected();
+    }
+
+    // 计算现在有多少个图片是被选中的，并显示出来，如果没有图片被选中，那么就不显示
+    function countImgSelected() {
+        var count = $(".img-div-select").size();
+        if (count == 0) {
+            $(".img-select-label").text("");
+            $(".img-select-batch-link-btn").hide();
+            $(".img-select-delete-btn").hide();
+            $(".dropdown-gal-list-div").hide();
+        } else {
+            $(".img-select-batch-link-btn").show();
+            $(".img-select-delete-btn").show();
+            $(".dropdown-gal-list-div").css("display", "inline-block");
+            $(".img-select-label").text(count + "张图片被选中");
+        }
     }
 
     // url get
@@ -331,7 +486,27 @@
         }
         return html;
     }
+
     $(document).ready(function() {
+        $("#batch-url-btn").click(function() {
+            $("#batch-result-area").html("");
+            var result = getPaths();
+            var html = getCode("", "\n", result);
+            $("#batch-result-area").html(html);
+        });
+        $("#batch-html-btn").click(function() {
+            $("#batch-result-area").html("");
+            var result = getPaths();
+            var html = getCode("<img src='", "'>\n", result);
+            $("#batch-result-area").html(html);
+        });
+        $("#batch-img-btn").click(function() {
+            $("#batch-result-area").html("");
+            var result = getPaths();
+            var html = getCode("[img]", "[/img]\n", result);
+            $("#batch-result-area").html(html);
+        });
+
         $("#url-btn").click(function() {
             $("#result-area").html("");
             var result = getPaths();
@@ -363,6 +538,23 @@
             $(".url-list").show();
             $("#result-area").html("");
             $("#url-btn").click();
+        });
+
+        $(".img-select-batch-link-btn").click(function() {
+            $("#fileList").html("");
+            $("#batch-result-area").html("")
+            $(".img-div-select").each(function() {
+                var link = $(this).attr("img-link");
+                console.log(link);
+                if (link) {
+                    var obj = $("<p class='path'>" + link + "</p>");
+                    $("#fileList").append(obj);
+                }
+            });
+
+            $("#batch-result-area").html("");
+            $("#batch-url-btn").click();
+
         });
     });
 </script>
@@ -408,7 +600,7 @@
 }
 
 .image-list-table {
-    margin-top: 40px;
+    margin-top: 50px;
     overflow: hidden;
 }
 
@@ -465,70 +657,85 @@
 #upload-batch-url {
     display: none;
 }
+
+.img-select-batch-link-btn, .img-select-delete-btn, .dropdown-gal-list-div {
+    display: none;
+}
+
+.img-div-select {
+    background-color: rgba(159, 159, 159, 1);
+}
+
+.image-list-controllers {
+    
+}
+
+.controllers-left {
+    float: left;
+}
+
+.controllers-right {
+    float: left;
+    margin-left: 20px;
+}
 </style>
 </head>
 <jsp:include page="../top.jsp"></jsp:include>
 <div id="imgList" class="container">
   <div class="tip">
-    <h4>
-      <strong>${user.email}</strong>一共上传了<strong>${count}</strong>个文件
-      <c:if test="${not(requestScope.totalCount eq 0) and not(requestScope.fileName eq null)}">, 搜索出<strong>${requestScope.totalCount}</strong>个文件</c:if>
-    </h4>
     <c:if test="${param.message!=null}">
       <div class="alert alert-success info">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         ${param.message}
       </div>
     </c:if>
-    <!-- 
-    <div class="col-md-8">
-      <form role="form" class="form-inline" action="${pageContext.request.contextPath}/img/search">
-        <div class="input-group">
-          <input type="text" name="fileName" value="${requestScope.fileName}" placeholder="文件名" class="form-control">
-        </div>
-        <div class="input-group col-md-3">
-          <select name="tag" class="form-control">
-            <option value="0">所有分类</option>
-            <c:forEach items="${tagList}" var="tag">
-              <option value="${tag.id}" <c:if test="${param.tag eq tag.id}">selected</c:if>><c:out
-                  value="${tag.name}"></c:out></option>
-            </c:forEach>
-          </select>
-        </div>
-        <div class="input-group">
-          <span class="input-group-btn">
-            <button class="btn btn-default" type="submit">搜索</button>
-          </span>
-        </div>
-      </form>
-    </div>
- -->
   </div>
 
   <div class="image-list-controllers">
-    <div class="btn-group image-gallery-list">
-      <a class="btn btn-default dropdown-all">全部图片</a>
-      <button type="button" class="btn btn-default dropdown-toggle dropdown-gallery-toggle" data-toggle="dropdown">
-        <span class="caret"></span> <span class="sr-only"></span>
-      </button>
-      <ul class="dropdown-menu" role="menu">
-        <li><a href="javascript:void(0)" id="create-gallery-btn" data-toggle="modal" data-target="#newGallery">新建相册</a></li>
-        <c:if test="${not empty galleries}">
-          <li class="dropdown-all-li"></li>
-          <li class="divider dropdown-divider"></li>
-        </c:if>
-        <c:forEach items="${galleries}" var="gal">
-          <li class="dropdown-gallery" gid="${gal.id}"><a href="javascript:void(0)" gid="${gal.id}">${gal.title}</a></li>
-        </c:forEach>
-      </ul>
+    <div class="controllers-left">
+      <div class="btn-group image-gallery-list">
+        <a class="btn btn-default dropdown-all">全部图片</a>
+        <button type="button" class="btn btn-default dropdown-toggle dropdown-gallery-toggle" data-toggle="dropdown">
+          <span class="caret"></span> <span class="sr-only"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="javascript:void(0)" id="create-gallery-btn" data-toggle="modal" data-target="#newGallery">新建相册</a></li>
+          <c:if test="${not empty galleries}">
+            <li class="dropdown-all-li"></li>
+            <li class="divider dropdown-divider"></li>
+          </c:if>
+          <c:forEach items="${galleries}" var="gal">
+            <li class="dropdown-gallery" gid="${gal.id}"><a href="javascript:void(0)" gid="${gal.id}">${gal.title}</a></li>
+          </c:forEach>
+        </ul>
+
+      </div>
+      <a class="btn btn-default img-upload-btn" data-target="#uploadModal" data-toggle="modal">上传图片</a>
+    </div>
+    <div class="controllers-right">
+      <button type="button" class="img-select-all-btn btn btn-default">全选</button>
+      <button type="button" class="img-select-reverse-btn btn btn-default">反选</button>
+      <button type="button" class="img-select-cancel-btn btn btn-default">取消</button>
+      <button type="button" class="btn btn-default img-select-batch-link-btn">生成链接</button>
+      <button type="button" class="img-select-delete-btn btn btn-danger">删除</button>
+      <div class="btn-group dropdown-gal-list-div">
+        <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle">
+          移动到<span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-gal-list" role="menu">
+          <c:forEach items="${galleries}" var="gal">
+            <li gid="${gal.id}"><a href="javascript:void(0)" gid="${gal.id}">${gal.title}</a></li>
+          </c:forEach>
+        </ul>
+      </div>
+      <!-- 用于显示有多少个图片被选中的 -->
+      <label class="img-select-label"> </label>
+
 
     </div>
-    <a class="btn btn-default img-upload-btn" data-target="#uploadModal" data-toggle="modal">上传图片</a>
 
   </div>
-
   <div class="image-list-table"></div>
-
   <div class="pages">
     <ul class="pagination page-ul">
     </ul>
@@ -550,7 +757,7 @@
           <div class="form-group">
             <label for="title" class="col-sm-2 control-label">相册名</label>
             <div class="col-sm-10">
-              <input type="text" name="title" class="form-control" id="title" placeholder="相册名(可不填)">
+              <input type="text" name="title" class="form-control" id="title" placeholder="相册名(如不填将以当前时间为相册名)">
             </div>
           </div>
           <div class="form-group">
@@ -625,6 +832,44 @@
   </div>
   <!-- /.modal -->
 </div>
+
+
+<!-- 新建相册模态框 -->
+<div class="modal" id="linksModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">生成链接</h4>
+      </div>
+      <div class="modal-body">
+        <div class="batch-links">
+          <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-primary" id="batch-url-btn"> <input type="radio" name="options">URL
+            </label> <label class="btn btn-primary" id="batch-html-btn"> <input type="radio" name="options">HTML
+            </label> <label class="btn btn-primary" id="batch-img-btn"> <input type="radio" name="options">[img]
+            </label>
+          </div>
+          <textarea class="form-control col-md-6" rows="8" id="batch-result-area"></textarea>
+
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+</div>
+
+
+
+
 <script src="${pageContext.request.contextPath}/static/ext/uploader/jquery.knob.min.js"></script>
 <script src="${pageContext.request.contextPath}/static/ext/uploader/jquery.ui.widget.min.js"></script>
 <script src="${pageContext.request.contextPath}/static/ext/uploader/jquery.iframe-transport.min.js"></script>

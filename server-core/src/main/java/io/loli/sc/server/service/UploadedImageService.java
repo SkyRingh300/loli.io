@@ -1,7 +1,10 @@
 package io.loli.sc.server.service;
 
+import io.loli.sc.server.dao.GalleryDao;
 import io.loli.sc.server.dao.UploadedImageDao;
+import io.loli.sc.server.entity.Gallery;
 import io.loli.sc.server.entity.UploadedImage;
+import io.loli.sc.server.entity.User;
 import io.loli.sc.server.storage.StorageUploader;
 import io.loli.util.image.ThumbnailUtil;
 
@@ -21,6 +24,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 @Named("imageService")
@@ -29,6 +33,9 @@ public class UploadedImageService {
     @Inject
     @Named("imageDao")
     private UploadedImageDao ud;
+
+    @Inject
+    private GalleryDao gd;
 
     @Transactional
     public void save(UploadedImage image) {
@@ -218,5 +225,46 @@ public class UploadedImageService {
 
     public int countByGalIdAndUId(int id, Integer gid) {
         return ud.countByGalIdAndUId(id, gid).intValue();
+    }
+
+    @Transactional
+    public void batchDelete(String ids) {
+        for (String id : ids.split(",")) {
+            if (StringUtils.isNoneBlank(id)) {
+                Integer iid = Integer.parseInt(id.trim());
+                UploadedImage img = ud.findById(iid);
+                img.setDelFlag(true);
+            }
+        }
+    }
+
+    @Transactional
+    public void batchDelete(String ids, User user) {
+        for (String id : ids.split(",")) {
+            if (StringUtils.isNoneBlank(id)) {
+                Integer iid = Integer.parseInt(id.trim());
+                UploadedImage img = ud.findById(iid);
+                if (user.getId() != img.getUser().getId()) {
+                    new IllegalArgumentException("图片" + img.getRedirectCode() + "非该用户所有");
+                }
+                img.setDelFlag(true);
+            }
+        }
+    }
+
+    @Transactional
+    public void batchMove(String ids, User user, Integer gid) {
+        Gallery gal = gd.findById(gid);
+        for (String id : ids.split(",")) {
+            if (StringUtils.isNoneBlank(id)) {
+                Integer iid = Integer.parseInt(id.trim());
+                UploadedImage img = ud.findById(iid);
+                if (user.getId() != img.getUser().getId()) {
+                    new IllegalArgumentException("图片" + img.getRedirectCode() + "非该用户所有");
+                } else {
+                    img.setGallery(gal);
+                }
+            }
+        }
     }
 }

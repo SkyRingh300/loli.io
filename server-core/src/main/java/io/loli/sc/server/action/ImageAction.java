@@ -6,6 +6,7 @@ import io.loli.sc.server.entity.User;
 import io.loli.sc.server.service.GalleryService;
 import io.loli.sc.server.service.UploadedImageService;
 import io.loli.sc.server.service.UserService;
+import io.loli.sc.server.util.StatusBean;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -225,6 +226,33 @@ public class ImageAction {
         double d = (double) result / imageService.getMaxResults();
         BigDecimal bd = new BigDecimal(d);
         return String.valueOf(bd.setScale(0, BigDecimal.ROUND_UP).intValue());
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "batchDelete")
+    public StatusBean batchDelete(@RequestParam(value = "ids", required = true) String ids, HttpSession session) {
+
+        try {
+            Object user = session.getAttribute("user");
+            imageService.batchDelete(ids, (User) user);
+        } catch (Exception e) {
+            new StatusBean(StatusBean.STATUS_ERROR, e.getMessage());
+        }
+        return new StatusBean(StatusBean.STATUS_SUCCESS, "删除成功");
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "batchMove")
+    public StatusBean batchMove(@RequestParam(value = "ids", required = true) String ids,
+        @RequestParam(value = "gid", required = true) Integer gid, HttpSession session) {
+
+        try {
+            Object user = session.getAttribute("user");
+            imageService.batchMove(ids, (User) user, gid);
+        } catch (Exception e) {
+            new StatusBean(StatusBean.STATUS_ERROR, e.getMessage());
+        }
+        return new StatusBean(StatusBean.STATUS_SUCCESS, "移动成功");
     }
 
 }

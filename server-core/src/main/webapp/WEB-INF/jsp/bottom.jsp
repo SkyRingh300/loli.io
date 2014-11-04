@@ -17,8 +17,8 @@
     </div>
     <!-- cnzz -->
     <div style="display: none" align=center>
-      <span style="display: none"><script src="https://s19.cnzz.com/z_stat.php?id=1252930997&web_id=1252930997"></script>
-      </span>
+      <span style="display: none"><script async="true"
+          src="https://s19.cnzz.com/z_stat.php?id=1252930997&web_id=1252930997"></script> </span>
     </div>
   </div>
 </div>
