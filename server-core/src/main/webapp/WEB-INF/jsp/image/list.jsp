@@ -255,12 +255,15 @@
                         obj.find("a").attr("gid", result[i].id);
                         obj.find("a").text(result[i].title);
 
-                        var obj2 = $("<li gid='"+result[i].id+"'>" + result[i].title + "</li>");
+                        var obj2 = $("<li gid='"+result[i].id+"'><a href='javascript:void(0)'>" + result[i].title
+                            + "</a></li>");
                         moveToList.append(obj2);
                         fobj.append(obj);
                     }
+                    rebindGalleryMoveClick();
 
                     rebindGalleryClick();
+
                     if (fun && !param) {
                         fun();
                     }
@@ -270,6 +273,27 @@
                 });
     }
 
+    function rebindGalleryMoveClick() {
+        $(".dropdown-gal-list-div").find("li").click(function() {
+
+            var gid = $(this).attr("gid");
+            var ids = getSelectImageIds();
+            $.post("${pageContext.request.contextPath}/img/batchMove", {
+                ids : ids,
+                gid : gid
+            }, function(result) {
+                if (result.status == "success") {
+                    alert(result.message);
+                } else {
+                    alert("发生错误:" + result.message);
+                }
+                reloadImages(getGid(), page);
+                loadPage(getGid());
+                resetSelectStatus();
+
+            });
+        });
+    }
     // 绑定相册下拉列表的click事件
     function rebindGalleryClick() {
         $(".dropdown-gallery").click(function() {
