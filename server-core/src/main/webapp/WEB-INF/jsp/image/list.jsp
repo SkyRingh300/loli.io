@@ -373,11 +373,8 @@
                                 pages.append(obj);
                                 lastIsDisabled = true;
                             }
-
                             continue;
-
                         }
-
                     }
 
                     var obj = $('<li><a>' + (i + 1) + '</a></li>');

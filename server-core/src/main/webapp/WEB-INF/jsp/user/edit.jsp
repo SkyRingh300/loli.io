@@ -83,8 +83,8 @@
               <label> <c:if test="${empty user.name}">
               昵称未设置
               </c:if> <c:if test="${not empty user.name}">
-              ${user.name}
-              </c:if>
+                  <c:out value="${user.name}"></c:out>
+                </c:if>
               </label>
               <button type="button" id="edit-nickname-btn" class="btn btn-xs">修改</button>
 

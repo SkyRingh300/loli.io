@@ -151,15 +151,17 @@
           <div class="image-show-body">
             <a target="_blank" href="<spring:message code="redirectPath"></spring:message>${image.redirectCode}"><img
               src="<spring:message code="redirectPath"></spring:message>${image.redirectCode}" /></a>
-            <h3 class="image-show-title">${image.originName}</h3>
+            <h3 class="image-show-title">
+              <c:out value="${image.originName}"></c:out>
+            </h3>
           </div>
 
           <div class="image-show-info">
             <span>上传:&nbsp;<c:if test="${empty image.user.name}">
           &lt;昵称未设置&gt;
         </c:if> <c:if test="${not empty image.user.name}">
-          ${image.user.name }
-        </c:if>
+                <c:out value="${image.user.name }"></c:out>
+              </c:if>
             </span> <span>上传时间: <fmt:formatDate value="${image.date}" pattern="yyyy-MM-dd HH:mm:ss" /></span>
           </div>
         </div>
