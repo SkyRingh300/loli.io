@@ -360,10 +360,26 @@
             gid : gid
         }, function(result) {
             resetSelectStatus();
+            var pages = $(".page-ul");
             $(".page-ul").html("");
             if (parseInt(result) > 0) {
                 var count = parseInt(result);
+                var lastIsDisabled = false;
                 for (i = 0; i < count; i++) {
+                    if (count > 14) {
+                        if ((i > 0 && i < page - 4) || (i<count-1 && i>page + 2)) {
+                            if (!lastIsDisabled) {
+                                var obj = $('<li class="disabled"><a>...</a></li>');
+                                pages.append(obj);
+                                lastIsDisabled = true;
+                            }
+
+                            continue;
+
+                        }
+
+                    }
+
                     var obj = $('<li><a>' + (i + 1) + '</a></li>');
                     var a = obj.find("a");
                     if (page == i + 1) {
@@ -375,7 +391,8 @@
                         page = parseInt($(this).text());
                         loadPage(gid);
                     });
-                    $(".page-ul").append(obj);
+                    pages.append(obj);
+                    lastIsDisabled = false;
                 }
             } else {
             }
