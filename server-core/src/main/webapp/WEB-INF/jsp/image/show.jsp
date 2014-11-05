@@ -162,7 +162,11 @@
         </c:if> <c:if test="${not empty image.user.name}">
                 <c:out value="${image.user.name }"></c:out>
               </c:if>
-            </span> <span>上传时间: <fmt:formatDate value="${image.date}" pattern="yyyy-MM-dd HH:mm:ss" /></span>
+            </span><span>所属相册:<c:if test="${empty image.gallery}">
+          &lt;未设置&gt;
+        </c:if> <c:if test="${not empty image.gallery}">
+                <c:out value="${image.gallery.title }"></c:out>
+              </c:if></span> <span>上传时间: <fmt:formatDate value="${image.date}" pattern="yyyy-MM-dd HH:mm:ss" /></span>
           </div>
         </div>
       </div>
