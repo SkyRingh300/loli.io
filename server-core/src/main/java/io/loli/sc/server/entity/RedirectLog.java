@@ -19,7 +19,9 @@ public class RedirectLog {
     private int id;
 
     private String url;
-    @Column(length = 512)
+
+    // 这里防止ua过长导致保存失败
+    @Column(length = 1024)
     private String ua;
     private String referer;
     private String ip;

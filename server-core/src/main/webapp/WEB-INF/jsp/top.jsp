@@ -50,8 +50,8 @@
               <c:if test="${user.type eq null}">
                 <li><a href="${pageContext.request.contextPath}/user/edit">个人资料</a></li>
               </c:if>
-              <li><a href="${pageContext.request.contextPath}/img/list">已上传图片</a></li>
-
+              <li><a href="${pageContext.request.contextPath}/img/list">图片</a></li>
+              <li><a href="${pageContext.request.contextPath}/gallery/list">相册</a></li>
               <c:if test="${sessionScope.user.vip}">
                 <li><a href="${pageContext.request.contextPath}/pan">网盘(测试中)</a></li>
               </c:if>

@@ -32,4 +32,9 @@ public class GalleryDao {
             .getSingleResult();
     }
 
+    public List<Gallery> listByUserIdReversed(int uid) {
+        return em.createQuery("from Gallery where delFlag=false and user.id=:uid order by id desc", Gallery.class)
+            .setParameter("uid", uid).getResultList();
+    }
+
 }

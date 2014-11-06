@@ -78,4 +78,18 @@ public class GalleryService {
     public List<Gallery> listByUser(int uid) {
         return gd.listByUserId(uid);
     }
+
+    public List<Gallery> listByUserReversed(int uid) {
+        return gd.listByUserIdReversed(uid);
+    }
+
+    @Transactional
+    public void update(Integer gid, String title, String description, User user) {
+        Gallery g = this.findById(gid);
+        if (g.getUser().getId() != user.getId()) {
+            throw new IllegalArgumentException("该相册不属于你");
+        }
+        g.setTitle(title);
+        g.setDescription(description);
+    }
 }

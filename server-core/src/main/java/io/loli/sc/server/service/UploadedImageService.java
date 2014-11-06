@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -40,6 +41,10 @@ public class UploadedImageService {
     @Transactional
     public void save(UploadedImage image) {
         ud.save(image);
+        if (image.getGallery() != null) {
+            image.getGallery().setLastUpdate(new Date());
+        }
+
     }
 
     @Transactional
@@ -255,6 +260,7 @@ public class UploadedImageService {
     @Transactional
     public void batchMove(String ids, User user, Integer gid) {
         Gallery gal = gd.findById(gid);
+        gal.setLastUpdate(new Date());
         for (String id : ids.split(",")) {
             if (StringUtils.isNoneBlank(id)) {
                 Integer iid = Integer.parseInt(id.trim());

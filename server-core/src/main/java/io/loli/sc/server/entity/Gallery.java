@@ -39,6 +39,10 @@ public class Gallery implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "last_update")
+    private Date lastUpdate;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnore
@@ -102,6 +106,14 @@ public class Gallery implements Serializable {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public Date getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
 }

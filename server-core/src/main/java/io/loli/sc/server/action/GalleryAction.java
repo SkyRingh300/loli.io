@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Named
 @RequestMapping("gallery")
@@ -36,12 +37,9 @@ public class GalleryAction {
         if (StringUtils.isBlank(title)) {
             title = format.format(new Date());
         }
-        if (StringUtils.isBlank(description)) {
-            description = format.format(new Date()) + "创建的相册";
-        }
         Object userObj = session.getAttribute("user");
 
-        Gallery gallery = new Gallery(); 
+        Gallery gallery = new Gallery();
         gallery.setUser((User) userObj);
         gallery.setTitle(title);
         gallery.setDescription(description);
@@ -52,20 +50,8 @@ public class GalleryAction {
     @RequestMapping(value = "edit/add")
     public String add(@RequestParam(required = false) String title, @RequestParam(required = false) String description,
         HttpSession session) {
-        if (StringUtils.isBlank(title)) {
-            title = format.format(new Date());
-        }
-        if (StringUtils.isBlank(description)) {
-            description = format.format(new Date()) + "创建的相册";
-        }
-        Object userObj = session.getAttribute("user");
-
-        Gallery gallery = new Gallery();
-        gallery.setUser((User) userObj);
-        gallery.setTitle(title);
-        gallery.setDescription(description);
-        gs.save(gallery);
-        return "/gallery/show/" + gallery.getId();
+        Gallery gal = this.addWithJsonResponse(title, description, session);
+        return "/gallery/show/" + gal.getId();
     }
 
     @RequestMapping(value = "img/{id}")
@@ -83,5 +69,24 @@ public class GalleryAction {
             galList = gs.listByUser(uid);
         }
         return galList;
+    }
+
+    @RequestMapping(value = "list")
+    public String list(HttpSession session, Model model) {
+        Object user = session.getAttribute("user");
+        List<Gallery> list = gs.listByUserReversed(((User) user).getId());
+        model.addAttribute("galList", list);
+        return "/gallery/list";
+    }
+
+    @RequestMapping(value = "edit/update")
+    public String update(@RequestParam(required = true) Integer gid, @RequestParam String title,
+        @RequestParam(required = false) String description, HttpSession session, Model model,
+        RedirectAttributes redirectAttributes) {
+        Object user = session.getAttribute("user");
+        gs.update(gid, title, description, (User) user);
+        Gallery gal = gs.findById(gid);
+        redirectAttributes.addFlashAttribute("message", "相册名已被修改为:" + gal.getTitle());
+        return "redirect:/gallery/list";
     }
 }
