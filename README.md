@@ -3,7 +3,7 @@
 
 [![Build Status](https://drone.io/github.com/chocotan/sc-server/status.png)](https://drone.io/github.com/chocotan/sc-server/latest)
 
-一个图床~还处于开发中
+一个使用阿里云OSS/又拍云/七牛云作为存储的图床~还处于开发中
 欢迎使用https://loli.io
 
 
