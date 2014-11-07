@@ -57,4 +57,18 @@
     </repositories>
 
 
+    <name>Loli.io</name>
+    <url>https://loli.io</url>
+    <organization>
+        <name>Loli.io</name>
+        <url>https://loli.io</url>
+    </organization>
+    <issueManagement>
+        <system>JIRA</system>
+        <url>http://jira.loli.io/browse/SCREEN</url>
+    </issueManagement>
+    <ciManagement>
+        <system>BAMBOO</system>
+        <url>http://bb.loli.io/browse/SCREEN</url>
+    </ciManagement>
 </project>
