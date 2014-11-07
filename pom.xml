@@ -35,7 +35,7 @@
     </scm>
     <issueManagement>
         <system>JIRA</system>
-        <url>http://jira.loli.io/jira/browse/SCREEN</url>
+        <url>http://jira.loli.io/browse/SCREEN</url>
     </issueManagement>
 
     <modules>
