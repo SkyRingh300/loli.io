@@ -10,7 +10,7 @@
             <id>choco</id>
             <name>chocotan</name>
             <email>loli@linux.com</email>
-            <url>http://loli.io</url>
+            <url>https://loli.io</url>
             <organization>USTS.edu.cn</organization>
             <organizationUrl>http://web.usts.edu.cn</organizationUrl>
             <roles>
@@ -33,6 +33,10 @@
         <developerConnection>scm:git:git@github.com:chocotan/sc-server.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
+    <issueManagement>
+        <system>JIRA</system>
+        <url>http://jira.loli.io/jira/browse/SCREEN</url>
+    </issueManagement>
 
     <modules>
         <module>server-core</module>
