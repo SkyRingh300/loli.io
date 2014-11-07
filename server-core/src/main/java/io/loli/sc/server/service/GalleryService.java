@@ -92,4 +92,31 @@ public class GalleryService {
         g.setTitle(title);
         g.setDescription(description);
     }
+
+    /**
+     * 根据gallery的id，类型，以及用户实体类删除
+     * 
+     * @param gid 需要删除的相册id
+     * @param type 类型，如果为image则表示连同图片删除
+     * @param user 用户实体类，用于判断该相册是否属于该用户
+     * @throws IllegalArgumentException 当该相册不属于该用户时抛出此异常
+     */
+    @Transactional
+    public void delete(Integer gid, String type, User user) {
+        Gallery g = this.findById(gid);
+        if (g.getUser().getId() != user.getId()) {
+            throw new IllegalArgumentException("该相册不属于你");
+        }
+        g.setDelFlag(true);
+        if ("image".equals(type)) {
+            for (UploadedImage image : g.getImages()) {
+                image.setDelFlag(true);
+                image.setGallery(null);
+            }
+        } else {
+            for (UploadedImage image : g.getImages()) {
+                image.setGallery(null);
+            }
+        }
+    }
 }

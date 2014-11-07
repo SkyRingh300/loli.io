@@ -5,7 +5,6 @@
 <title>我的相册-萝莉图床</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <jsp:include page="../static.jsp"></jsp:include>
-
 <script type="text/javascript">
     $(document).ready(function() {
         $("#add-gallery-submit").click(function() {
@@ -45,11 +44,62 @@
                 $(".success-info").hide(600);
             }, 2000);
         }
+
+        $(".gal-list-delete").click(function() {
+
+            var gid = $(this).parent().parent().attr("gid");
+            $("#delete-gallery-btn").unbind("click");
+            $("#delete-gallery-all-btn").unbind("click");
+            if (gid) {
+                $("#delete-gallery-btn").click(function() {
+                    $.post("${pageContext.request.contextPath}/gallery/delete", {
+                        gid : gid,
+                        type : 'gallery'
+                    }, function(result) {
+                        if (result.status == "success") {
+                            alert("删除成功");
+                            window.location.reload();
+                        } else {
+                            alert("删除失败:" + result.message);
+                        }
+                    });
+                });
+                $("#delete-gallery-all-btn").click(function() {
+                    $.post("${pageContext.request.contextPath}/gallery/delete", {
+                        gid : gid,
+                        type : 'image'
+                    }, function(result) {
+                        if (result.status == "success") {
+                            alert("删除成功");
+                            window.location.reload();
+
+                        } else {
+                            alert("删除失败:" + result.message);
+                        }
+                    });
+                });
+
+            }
+        });
+        $('.modal').on('shown.bs.modal', function() {
+            $(this).css("top", "20%");
+        });
     });
 </script>
 <style>
 .success-info {
     padding: 15px;
+}
+
+.delete-gallery-div {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    text-align: center;
+    width: 100%;
+}
+
+.delete-gallery-div>a {
+    width: 95%;
 }
 </style>
 </head>
@@ -69,6 +119,7 @@
         <tr>
           <th>相册名</th>
           <th>描述</th>
+          <th>图片数</th>
           <th>创建时间</th>
           <th>最后上传</th>
           <th>操作</th>
@@ -79,13 +130,15 @@
           <tr gid="${gal.id}">
             <td><c:out value="${gal.title}"></c:out></td>
             <td><c:out value="${gal.description}"></c:out></td>
+            <td></td>
             <td><fmt:formatDate value="${gal.date}" pattern="yyyy-MM-dd HH:mm"></fmt:formatDate></td>
             <td><fmt:formatDate value="${gal.lastUpdate}" pattern="yyyy-MM-dd HH:mm"></fmt:formatDate></td>
             <td>
               <button type="button" class="btn btn-default btn-xs">图片</button>
               <button type="button" class="btn btn-primary btn-xs gal-list-edit" data-toggle="modal"
                 data-target="#editGallery">编辑</button>
-              <button type="button" class="btn btn-danger btn-xs">删除</button>
+              <button type="button" class="btn btn-danger btn-xs gal-list-delete" data-toggle="modal"
+                data-target="#deleteGalModal">删除</button>
             </td>
           </tr>
         </c:forEach>
@@ -138,6 +191,34 @@
 </div>
 <!-- /.modal -->
 
+
+
+<div class="modal" id="deleteGalModal">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">确认删除</h4>
+      </div>
+      <div class="modal-body">
+        <div class="delete-gallery-div">
+          <a href="#" class="btn btn-danger delete-gallery-btn" id="delete-gallery-btn">删除相册(不包括图片)</a>
+        </div>
+        <div class="delete-gallery-div">
+          <a class="btn btn-danger delete-gallery-btn" id="delete-gallery-all-btn">删除相册(包括图片)</a>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 
 
 <jsp:include page="add.jsp"></jsp:include>

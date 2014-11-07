@@ -3,6 +3,7 @@ package io.loli.sc.server.action;
 import io.loli.sc.server.entity.Gallery;
 import io.loli.sc.server.entity.User;
 import io.loli.sc.server.service.GalleryService;
+import io.loli.sc.server.util.StatusBean;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -88,5 +89,18 @@ public class GalleryAction {
         Gallery gal = gs.findById(gid);
         redirectAttributes.addFlashAttribute("message", "相册名已被修改为:" + gal.getTitle());
         return "redirect:/gallery/list";
+    }
+
+    @RequestMapping(value = "delete")
+    @ResponseBody
+    public StatusBean delete(@RequestParam(required = true) Integer gid, @RequestParam(required = true) String type,
+        HttpSession session) {
+        try {
+            Object user = session.getAttribute("user");
+            gs.delete(gid, type, (User) user);
+        } catch (Exception e) {
+            return new StatusBean("error", "删除失败:" + e.getMessage());
+        }
+        return new StatusBean("success", "删除成功");
     }
 }
