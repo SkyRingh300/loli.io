@@ -31,6 +31,11 @@
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
+        <c:if test="${sessionScope.user ne null}">
+          <li><a href="${pageContext.request.contextPath}/img/list" class="title">图片</a></li>
+          <li><a href="${pageContext.request.contextPath}/gallery/list" class="title">相册</a></li>
+        </c:if>
+
         <li><a href="${pageContext.request.contextPath}/comment" class="title">留言和建议</a></li>
       </ul>
 
@@ -52,9 +57,6 @@
               </c:if>
               <li><a href="${pageContext.request.contextPath}/img/list">图片</a></li>
               <li><a href="${pageContext.request.contextPath}/gallery/list">相册</a></li>
-              <c:if test="${sessionScope.user.vip}">
-                <li><a href="${pageContext.request.contextPath}/pan">网盘(测试中)</a></li>
-              </c:if>
             </ul></li>
           <li><a href="${pageContext.request.contextPath}/user/logout" class="title">登出</a></li>
         </c:if>

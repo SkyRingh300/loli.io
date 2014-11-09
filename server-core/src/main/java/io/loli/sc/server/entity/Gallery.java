@@ -48,7 +48,7 @@ public class Gallery implements Serializable {
     @JsonIgnore
     private User user;
 
-    @OneToMany
+    @OneToMany(mappedBy = "gallery")
     @JsonIgnore
     private List<UploadedImage> images;
 

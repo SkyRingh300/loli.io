@@ -2,7 +2,7 @@
 <jsp:directive.include file="../taglib.jsp" />
 <!DOCTYPE html>
 <head>
-<title>查看已上传文件-萝莉图床</title>
+<title>我的图片-萝莉图床</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <jsp:include page="../static.jsp"></jsp:include>
@@ -31,7 +31,6 @@
                 } else {
                     span.text($(tag).val());
                     var name = $(tag).val();
-
                     $(tag).remove();
                     $.post("${pageContext.request.contextPath}/tag/add", {
                         name : $(tag).val(),
@@ -155,8 +154,14 @@
         });
 
         rebindGalleryClick();
-        reloadImages(0, 1);
-        loadPage(gid);
+        var gid = window.location.hash ? parseInt(window.location.hash.substring(1)) : 0;
+        if (gid != 0) {
+            $(".dropdown-gallery[gid=" + gid + "]").click();
+        } else {
+            $(".dropdown-all").click();
+        }
+        //reloadImages(gid, 1);
+        //loadPage(gid);
 
         // 给全选、反选等绑定事件
         $(".img-select-all-btn").click(function() {
@@ -300,7 +305,8 @@
     function rebindGalleryClick() {
         $(".dropdown-gallery").click(function() {
             var gid = $(this).find("a").attr("gid");
-            changeMainGallery($("a[gid=" + gid + "]").parent().get(0));
+            changeMainGallery($(".dropdown-gallery[gid=" + gid + "]").get(0));
+            window.location.hash = "#" + gid;
             //reloadGalleryList();
             //loadImageList(gid, page);
         });
@@ -310,10 +316,11 @@
                 var move = $(".dropdown-default");
                 var gid = move.attr("gid");
                 move.remove();
-                $(".image-gallery-list li[gid=" + gid + "]").append(move);
+                $(".dropdown-gallery[gid=" + gid + "]").append(move);
                 move.removeAttr("class");
-                $(".image-gallery-list li[gid=" + gid + "]").show();
+                $(".dropdown-gallery[gid=" + gid + "]").show();
                 move.attr("href", "javascript:void(0)");
+                window.location.hash = "#" + 0;
             }
             if ($(this).parent().attr("class") == "dropdown-all-li") {
                 $(this).parent().hide();
@@ -360,7 +367,7 @@
             var move = $(".dropdown-default");
             var gid = move.attr("gid");
             move.remove();
-            $(".image-gallery-list li[gid=" + gid + "]").append(move);
+            $(".dropdown-gallery[gid=" + gid + "]").append(move);
             move.removeAttr("class");
             move.attr("href", "javascript:void(0)");
         } else {
@@ -370,7 +377,7 @@
         page = 1;
         reloadImages(gid, page);
         loadPage(gid);
-        $(".image-gallery-list li[gid=" + gid + "]").show();
+        $(".dropdown-gallery[gid=" + gid + "]").show();
         $(".dropdown-gallery-toggle").before($(obj));
         $(obj).attr("class", "btn btn-default dropdown-default");
         $(obj).removeAttr("href");
@@ -437,6 +444,8 @@
                     $(".image-list-table").html("");
                     for (i = 0; i < result.length; i++) {
                         var img = result[i];
+                        var galTitle = img.gallery ? img.gallery.title : "无";
+                        var galId = img.gallery ? img.gallery.id : 0;
                         var obj = $('<div img-link="'
                             + redirectPage
                             + result[i].redirectCode
@@ -444,7 +453,13 @@
                             + result[i].id
                             + '" class="image-list-table-single"><div class="image-list-table-single-img"><a href="${pageContext.request.contextPath}/img/m/'
                             + result[i].generatedCode
-                            + '" target="_blank"><img class="image-list-table-show"></a></div><div class="image-list-table-single-control"><a type="button" class="btn-primary image-list-select-btn btn btn-xs">选择</a><a type="button" class="btn-danger image-list-delete-btn btn btn-xs">删除</a></div></div>');
+                            + '" target="_blank"><img class="image-list-table-show"></a></div><div class="image-list-table-single-control"><a class="btn-primary image-list-select-btn btn btn-xs">选择</a><a href="javascript:void(0)" title="'
+                            + galTitle
+                            + '" gid="'
+                            + galId
+                            + '" class="btn btn-xs btn-default image-list-gal-span">'
+                            + galTitle
+                            + '</a><a class="btn-danger image-list-delete-btn btn btn-xs">删除</a></div></div>');
                         if (img.smallName) {
                             obj.find("img").attr("src", redirectPage + img.smallSquareName);
                         } else {
@@ -471,6 +486,16 @@
                         }
                         var imgid = $(this).parent().parent().attr("img-id");
                         batchDelete(imgid);
+                    });
+
+                    $(".image-list-gal-span").click(function() {
+                        var gid = $(this).attr("gid");
+                        $(".dropdown-gallery[gid=" + gid + "]").find("a").click();
+                    });
+
+                    //modal位置稍微往下挪一点
+                    $('.modal').on('shown.bs.modal', function() {
+                        $(this).css("top", "20%");
                     });
                 });
     }
@@ -732,6 +757,15 @@
 
 .dropdown-share-div {
     display: none;
+}
+
+.image-list-gal-span {
+    margin-left: 0.5em;
+    max-width: 5em;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    overflow: hidden;
 }
 </style>
 </head>

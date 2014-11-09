@@ -40,7 +40,6 @@ public class UploadedImage implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "gallery_id")
-    @JsonIgnore
     private Gallery gallery;
 
     @Column
