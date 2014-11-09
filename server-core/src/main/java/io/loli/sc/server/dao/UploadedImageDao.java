@@ -86,7 +86,8 @@ public class UploadedImageDao {
     }
 
     public List<UploadedImage> findAll() {
-        return em.createQuery("from UploadedImage where delFlag=false", UploadedImage.class).getResultList();
+        return em.createQuery("from UploadedImage where delFlag=false order by id desc", UploadedImage.class)
+            .getResultList();
     }
 
     public UploadedImage findNext(int uid, int imageId) {
@@ -103,20 +104,23 @@ public class UploadedImageDao {
 
     public List<UploadedImage> findByGalIdAndUId(int uid, Integer gid, int firstPosition, int maxResults) {
         return em
-            .createQuery("from UploadedImage where delFlag=false and user.id=:uid and gallery.id=:gid",
+            .createQuery(
+                "from UploadedImage where delFlag=false and user.id=:uid and gallery.id=:gid order by id desc",
                 UploadedImage.class).setParameter("uid", uid).setParameter("gid", gid).setFirstResult(firstPosition)
             .setMaxResults(maxResults).getResultList();
     }
 
     public Long countByGalIdAndUId(int uid, Integer gid) {
         return em
-            .createQuery("select count(*) from UploadedImage where delFlag=false and user.id=:uid and gallery.id=:gid",
+            .createQuery(
+                "select count(*) from UploadedImage where delFlag=false and user.id=:uid and gallery.id=:gid order by id desc",
                 Long.class).setParameter("uid", uid).setParameter("gid", gid).getSingleResult();
     }
 
     public List<UploadedImage> findAllByGalIdAndUId(int uid, Integer gid) {
         return em
-            .createQuery("from UploadedImage where delFlag=false and user.id=:uid and gallery.id=:gid",
+            .createQuery(
+                "from UploadedImage where delFlag=false and user.id=:uid and gallery.id=:gid order by id desc",
                 UploadedImage.class).setParameter("uid", uid).setParameter("gid", gid).getResultList();
     }
 }

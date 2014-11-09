@@ -212,7 +212,7 @@
         <dependency>
             <groupId>io.loli</groupId>
             <artifactId>util</artifactId>
-            <version>0.0.13</version>
+            <version>0.0.14-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>io.loli.util</groupId>
