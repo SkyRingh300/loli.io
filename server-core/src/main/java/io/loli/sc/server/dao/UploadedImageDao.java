@@ -113,4 +113,10 @@ public class UploadedImageDao {
             .createQuery("select count(*) from UploadedImage where delFlag=false and user.id=:uid and gallery.id=:gid",
                 Long.class).setParameter("uid", uid).setParameter("gid", gid).getSingleResult();
     }
+
+    public List<UploadedImage> findAllByGalIdAndUId(int uid, Integer gid) {
+        return em
+            .createQuery("from UploadedImage where delFlag=false and user.id=:uid and gallery.id=:gid",
+                UploadedImage.class).setParameter("uid", uid).setParameter("gid", gid).getResultList();
+    }
 }

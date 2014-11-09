@@ -108,15 +108,12 @@ public class GalleryService {
             throw new IllegalArgumentException("该相册不属于你");
         }
         g.setDelFlag(true);
-        if ("image".equals(type)) {
-            for (UploadedImage image : g.getImages()) {
+        for (UploadedImage image : uid.findAllByGalIdAndUId(user.getId(), gid)) {
+            if ("image".equals(type)) {
                 image.setDelFlag(true);
-                image.setGallery(null);
             }
-        } else {
-            for (UploadedImage image : g.getImages()) {
-                image.setGallery(null);
-            }
+            image.setGallery(null);
+            uid.update(image);
         }
     }
 }
