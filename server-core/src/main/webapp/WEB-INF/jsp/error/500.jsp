@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<jsp:directive.include file="../taglib.jsp" />
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isErrorPage="true"%>
+<jsp:include page="../taglib.jsp" />
 
 <html>
 <head>
@@ -7,13 +7,13 @@
 <jsp:include page="../meta.jsp"></jsp:include>
 <jsp:include page="../static.jsp"></jsp:include>
 
-<title>该页面不存在-萝莉图床</title>
+<title>系统内部错误-萝莉图床</title>
 </head>
 <body>
   <jsp:include page="../top.jsp"></jsp:include>
   <div class="container">
-    <div class="alert alert-danger" role="alert">该页面不存在！</div>
-
+    <div class="alert alert-danger" role="alert">
+      系统内部错误！<%=exception%></div>
   </div>
   <jsp:include page="../bottom.jsp"></jsp:include>
 

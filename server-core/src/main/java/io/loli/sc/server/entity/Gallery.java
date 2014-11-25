@@ -16,6 +16,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Where;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -50,6 +52,7 @@ public class Gallery implements Serializable {
 
     @OneToMany(mappedBy = "gallery")
     @JsonIgnore
+    @Where(clause = "del_flag!=1")
     private List<UploadedImage> images;
 
     public int getId() {
