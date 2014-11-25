@@ -1,23 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <jsp:directive.include file="../taglib.jsp" />
-<!DOCTYPE html>
-<style>
-#upload ul li span {
-    background: url('${pageContext.request.contextPath}/static/ext/uploader/icons.png') no-repeat !important;
-}
-
-#drop {
-    border-image: url('${pageContext.request.contextPath}/static/ext/uploader/border-image.png') 25 repeat !important;
-    background-color: rgb(46, 49, 52) !important;
-}
-
-#html {
-    float: right;
-}
-</style>
-
-
-<jsp:include page="../top.jsp"></jsp:include>
 <div class="container">
   <c:if test="${info!=null}">
     <div class="alert alert-success info">
@@ -27,7 +9,8 @@
   </c:if>
 
   <form id="upload" method="post" action="${pageContext.request.contextPath}/api/upload" enctype="multipart/form-data">
-    <div id="drop">
+    <div id="drop"
+      style="border-image: url('${pageContext.request.contextPath}/static/ext/uploader/border-image.png') 25 repeat !important;">
       <h3>拖动图片到这里或者</h3>
       <a class="btn btn-primary">选择图片</a>&nbsp; <input type="file" name="image" multiple />
     </div>

@@ -110,3 +110,31 @@ ul#fileList li .name {
     overflow: hidden;
     white-space: nowrap;
 }
+
+#upload ul li span {
+}
+
+#drop {
+    background-color: rgb(46, 49, 52) !important;
+}
+
+#html {
+    float: right;
+}
+
+.navbar-default {
+    background-color: rgb(94, 94, 94) !important;
+}
+
+.navbar-nav>.active>a, .navbar-nav>.active>a:hover {
+    color: rgb(255, 255, 255) !important;
+    background-color: rgb(70, 50, 101);
+}
+
+.title {
+    color: rgb(230, 230, 230) !important;
+}
+
+.navbar-right>.open>a {
+    background-color: rgb(77, 77, 77) !important;
+}

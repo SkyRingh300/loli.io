@@ -1,24 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <jsp:directive.include file="taglib.jsp" />
-<style>
-.navbar-default {
-    background-color: rgb(94, 94, 94) !important;
-}
-
-.navbar-nav>.active>a, .navbar-nav>.active>a:hover {
-    color: rgb(255, 255, 255) !important;
-    background-color: rgb(70, 50, 101);
-}
-
-.title {
-    color: rgb(230, 230, 230) !important;
-}
-
-.navbar-right>.open>a {
-    background-color: rgb(77, 77, 77) !important;
-}
-</style>
-
 <nav id="top" class="navbar navbar-default navbar-static-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
