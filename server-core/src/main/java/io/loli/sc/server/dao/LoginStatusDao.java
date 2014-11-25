@@ -17,9 +17,8 @@ public class LoginStatusDao {
 
     public LoginStatus findByUId(int uid) {
 
-        List<LoginStatus> list = em
-                .createNamedQuery("LoginStatus.findByUId", LoginStatus.class)
-                .setParameter("uid", uid).getResultList();
+        List<LoginStatus> list = em.createNamedQuery("LoginStatus.findByUId", LoginStatus.class)
+            .setParameter("uid", uid).getResultList();
         LoginStatus result = null;
         if (list.size() >= 1) {
             result = list.get(0);
@@ -32,7 +31,10 @@ public class LoginStatusDao {
     }
 
     public List<User> listByToken(String value) {
-        return em.createNamedQuery("User.listByToken", User.class)
-                .setParameter("token", value).getResultList();
+        return em.createNamedQuery("User.listByToken", User.class).setParameter("token", value).getResultList();
+    }
+
+    public void update(LoginStatus ls) {
+        em.merge(ls);
     }
 }

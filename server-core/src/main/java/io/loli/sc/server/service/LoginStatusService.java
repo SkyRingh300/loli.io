@@ -35,6 +35,11 @@ public class LoginStatusService {
         ls.setToken(newToken);
     }
 
+    @Transactional
+    public void update(LoginStatus ls) {
+        loginStatusDao.update(ls);
+    }
+
     public User findByToken(String value) {
         List<User> list = loginStatusDao.listByToken(value);
         if (list.size() == 1) {
@@ -45,7 +50,7 @@ public class LoginStatusService {
     }
 
     @Transactional
-    public LoginStatus getLoginStatusById(int uid) {
+    public LoginStatus getLoginStatusByUId(int uid) {
         LoginStatus ls = this.findByUId(uid);
         if (ls == null) {
             ls = new LoginStatus();
@@ -63,6 +68,12 @@ public class LoginStatusService {
         } else {
             return ls;
         }
+    }
+
+    @Transactional
+    public void updateDate(User user) {
+        LoginStatus ls = this.findByUId(user.getId());
+        ls.setLastLogin(new Date());
     }
 
 }

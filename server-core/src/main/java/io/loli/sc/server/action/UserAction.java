@@ -3,6 +3,7 @@ package io.loli.sc.server.action;
 import io.loli.sc.server.entity.Social;
 import io.loli.sc.server.entity.User;
 import io.loli.sc.server.exception.DBException;
+import io.loli.sc.server.service.LoginStatusService;
 import io.loli.sc.server.service.UserService;
 import io.loli.sc.server.service.social.SocialService;
 
@@ -35,6 +36,9 @@ public class UserAction {
 
     @Inject
     private SocialService socialService;
+
+    @Inject
+    private LoginStatusService loginStatusService;
 
     /**
      * 注册的INPUT地址
@@ -147,6 +151,9 @@ public class UserAction {
         if (trueUser != null && user.getPassword().equals(trueUser.getPassword())) {
             session.setAttribute("user", trueUser);
             redirectAttributes.addFlashAttribute("info", "登录成功");
+            // 更新最后登录时间
+            loginStatusService.updateDate(trueUser);
+
             return "redirect:/";
         } else {
             // 邮箱或者密码错误

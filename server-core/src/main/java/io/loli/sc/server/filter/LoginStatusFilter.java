@@ -6,6 +6,7 @@ import io.loli.sc.server.service.LoginStatusService;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Date;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -36,8 +37,8 @@ public class LoginStatusFilter implements Filter {
     public void destroy() {
     }
 
-    public void doFilter(ServletRequest request, ServletResponse response,
-            FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
+        ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
         if (req.getServletPath().contains("api")) {
@@ -53,14 +54,14 @@ public class LoginStatusFilter implements Filter {
 
                 Cookie[] cookies = req.getCookies();
                 if (cookies != null) {
-                    long count = Arrays.stream(req.getCookies())
-                            .filter(c -> c.getName().equals("token")).count();
+                    long count = Arrays.stream(req.getCookies()).filter(c -> c.getName().equals("token")).count();
                     if (count == 0) {
-                        LoginStatus ls = loginStatusService.findByUId(user
-                                .getId());
+                        LoginStatus ls = loginStatusService.findByUId(user.getId());
                         if (ls == null) {
-                            ls = loginStatusService.getLoginStatusById(user
-                                    .getId());
+                            ls = loginStatusService.getLoginStatusByUId(user.getId());
+
+                            ls.setLastLogin(new Date());
+                            loginStatusService.update(ls);
                         }
                         Cookie cookie = new Cookie("token", ls.getToken());
                         cookie.setMaxAge(3600 * 24 * 365);
@@ -73,16 +74,14 @@ public class LoginStatusFilter implements Filter {
                 // 如果没有登录, 寻找此token是否对应某个用户，如果是，则将此用户添加到session中
                 Cookie[] cookies = req.getCookies();
                 if (cookies != null) {
-                    Arrays.stream(req.getCookies()).forEach(
-                            c -> {
-                                if (c.getName().equals("token")) {
-                                    User user = loginStatusService
-                                            .findByToken(c.getValue());
-                                    if (user != null) {
-                                        session.setAttribute("user", user);
-                                    }
-                                }
-                            });
+                    Arrays.stream(req.getCookies()).filter(c -> c.getName().equals("token")).forEach(c -> {
+                        User user = loginStatusService.findByToken(c.getValue());
+                        if (user != null) {
+                            session.setAttribute("user", user);
+                            // 将该用户的登录时间保存进数据库中去
+                        loginStatusService.updateDate(user);
+                    }
+                }   );
                 }
             }
         } catch (Exception e) {
