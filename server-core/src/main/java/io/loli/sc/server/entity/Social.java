@@ -24,7 +24,11 @@ public class Social implements Serializable {
 
     public static final String TYPE_QQ = "qq";
 
-    public static final String[] TYPES = { TYPE_WEIBO, TYPE_QQ };
+    public static final String TYPE_GITHUB = "github";
+    
+    
+    public static final String[] TYPES = { TYPE_WEIBO, TYPE_QQ, TYPE_GITHUB };
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

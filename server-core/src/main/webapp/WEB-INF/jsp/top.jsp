@@ -27,13 +27,13 @@
         </c:if>
         <c:if test="${sessionScope.user!=null}">
           <li><a href="#" class="title dropdown-toggle" data-toggle="dropdown"> <c:if
-                test="${user.type eq 'weibo'}">
+                test="${not empty user.type}">
                  ${sessionScope.user.name}
-              </c:if> <c:if test="${user.type eq null}">
+              </c:if> <c:if test="${empty user.type}">
                 ${sessionScope.user.email}
               </c:if> <b class="caret"></b></a>
             <ul class="dropdown-menu">
-              <c:if test="${user.type eq null}">
+              <c:if test="${empty user.type}">
                 <li><a href="${pageContext.request.contextPath}/user/edit">个人资料</a></li>
               </c:if>
               <li><a href="${pageContext.request.contextPath}/img/list">图片</a></li>

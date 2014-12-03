@@ -636,6 +636,10 @@
     padding-left: 0px !important;
 }
 
+#drop {
+    background-color: white !important;
+}
+
 .dropdown-default {
     width: 160px;
     text-align: left;

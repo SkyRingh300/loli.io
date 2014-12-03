@@ -115,7 +115,7 @@ ul#fileList li .name {
 }
 
 #drop {
-    background-color: rgb(46, 49, 52) !important;
+    background-color: rgb(46, 49, 52);
 }
 
 #html {
