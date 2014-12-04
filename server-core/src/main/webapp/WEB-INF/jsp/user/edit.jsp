@@ -13,8 +13,6 @@
 <script src="${pageContext.request.contextPath}/static/js/md5.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/static/js/edit.js"></script>
 
-<link href="<spring:message code="staticPath"></spring:message>/font.css" rel='stylesheet' />
-
 <script>
     $(document).ready(function() {
         $("#edit-form").submit(function(e) {
@@ -65,7 +63,7 @@
     height: 380px;
 }
 
-#edit-nickname-div {
+.form-right-lable>label {
     padding-top: 7px;
 }
 </style>
@@ -79,7 +77,7 @@
           <legend>修改个人信息</legend>
           <div class="form-group">
             <label for="user-email" class="col-sm-4 control-label">昵称</label>
-            <div class="col-sm-4" id="edit-nickname-div">
+            <div class="col-sm-4 form-right-lable" id="edit-nickname-div">
               <label> <c:if test="${empty user.name}">
               昵称未设置
               </c:if> <c:if test="${not empty user.name}">
@@ -154,27 +152,42 @@
           <div class="form-group">
 
             <label class="col-sm-4 control-label">新浪: </label>
-            <div class="col-sm-4">
+            <div class="col-sm-4 form-right-lable">
               <c:if test="${empty weibo}">
                 <a href="${pageContext.request.contextPath}/social/weibo/redirect"><img
-                  src="${pageContext.request.contextPath}/static/img/weibo_btn.png"></a>
+                  src="${pageContext.request.contextPath}/static/img/weibo-btn.png"></a>
               </c:if>
               <c:if test="${not empty weibo}">
-                    ${weibo.name}&nbsp;<a href="${pageContext.request.contextPath}/social/weibo/cancel">解除绑定</a>
+                <label> ${weibo.name}&nbsp;<a href="${pageContext.request.contextPath}/social/weibo/cancel">解除绑定
+                </a></label>
               </c:if>
-
             </div>
 
           </div>
           <div class="form-group">
             <label class="col-sm-4 control-label">QQ: </label>
-            <div class="col-sm-4">
+            <div class="col-sm-4 form-right-lable">
               <c:if test="${empty qq}">
                 <a href="${pageContext.request.contextPath}/social/qq/redirect"><img
-                  src="${pageContext.request.contextPath}/static/img/qq_btn.png"></a>
+                  src="${pageContext.request.contextPath}/static/img/qq-btn.png"></a>
               </c:if>
               <c:if test="${not empty qq}">
-                    ${qq.name}<!-- &nbsp;<a href="${pageContext.request.contextPath}/social/qq/cancel"></a> -->
+                <label> ${qq.name}<!-- &nbsp;<a href="${pageContext.request.contextPath}/social/qq/cancel"></a> -->
+                </label>
+              </c:if>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Github: </label>
+            <div class="col-sm-4 form-right-lable">
+              <c:if test="${empty github}">
+                <a href="${pageContext.request.contextPath}/social/qq/redirect"><img
+                  src="${pageContext.request.contextPath}/static/img/github-btn.png"></a>
+              </c:if>
+              <c:if test="${not empty github}">
+                <label> ${github.name}<!-- &nbsp;<a href="${pageContext.request.contextPath}/social/qq/cancel"></a> -->
+                </label>
+
               </c:if>
             </div>
           </div>

@@ -60,8 +60,7 @@ public class WeiboAuthManager extends AuthManager {
 
     @Override
     public String refresh(String token) {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override

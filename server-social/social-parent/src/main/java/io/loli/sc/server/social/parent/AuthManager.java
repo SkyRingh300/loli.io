@@ -37,6 +37,9 @@ public abstract class AuthManager {
     /**
      * 取消授权
      * 
+     * @throws UnsupportedOperationException if this operation is not provided
+     *             by sdk
+     * 
      * @return 是否取消成功
      */
     public abstract boolean cancel(String accessToken);
@@ -54,6 +57,8 @@ public abstract class AuthManager {
      * 
      * @param token 旧的accessToken
      * @return 返回新的accessToken
+     * @throws UnsupportedOperationException if this operation is not provided
+     *             by sdk
      */
     public abstract String refresh(String token);
 

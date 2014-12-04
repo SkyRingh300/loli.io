@@ -31,8 +31,7 @@ public class GithubAuthManager extends AuthManager {
 
     @Override
     public boolean cancel(String accessToken) {
-        // TODO Auto-generated method stub
-        return false;
+        throw new UnsupportedOperationException("Cancel token is not supported by github api");
     }
 
     @Override
@@ -58,8 +57,7 @@ public class GithubAuthManager extends AuthManager {
 
     @Override
     public String refresh(String token) {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException("Refresh token is not supported by github api");
     }
 
     @Override

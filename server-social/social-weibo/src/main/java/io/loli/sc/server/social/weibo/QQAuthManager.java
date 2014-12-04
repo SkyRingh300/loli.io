@@ -53,8 +53,7 @@ public class QQAuthManager extends AuthManager {
 
     @Override
     public String refresh(String token) {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException("Refresh token is not supported by qq api");
     }
 
     @Override
@@ -122,8 +121,7 @@ public class QQAuthManager extends AuthManager {
 
     @Override
     public boolean cancel(String accessToken) {
-        // Not supported
-        return true;
+        throw new UnsupportedOperationException("Cancel token is not supported by qq api");
     }
 
 }
