@@ -96,8 +96,9 @@
             <div class="col-sm-offset-4 col-sm-6">
               <a href="${pageContext.request.contextPath}/social/weibo/redirect"><img
                 src="${pageContext.request.contextPath}/static/img/weibo_btn.png"></a> <a
-                href="${pageContext.request.contextPath}/social/qq/redirect"><img
-                src="${pageContext.request.contextPath}/static/img/qq_btn.png"></a>
+                href="${pageContext.request.contextPath}/social/github/redirect"><img
+                src="${pageContext.request.contextPath}/static/img/github-btn.png"></a>
+
             </div>
           </div>
           <input type="hidden" id="password_md5" name="password"> <input type="hidden" id="password_re_md5"

@@ -165,19 +165,6 @@
 
           </div>
           <div class="form-group">
-            <label class="col-sm-4 control-label">QQ: </label>
-            <div class="col-sm-4 form-right-lable">
-              <c:if test="${empty qq}">
-                <a href="${pageContext.request.contextPath}/social/qq/redirect"><img
-                  src="${pageContext.request.contextPath}/static/img/qq-btn.png"></a>
-              </c:if>
-              <c:if test="${not empty qq}">
-                <label> ${qq.name}<!-- &nbsp;<a href="${pageContext.request.contextPath}/social/qq/cancel"></a> -->
-                </label>
-              </c:if>
-            </div>
-          </div>
-          <div class="form-group">
             <label class="col-sm-4 control-label">Github: </label>
             <div class="col-sm-4 form-right-lable">
               <c:if test="${empty github}">

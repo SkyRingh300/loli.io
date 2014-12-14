@@ -55,8 +55,6 @@
             <div class="col-sm-offset-4 col-sm-6">
               <a href="${pageContext.request.contextPath}/social/weibo/redirect"><img
                 src="${pageContext.request.contextPath}/static/img/weibo-btn.png"></a> <a
-                href="${pageContext.request.contextPath}/social/qq/redirect"><img
-                src="${pageContext.request.contextPath}/static/img/qq-btn.png"></a> <a
                 href="${pageContext.request.contextPath}/social/github/redirect"><img
                 src="${pageContext.request.contextPath}/static/img/github-btn.png"></a>
             </div>
