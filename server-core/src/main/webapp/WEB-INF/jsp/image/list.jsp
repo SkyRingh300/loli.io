@@ -453,7 +453,9 @@
                             + result[i].id
                             + '" class="image-list-table-single"><div class="image-list-table-single-img"><a href="${pageContext.request.contextPath}/img/m/'
                             + result[i].generatedCode
-                            + '" target="_blank"><img class="image-list-table-show"></a></div><div class="image-list-table-single-control"><a class="btn-primary image-list-select-btn btn btn-xs">选择</a><a href="javascript:void(0)" title="'
+                            + '" target="_blank"><img class="image-list-table-show"></a></div><div class="img-name">'
+                            + result[i].originName
+                            + '</div><div class="image-list-table-single-control"><a class="btn-primary image-list-select-btn btn btn-xs">选择</a><a href="javascript:void(0)" title="'
                             + galTitle
                             + '" gid="'
                             + galId
@@ -632,6 +634,20 @@
     });
 </script>
 <style>
+.img-name {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    overflow: hidden;
+    z-index: 3;
+    float: left;
+    margin-top: -19px;
+    margin-left: 0px;
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.71);
+    width: 150px;
+}
+
 .search-form {
     padding-left: 0px !important;
 }
