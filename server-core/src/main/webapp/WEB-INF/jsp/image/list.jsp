@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <jsp:directive.include file="../taglib.jsp" />
 <!DOCTYPE html>
+<html>
 <head>
 <title>我的图片-萝莉图床</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -325,7 +326,7 @@
             if ($(this).parent().attr("class") == "dropdown-all-li") {
                 $(this).parent().hide();
                 $(".dropdown-gallery-toggle").before($(this));
-                $(this).attr("class", "btn btn-default dropdown-all");
+                $(this).attr("class", "btn btn-default dropdown-all btn-sm");
             }
             gid = 0;
             page = 1;
@@ -379,9 +380,9 @@
         loadPage(gid);
         $(".dropdown-gallery[gid=" + gid + "]").show();
         $(".dropdown-gallery-toggle").before($(obj));
-        $(obj).attr("class", "btn btn-default dropdown-default");
+        $(obj).attr("class", "btn btn-default dropdown-default btn-sm");
         $(obj).removeAttr("href");
-        $(".dropdown-all").removeClass("btn btn-default");
+        $(".dropdown-all").removeClass("btn btn-default btn-sm");
         $(".dropdown-all").attr("href", "javascript:void(0)");
         $(".dropdown-all-li").append($(".dropdown-all"));
         $(".dropdown-all-li").show();
@@ -534,7 +535,7 @@
             $(".img-select-batch-link-btn").show();
             $(".img-select-delete-btn").show();
             $(".dropdown-gal-list-div").css("display", "inline-block");
-            $(".img-select-label").text(count + "张图片被选中");
+            $(".img-select-label").text(count + "张图片");
         }
     }
 
@@ -789,176 +790,176 @@
 }
 </style>
 </head>
-<jsp:include page="../top.jsp"></jsp:include>
-<div id="imgList" class="container">
-  <div class="tip">
-    <c:if test="${param.message!=null}">
-      <div class="alert alert-success info">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        ${param.message}
-      </div>
-    </c:if>
-  </div>
-
-  <div class="image-list-controllers">
-    <div class="controllers-left">
-      <div class="btn-group image-gallery-list">
-        <a class="btn btn-default dropdown-all">全部图片</a>
-        <button type="button" class="btn btn-default dropdown-toggle dropdown-gallery-toggle" data-toggle="dropdown">
-          <span class="caret"></span> <span class="sr-only"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu">
-          <li><a href="javascript:void(0)" id="create-gallery-btn" data-toggle="modal" data-target="#newGallery">新建相册</a></li>
-          <c:if test="${not empty galleries}">
-            <li class="dropdown-all-li"></li>
-            <li class="divider dropdown-divider"></li>
-          </c:if>
-          <c:forEach items="${galleries}" var="gal">
-            <li class="dropdown-gallery" gid="${gal.id}"><a href="javascript:void(0)" gid="${gal.id}">${gal.title}</a></li>
-          </c:forEach>
-        </ul>
-
-      </div>
-      <a class="btn btn-default img-upload-btn" data-target="#uploadModal" data-toggle="modal">上传图片</a>
-    </div>
-    <div class="controllers-right">
-      <button type="button" class="img-select-all-btn btn btn-default">全选</button>
-      <button type="button" class="img-select-reverse-btn btn btn-default">反选</button>
-      <button type="button" class="img-select-cancel-btn btn btn-default">取消</button>
-      <button type="button" class="btn btn-default img-select-batch-link-btn">生成链接</button>
-      <div class="btn-group dropdown-share-div">
-        <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle">
-          分享到<span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu dropdown-share-list" role="menu">
-          <li><a href="javascript:void(0)">新浪微博</a></li>
-          <li><a href="javascript:void(0)">腾讯微博</a></li>
-          <li><a href="javascript:void(0)">人人网</a></li>
-          <li><a href="javascript:void(0)">QQ空间</a></li>
-        </ul>
-      </div>
-
-
-      <div class="btn-group dropdown-gal-list-div">
-        <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle">
-          移动到<span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu dropdown-gal-list" role="menu">
-          <c:forEach items="${galleries}" var="gal">
-            <li gid="${gal.id}"><a href="javascript:void(0)" gid="${gal.id}">${gal.title}</a></li>
-          </c:forEach>
-        </ul>
-      </div>
-      <button type="button" class="img-select-delete-btn btn btn-danger">删除</button>
-
-      <!-- 用于显示有多少个图片被选中的 -->
-      <label class="img-select-label"> </label>
-
-
+<body>
+  <jsp:include page="../top.jsp"></jsp:include>
+  <div id="imgList" class="container">
+    <div class="tip">
+      <c:if test="${param.message!=null}">
+        <div class="alert alert-success info">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          ${param.message}
+        </div>
+      </c:if>
     </div>
 
-  </div>
-  <div class="control-info"></div>
-
-  <div class="image-list-table"></div>
-  <div class="pages">
-    <ul class="pagination page-ul">
-    </ul>
-  </div>
-</div>
-<jsp:include page="../gallery/add.jsp"></jsp:include>
-
-<div class="modal" id="uploadModal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">
-          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-        </button>
-        <h4 class="modal-title">上传图片</h4>
-      </div>
-      <div class="modal-body">
-
-        <form id="list-upload" method="post" action="${pageContext.request.contextPath}/api/upload"
-          enctype="multipart/form-data">
-          <div id="drop">
-            <label id="upload-to-label">未选择相册</label>&nbsp;&nbsp;<a href="javascript:void(0)" data-toggle="modal"
-              data-target="#newGallery" class="btn btn-primary btn-xs" id="upload-new-gallery">新建相册</a>
-            <h3>拖动图片到这里或者</h3>
-            <a class="btn btn-primary img-select-btn">选择图片</a>&nbsp; <input type="file" name="image" multiple /> <input
-              id="gid-input" type="hidden" name="gid">
-          </div>
-          <ul id="fileList">
+    <div class="image-list-controllers">
+      <div class="controllers-left">
+        <div class="btn-group image-gallery-list">
+          <a class="btn btn-default dropdown-all btn-sm">全部图片</a>
+          <button type="button" class="btn btn-default dropdown-toggle dropdown-gallery-toggle btn-sm"
+            data-toggle="dropdown">
+            <span class="caret"></span> <span class="sr-only"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="javascript:void(0)" id="create-gallery-btn" data-toggle="modal" data-target="#newGallery">新建相册</a></li>
+            <c:if test="${not empty galleries}">
+              <li class="dropdown-all-li"></li>
+              <li class="divider dropdown-divider"></li>
+            </c:if>
+            <c:forEach items="${galleries}" var="gal">
+              <li class="dropdown-gallery" gid="${gal.id}"><a href="javascript:void(0)" gid="${gal.id}">${gal.title}</a></li>
+            </c:forEach>
           </ul>
-          <input type="hidden" id="redirectPath" value="<spring:message code="redirectPath"></spring:message>">
 
-        </form>
+        </div>
+        <a class="btn btn-default img-upload-btn btn-sm" data-target="#uploadModal" data-toggle="modal">上传图片</a>
+      </div>
+      <div class="controllers-right">
+        <button type="button" class="img-select-all-btn btn btn-default btn-sm">全选</button>
+        <button type="button" class="img-select-reverse-btn btn btn-default btn-sm">反选</button>
+        <button type="button" class="img-select-cancel-btn btn btn-default btn-sm">取消</button>
+        <button type="button" class="btn btn-default img-select-batch-link-btn btn-sm">生成链接</button>
+        <div class="btn-group dropdown-share-div">
+          <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle">
+            分享到<span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu dropdown-share-list" role="menu">
+            <li><a href="javascript:void(0)">新浪微博</a></li>
+            <li><a href="javascript:void(0)">腾讯微博</a></li>
+            <li><a href="javascript:void(0)">人人网</a></li>
+            <li><a href="javascript:void(0)">QQ空间</a></li>
+          </ul>
+        </div>
 
 
-        <div class="url-list">
-          <div class="btn-group" data-toggle="buttons">
-            <label class="btn btn-primary" id="url-btn"> <input type="radio" name="options">URL
-            </label> <label class="btn btn-primary" id="html-btn"> <input type="radio" name="options">HTML
-            </label> <label class="btn btn-primary" id="img-btn"> <input type="radio" name="options">[img]
-            </label>
-          </div>
-          <textarea class="form-control col-md-6" rows="8" id="result-area">
+        <div class="btn-group dropdown-gal-list-div">
+          <button type="button" data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle">
+            移动到<span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu dropdown-gal-list" role="menu">
+            <c:forEach items="${galleries}" var="gal">
+              <li gid="${gal.id}"><a href="javascript:void(0)" gid="${gal.id}">${gal.title}</a></li>
+            </c:forEach>
+          </ul>
+        </div>
+        <button type="button" class="img-select-delete-btn btn btn-sm btn-danger">删除</button>
+
+        <!-- 用于显示有多少个图片被选中的 -->
+        <label class="img-select-label"> </label>
+      </div>
+
+    </div>
+    <div class="control-info"></div>
+
+    <div class="image-list-table"></div>
+    <div class="pages">
+      <ul class="pagination page-ul">
+      </ul>
+    </div>
+  </div>
+  <jsp:include page="../gallery/add.jsp"></jsp:include>
+
+  <div class="modal" id="uploadModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          </button>
+          <h4 class="modal-title">上传图片</h4>
+        </div>
+        <div class="modal-body">
+
+          <form id="list-upload" method="post" action="${pageContext.request.contextPath}/api/upload"
+            enctype="multipart/form-data">
+            <div id="drop">
+              <label id="upload-to-label">未选择相册</label>&nbsp;&nbsp;<a href="javascript:void(0)" data-toggle="modal"
+                data-target="#newGallery" class="btn btn-primary btn-xs" id="upload-new-gallery">新建相册</a>
+              <h3>拖动图片到这里或者</h3>
+              <a class="btn btn-primary img-select-btn">选择图片</a>&nbsp; <input type="file" name="image" multiple /> <input
+                id="gid-input" type="hidden" name="gid">
+            </div>
+            <ul id="fileList">
+            </ul>
+            <input type="hidden" id="redirectPath" value="<spring:message code="redirectPath"></spring:message>">
+
+          </form>
+
+
+          <div class="url-list">
+            <div class="btn-group" data-toggle="buttons">
+              <label class="btn btn-primary" id="url-btn"> <input type="radio" name="options">URL
+              </label> <label class="btn btn-primary" id="html-btn"> <input type="radio" name="options">HTML
+              </label> <label class="btn btn-primary" id="img-btn"> <input type="radio" name="options">[img]
+              </label>
+            </div>
+            <textarea class="form-control col-md-6" rows="8" id="result-area">
         </textarea>
 
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" id="upload-batch-url">获取链接</button>
-        <button type="button" class="btn btn-primary" id="upload-continue">继续上传</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-      </div>
-      <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-  </div>
-  <!-- /.modal -->
-</div>
-
-
-<div class="modal" id="linksModal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">
-          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-        </button>
-        <h4 class="modal-title">生成链接</h4>
-      </div>
-      <div class="modal-body">
-        <div class="batch-links">
-          <div class="btn-group" data-toggle="buttons">
-            <label class="btn btn-primary" id="batch-url-btn"> <input type="radio" name="options">URL
-            </label> <label class="btn btn-primary" id="batch-html-btn"> <input type="radio" name="options">HTML
-            </label> <label class="btn btn-primary" id="batch-img-btn"> <input type="radio" name="options">[img]
-            </label>
           </div>
-          <textarea class="form-control col-md-6" rows="8" id="batch-result-area"></textarea>
-
         </div>
-      </div>
 
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="upload-batch-url">获取链接</button>
+          <button type="button" class="btn btn-primary" id="upload-continue">继续上传</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        </div>
+        <!-- /.modal-content -->
       </div>
-      <!-- /.modal-content -->
+      <!-- /.modal-dialog -->
     </div>
-    <!-- /.modal-dialog -->
+    <!-- /.modal -->
   </div>
-  <!-- /.modal -->
-</div>
 
 
+  <div class="modal" id="linksModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          </button>
+          <h4 class="modal-title">生成链接</h4>
+        </div>
+        <div class="modal-body">
+          <div class="batch-links">
+            <div class="btn-group" data-toggle="buttons">
+              <label class="btn btn-primary" id="batch-url-btn"> <input type="radio" name="options">URL
+              </label> <label class="btn btn-primary" id="batch-html-btn"> <input type="radio" name="options">HTML
+              </label> <label class="btn btn-primary" id="batch-img-btn"> <input type="radio" name="options">[img]
+              </label>
+            </div>
+            <textarea class="form-control col-md-6" rows="8" id="batch-result-area"></textarea>
+
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+  </div>
 
 
-<script src="${pageContext.request.contextPath}/static/ext/uploader/jquery.knob.min.js"></script>
-<script src="${pageContext.request.contextPath}/static/ext/uploader/jquery.ui.widget.min.js"></script>
-<script src="${pageContext.request.contextPath}/static/ext/uploader/jquery.iframe-transport.min.js"></script>
-<script src="${pageContext.request.contextPath}/static/ext/uploader/jquery.fileupload.min.js"></script>
-<script src="${pageContext.request.contextPath}/static/ext/uploader/img.list.js"></script>
-<jsp:include page="../bottom.jsp"></jsp:include>
+  <script src="${pageContext.request.contextPath}/static/ext/uploader/jquery.knob.min.js"></script>
+  <script src="${pageContext.request.contextPath}/static/ext/uploader/jquery.ui.widget.min.js"></script>
+  <script src="${pageContext.request.contextPath}/static/ext/uploader/jquery.iframe-transport.min.js"></script>
+  <script src="${pageContext.request.contextPath}/static/ext/uploader/jquery.fileupload.min.js"></script>
+  <script src="${pageContext.request.contextPath}/static/ext/uploader/img.list.js"></script>
+  <jsp:include page="../bottom.jsp"></jsp:include>
+</body>
+</html>

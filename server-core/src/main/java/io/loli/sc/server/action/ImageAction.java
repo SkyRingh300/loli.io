@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.springframework.http.HttpMethod;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -253,6 +254,11 @@ public class ImageAction {
             new StatusBean(StatusBean.STATUS_ERROR, e.getMessage());
         }
         return new StatusBean(StatusBean.STATUS_SUCCESS, "移动成功");
+    }
+
+    @RequestMapping(value = "search", method = RequestMethod.GET)
+    public String searchGet() {
+        return "image/searchForm";
     }
 
 }
