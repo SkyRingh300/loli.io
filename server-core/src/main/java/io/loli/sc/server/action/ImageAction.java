@@ -24,7 +24,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.springframework.http.HttpMethod;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -71,7 +70,7 @@ public class ImageAction {
         }
         int uid = ((User) request.getSession().getAttribute("user")).getId();
 
-        List<UploadedImage> list = imageService.listByUId(uid, firstPosition);
+        List<UploadedImage> list = imageService.listByUId(uid, firstPosition, null);
         int totalCount = imageService.countByUId(uid);
         int pageCount = (int) Math.ceil((float) totalCount / (float) imageService.getMaxResults());
         boolean hasLast = page != 1;
@@ -197,7 +196,8 @@ public class ImageAction {
     @RequestMapping(value = "jsonList")
     @ResponseBody
     public List<UploadedImage> list(HttpSession session, @RequestParam(value = "gid", required = false) Integer gid,
-        @RequestParam(value = "page", required = false) Integer page) {
+        @RequestParam(value = "page", required = false) Integer page,
+        @RequestParam(value = "name", required = false) String name) {
         if (page == null || page == 0) {
             page = 1;
         }
@@ -205,24 +205,24 @@ public class ImageAction {
 
         List<UploadedImage> result = new ArrayList<>();
         if (gid == null || gid == 0) {
-            result = imageService.listByUId(((User) user).getId(), imageService.getMaxResults() * (page - 1));
+            result = imageService.listByUId(((User) user).getId(), imageService.getMaxResults() * (page - 1), name);
         } else {
-            result = imageService.findByGalIdAndUId(((User) user).getId(), gid, page);
+            result = imageService.findByGalIdAndUId(((User) user).getId(), gid, page, name);
         }
-
         return result;
     }
 
     @RequestMapping(value = "pageCount")
     @ResponseBody
-    public String pageCount(HttpSession session, @RequestParam(value = "gid", required = false) Integer gid) {
+    public String pageCount(HttpSession session, @RequestParam(value = "gid", required = false) Integer gid,
+        @RequestParam(value = "name", required = false) String name) {
 
         Object user = session.getAttribute("user");
         int result = 0;
         if (gid == null || gid == 0) {
-            result = imageService.countByUId(((User) user).getId());
+            result = imageService.countByUId(((User) user).getId(), name);
         } else {
-            result = imageService.countByGalIdAndUId(((User) user).getId(), gid);
+            result = imageService.countByGalIdAndUId(((User) user).getId(), gid, name);
         }
         double d = (double) result / imageService.getMaxResults();
         BigDecimal bd = new BigDecimal(d);
@@ -257,7 +257,15 @@ public class ImageAction {
     }
 
     @RequestMapping(value = "search", method = RequestMethod.GET)
-    public String searchGet() {
+    public String searchGet(@RequestParam(value = "name") String name, HttpSession session) {
+
+        try {
+            Object user = session.getAttribute("user");
+            imageService.findByNameAndUser(name, (User) user);
+        } catch (Exception e) {
+            new StatusBean(StatusBean.STATUS_ERROR, e.getMessage());
+        }
+
         return "image/searchForm";
     }
 

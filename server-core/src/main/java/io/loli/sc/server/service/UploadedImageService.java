@@ -85,10 +85,11 @@ public class UploadedImageService {
      * @param u_id 用户id
      * @param firstPosition 初始位置
      * @param maxResults 每页的最大数量
+     * @param name 图片名
      * @return 截图列表
      */
-    public List<UploadedImage> listByUId(int u_id, int firstPosition, int maxResults) {
-        return ud.listByUId(u_id, firstPosition, maxResults);
+    public List<UploadedImage> listByUId(int u_id, int firstPosition, int maxResults, String name) {
+        return ud.listByUId(u_id, firstPosition, maxResults, name);
     }
 
     /**
@@ -96,10 +97,11 @@ public class UploadedImageService {
      * 
      * @param u_id 用户id
      * @param firstPosition 开始位置
+     * @param name 图片名
      * @return 截图列表
      */
-    public List<UploadedImage> listByUId(int u_id, int firstPosition) {
-        return this.listByUId(u_id, firstPosition, maxResults);
+    public List<UploadedImage> listByUId(int u_id, int firstPosition, String name) {
+        return this.listByUId(u_id, firstPosition, maxResults, name);
     }
 
     public List<UploadedImage> listByUIdAndFileName(int u_id, String fileName, int firstPosition, Integer tag) {
@@ -117,6 +119,10 @@ public class UploadedImageService {
 
     public int countByUId(int u_id) {
         return ud.countByUId(u_id);
+    }
+
+    public int countByUId(int u_id, String name) {
+        return ud.countByUId(u_id, name);
     }
 
     public int getMaxResults() {
@@ -223,13 +229,18 @@ public class UploadedImageService {
         return "";
     }
 
-    public List<UploadedImage> findByGalIdAndUId(int id, Integer gid, int page) {
+    public List<UploadedImage> findByGalIdAndUId(int id, Integer gid, int page, String name) {
         int start = this.getMaxResults() * (page - 1);
-        return ud.findByGalIdAndUId(id, gid, start, this.getMaxResults());
+        return ud.findByGalIdAndUId(id, gid, start, this.getMaxResults(), name);
     }
 
     public int countByGalIdAndUId(int id, Integer gid) {
         return ud.countByGalIdAndUId(id, gid).intValue();
+    }
+    
+    
+    public int countByGalIdAndUId(int id, Integer gid, String name) {
+        return ud.countByGalIdAndUId(id, gid, name).intValue();
     }
 
     @Transactional
@@ -272,5 +283,9 @@ public class UploadedImageService {
                 }
             }
         }
+    }
+
+    public List<UploadedImage> findByNameAndUser(String name, User user) {
+        return ud.findByNameAndUser("%" + name + "%", user.getId());
     }
 }

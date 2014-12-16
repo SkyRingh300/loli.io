@@ -305,6 +305,7 @@
     // 绑定相册下拉列表的click事件
     function rebindGalleryClick() {
         $(".dropdown-gallery").click(function() {
+            $("#search-name").val("");
             var gid = $(this).find("a").attr("gid");
             changeMainGallery($(".dropdown-gallery[gid=" + gid + "]").get(0));
             window.location.hash = "#" + gid;
@@ -313,6 +314,7 @@
         });
 
         $(".dropdown-all").click(function() {
+            $("#search-name").val("");
             if ($(".dropdown-default").attr("gid")) {
                 var move = $(".dropdown-default");
                 var gid = move.attr("gid");
@@ -391,7 +393,8 @@
     // 加载分页
     function loadPage(gid) {
         $.post("${pageContext.request.contextPath}/img/pageCount", {
-            gid : gid
+            gid : gid,
+            name : $("#search-name").val()
         }, function(result) {
             resetSelectStatus();
             var pages = $(".page-ul");
@@ -438,7 +441,8 @@
                 "${pageContext.request.contextPath}/img/jsonList",
                 {
                     gid : galleryId,
-                    page : currentPage
+                    page : currentPage,
+                    name : $("#search-name").val()
                 },
                 function(result) {
                     var redirectPage = "<spring:message code='redirectPath'/>";
@@ -563,6 +567,11 @@
         return html;
     }
 
+    function search() {
+        reloadImages(gid, page);
+        loadPage(gid);
+    }
+
     $(document).ready(function() {
         $("#batch-url-btn").click(function() {
             $("#batch-result-area").html("");
@@ -632,6 +641,21 @@
             $("#batch-url-btn").click();
 
         });
+
+        $("#search-btn").click(function() {
+            search();
+        });
+
+
+
+        $("#search-name").keypress(function(e) {
+            var k = e.keyCode || e.which;
+            if (k == 13) {
+                search();
+            }
+        });
+        
+
     });
 </script>
 <style>
@@ -694,11 +718,12 @@
 }
 
 .control-info {
-    margin-top: 50px;
+    margin-top: 40px;
 }
 
 .image-list-table {
     overflow: hidden;
+    margin-top: 20px;
 }
 
 .image-list-delete-btn {
@@ -788,6 +813,15 @@
     -o-text-overflow: ellipsis;
     overflow: hidden;
 }
+
+.controllers-search {
+    width: 20%;
+    min-width: 200px;
+}
+
+#search-name {
+    height: 30px;
+}
 </style>
 </head>
 <body>
@@ -820,7 +854,6 @@
               <li class="dropdown-gallery" gid="${gal.id}"><a href="javascript:void(0)" gid="${gal.id}">${gal.title}</a></li>
             </c:forEach>
           </ul>
-
         </div>
         <a class="btn btn-default img-upload-btn btn-sm" data-target="#uploadModal" data-toggle="modal">上传图片</a>
       </div>
@@ -857,10 +890,16 @@
         <!-- 用于显示有多少个图片被选中的 -->
         <label class="img-select-label"> </label>
       </div>
-
     </div>
     <div class="control-info"></div>
-
+    <div class="controllers-search">
+      <div class="input-group">
+        <input type="text" class="col-md-4 form-control btn-sm" id="search-name" placeholder="在该分类下搜索"> <span
+          class="input-group-btn">
+          <button class="btn btn-default btn-sm" type="button" id="search-btn">搜索</button>
+        </span>
+      </div>
+    </div>
     <div class="image-list-table"></div>
     <div class="pages">
       <ul class="pagination page-ul">
