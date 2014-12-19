@@ -95,7 +95,7 @@
             <label class="col-sm-4 control-label">社交账号</label>
             <div class="col-sm-offset-4 col-sm-6">
               <a href="${pageContext.request.contextPath}/social/weibo/redirect"><img
-                src="${pageContext.request.contextPath}/static/img/weibo_btn.png"></a> <a
+                src="${pageContext.request.contextPath}/static/img/weibo-btn.png"></a> <a
                 href="${pageContext.request.contextPath}/social/github/redirect"><img
                 src="${pageContext.request.contextPath}/static/img/github-btn.png"></a>
 

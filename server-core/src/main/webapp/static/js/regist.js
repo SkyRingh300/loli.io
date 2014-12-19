@@ -67,9 +67,9 @@ $(document).ready(function() {
     $("#user-token").attr("disabled", "disabled");
     $("#regist-form").submit(function(e) {
         var var1 = md5password();
-        var var2 = $("#token-status").val() == "true";
+        // var var2 = $("#token-status").val() == "true";
         var var3 = validateTerms();
-        if (!(var1 && var2 && var3)) {
+        if (!(var1 && var3)) {
             e.preventDefault();
         }
     });
