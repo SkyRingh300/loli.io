@@ -82,16 +82,6 @@ $(document).ready(function() {
 
 });
 
-function validateTokenTrue() {
-    $.post("${rootPath}/mail/validate", {
-        token : $("#user-token").val()
-    }, function(e) {
-        if (e == "true") {
-            $("#token-status").val("true");
-        }
-    }, "text");
-}
-
 function refreshTime(time) {
     if (time > 0) {
         $("#sendEmail").val("等待" + time / 1000 + "秒");

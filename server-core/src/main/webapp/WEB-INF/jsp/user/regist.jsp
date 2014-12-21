@@ -12,6 +12,16 @@
 <script src="${pageContext.request.contextPath}/static/js/regist.js"></script>
 <script src="${pageContext.request.contextPath}/static/js/md5.js"></script>
 <script type="text/javascript">
+    function validateTokenTrue() {
+        $.post("${pageContext.request.contextPath}/mail/validate", {
+            token : $("#user-token").val()
+        }, function(e) {
+            if (e == "true") {
+                $("#token-status").val("true");
+            }
+        }, "text");
+    }
+
     $(document).ready(function(e) {
         $("#sendEmail").click(function(e) {
             if (validateEmail()) {

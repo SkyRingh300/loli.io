@@ -37,9 +37,6 @@ public class UserAction {
     @Inject
     private SocialService socialService;
 
-    @Inject
-    private LoginStatusService loginStatusService;
-
     /**
      * 注册的INPUT地址
      */
@@ -151,8 +148,7 @@ public class UserAction {
         if (trueUser != null && user.getPassword().equals(trueUser.getPassword())) {
             session.setAttribute("user", trueUser);
             redirectAttributes.addFlashAttribute("info", "登录成功");
-            // 更新最后登录时间
-            loginStatusService.updateDate(trueUser);
+
 
             return "redirect:/";
         } else {
